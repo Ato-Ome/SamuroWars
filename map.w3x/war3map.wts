@@ -1,0 +1,191 @@
+﻿STRING 1
+{
+Samuro Wars
+}
+
+STRING 3
+{
+Prove you're the best samurai
+}
+
+STRING 4
+{
+Феникс (AtoOme)
+}
+
+STRING 5
+{
+Player 1
+}
+
+STRING 6
+{
+Player 2
+}
+
+STRING 7
+{
+Player 3
+}
+
+STRING 8
+{
+Player 4
+}
+
+STRING 29
+{
+Force 1
+}
+
+STRING 35
+// Abilities: A001 (Jump), Researchubertip (Tooltip - Learn - Extended)
+{
+Переносит самурая  на короткое расстояние, позволяя быстро вступить в бой и выйти из него.
+}
+
+STRING 36
+// Abilities: A001 (Jump), Researchtip (Tooltip - Learn)
+{
+Изучить «Скачок»
+}
+
+STRING 38
+// Abilities: A002 (Bladestorm), Researchhotkey (Hotkey - Learn)
+{
+R
+}
+
+STRING 39
+// Abilities: A002 (Bladestorm), Hotkey (Hotkey - Normal)
+{
+R
+}
+
+STRING 44
+// Abilities: A002 (Bladestorm), Researchubertip (Tooltip - Learn - Extended)
+{
+Окружает мастера клинка вихрем разрушительной силы, который наносит 250 урона/сек. находящимся рядом врагам.|n|Cffffcc00Не может навредить врагам в состоянии вихря.|r
+}
+
+STRING 46
+// Abilities: A001 (Jump), Researchhotkey (Hotkey - Learn)
+{
+W
+}
+
+STRING 47
+// Abilities: A001 (Jump), Hotkey (Hotkey - Normal)
+{
+W
+}
+
+STRING 48
+// Abilities: A000 (Parry), Hotkey (Hotkey - Normal)
+{
+E
+}
+
+STRING 52
+// Abilities: A003 (Slash Attack), Hotkey (Hotkey - Normal)
+{
+Q
+}
+
+STRING 56
+{
+Force 2
+}
+
+STRING 64
+// Abilities: A000 (Parry), Name (Name)
+{
+Parry
+}
+
+STRING 65
+// Abilities: A000 (Parry), Tip (Tooltip - Normal)
+{
+Parry
+}
+
+STRING 66
+// Abilities: A000 (Parry), Ubertip (Tooltip - Normal - Extended)
+{
+Block and return all incoming damage
+}
+
+STRING 67
+// Abilities: A001 (Jump), Tip (Tooltip - Normal)
+{
+Jump
+}
+
+STRING 68
+// Abilities: A001 (Jump), Name (Name)
+{
+Jump
+}
+
+STRING 69
+// Abilities: A001 (Jump), Ubertip (Tooltip - Normal - Extended)
+{
+Jumps a short distance leaving a cloud of dust
+}
+
+STRING 70
+// Abilities: A002 (Bladestorm), Ubertip (Tooltip - Normal - Extended)
+{
+Surrounds the master of the blade with a whirlwind of destructive force, which deals 250 damage / sec. nearby ground enemies. |nDuration: 5 seconds |n|Cffffcc00Cannot harm enemies in a whirlwind state.|r
+}
+
+STRING 71
+// Abilities: A002 (Bladestorm), Tip (Tooltip - Normal)
+{
+Bladestorm
+}
+
+STRING 72
+// Abilities: A002 (Bladestorm), Name (Name)
+{
+Bladestorm
+}
+
+STRING 73
+// Abilities: A003 (Slash Attack), Name (Name)
+{
+Slash Attack
+}
+
+STRING 74
+// Abilities: A003 (Slash Attack), Tip (Tooltip - Normal)
+{
+Slash Atttack
+}
+
+STRING 75
+// Abilities: A003 (Slash Attack), Ubertip (Tooltip - Normal - Extended)
+{
+Deals damage to enemies in front
+}
+
+STRING 76
+{
+Player 13
+}
+
+STRING 77
+{
+Player 14
+}
+
+STRING 78
+{
+Player 15
+}
+
+STRING 79
+{
+Player 16
+}
+
