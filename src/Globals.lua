@@ -25,3 +25,4 @@ Team = {
         [1] = "Force 2"
     }
 }
+WinTeam = nil

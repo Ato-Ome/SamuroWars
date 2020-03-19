@@ -1,6 +1,6 @@
 gg_snd_great_player01 = ""
-gg_trg_AttackAllied = nil
 gg_trg_Initialization = nil
+gg_trg_AttackAllied = nil
 function InitGlobals()
 end
 
@@ -36,6 +36,7 @@ Team = {
         [1] = "Force 2"
     }
 }
+WinTeam = nil
 ---@param text string
 ---@param textSize real
 ---@param x real
@@ -240,13 +241,14 @@ function Death_Actions()
         end
     else
         if Stats.Team[GetPlayerTeam(killerplayer)] >= KillToWin then
+            WinTeam = GetPlayerTeam(killerplayer)
             print("|c0000FF40"..Team.Name[GetPlayerTeam(killerplayer)].."|r team has won, congratulate them, game will be end in |c00FFFC005|r second")
             TimerStart(Timer, 5, false, function()
                 for i = 0, bj_MAX_PLAYERS-1 do
-                    if Player(i) == killerplayer then
+                    if GetPlayerTeam(killerplayer) == WinTeam then
                         CustomVictoryBJ(killerplayer, true, true)
                     else
-                        CustomDefeatBJ(Player(i, "You are loose, come again to win"))
+                        CustomDefeatBJ(Player(i, "Your team are loose, come again to win"))
                     end
                 end
             end)
