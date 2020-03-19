@@ -25,7 +25,7 @@ function Start()
         [21] = Rect(1024.0, -256.0, 1152.0, -128.0),
         [22] = Rect(1024.0, -384.0, 1152.0, -256.0),
         [23] = Rect(1024.0, -512.0, 1152.0, -384.0),
-        revive = {
+        Revive = {
             [1] = Rect(-1536.0, -1408.0, -1152.0, -896.0),
             [2] = Rect(1152.0, -1408.0, 1536.0, -896.0),
             [3] = Rect(-512.0, -3200.0, 512.0, -2816.0),
@@ -54,6 +54,10 @@ function Start()
     EntireMap()
     Slash()
     TimeElapse()
+    Stats.Team = {
+        [0] = 0,
+        [1] = 0
+    }
     for i = 0, bj_MAX_PLAYERS-1 do
         Hint[i] = {
             Death = true,

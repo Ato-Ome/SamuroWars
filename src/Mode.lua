@@ -3,7 +3,7 @@ function ChooseTimeElapse_Actions()
     DestroyTimerDialog(Dialog)
     PauseAllUnitsBJ(false)
     if Mode.Voices.DM > Mode.Voices.TVT then
-        Mode.Current.DM = true
+        Mode.CurrentDM = true
         print("|c00FF0000Death Match|r mode was chosen by voting prepare to fight, your allies will become to enemy in |c00FFFC005|r second")
         TimerStart(Timer, 5, false, function()
             for i = 0, bj_MAX_PLAYERS-1 do
@@ -22,7 +22,7 @@ function ChooseTimeElapse_Actions()
         TimerDialogDisplay(dialog, true)
     else
         print("|c0000FFFFTeam vs Team|r mode was chosen by voting prepare to fight")
-        Mode.Current.DM = false
+        Mode.CurrentDM = false
         KillToWin = KillToWin * CountPlayersInForceBJ(GetPlayersAll())/2
     end
     for i = 0, bj_MAX_PLAYERS-1 do
@@ -39,7 +39,7 @@ end
 function ButtonClickDM_Actions()
     Mode.Voices.DM = Mode.Voices.DM + 1
     DisplayTimedTextToPlayer(GetTriggerPlayer(), 0, 0, bj_TEXT_DELAY_ALWAYSHINT, "You have voted |c00FF0000Death Match|r mode, wait for others")
-    if Mode.Voices.TVT + Mode.Voices.DM > Players then
+    if Mode.Voices.TVT + Mode.Voices.DM >= Players then
         DestroyTimer(Timer)
         Timer = CreateTimer()
         ChooseTimeElapse_Actions()
@@ -55,7 +55,7 @@ end
 function ButtonClickTVT_Actions()
     Mode.Voices.TVT = Mode.Voices.TVT + 1
     DisplayTimedTextToPlayer(GetTriggerPlayer(), 0, 0, bj_TEXT_DELAY_ALWAYSHINT, "You have voted |c0000FFFFTeam vs Team|r mode, wait for others")
-    if Mode.Voices.TVT + Mode.Voices.DM > Players then
+    if Mode.Voices.TVT + Mode.Voices.DM >= Players then
         DestroyTimer(Timer)
         Timer = CreateTimer()
         ChooseTimeElapse_Actions()

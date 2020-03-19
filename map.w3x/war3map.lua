@@ -119,7 +119,7 @@ function ChooseTimeElapse_Actions()
     DestroyTimerDialog(Dialog)
     PauseAllUnitsBJ(false)
     if Mode.Voices.DM > Mode.Voices.TVT then
-        Mode.Current.DM = true
+        Mode.CurrentDM = true
         print("|c00FF0000Death Match|r mode was chosen by voting prepare to fight, your allies will become to enemy in |c00FFFC005|r second")
         TimerStart(Timer, 5, false, function()
             for i = 0, bj_MAX_PLAYERS-1 do
@@ -138,7 +138,7 @@ function ChooseTimeElapse_Actions()
         TimerDialogDisplay(dialog, true)
     else
         print("|c0000FFFFTeam vs Team|r mode was chosen by voting prepare to fight")
-        Mode.Current.DM = false
+        Mode.CurrentDM = false
         KillToWin = KillToWin * CountPlayersInForceBJ(GetPlayersAll())/2
     end
     for i = 0, bj_MAX_PLAYERS-1 do
@@ -155,7 +155,7 @@ end
 function ButtonClickDM_Actions()
     Mode.Voices.DM = Mode.Voices.DM + 1
     DisplayTimedTextToPlayer(GetTriggerPlayer(), 0, 0, bj_TEXT_DELAY_ALWAYSHINT, "You have voted |c00FF0000Death Match|r mode, wait for others")
-    if Mode.Voices.TVT + Mode.Voices.DM > Players then
+    if Mode.Voices.TVT + Mode.Voices.DM >= Players then
         DestroyTimer(Timer)
         Timer = CreateTimer()
         ChooseTimeElapse_Actions()
@@ -171,7 +171,7 @@ end
 function ButtonClickTVT_Actions()
     Mode.Voices.TVT = Mode.Voices.TVT + 1
     DisplayTimedTextToPlayer(GetTriggerPlayer(), 0, 0, bj_TEXT_DELAY_ALWAYSHINT, "You have voted |c0000FFFFTeam vs Team|r mode, wait for others")
-    if Mode.Voices.TVT + Mode.Voices.DM > Players then
+    if Mode.Voices.TVT + Mode.Voices.DM >= Players then
         DestroyTimer(Timer)
         Timer = CreateTimer()
         ChooseTimeElapse_Actions()
@@ -214,19 +214,19 @@ function Death_Actions()
     local killerplayer = GetOwningPlayer(killer)
     local t = CreateTimer()
     local random = GetRandomInt(1,20)
-    local x = GetRandomReal(GetRectMinX(SpawnRect.revive[random]),GetRectMaxX(SpawnRect.revive[random]))
-    local y = GetRandomReal(GetRectMinY(SpawnRect.revive[random]),GetRectMaxY(SpawnRect.revive[random]))
+    local x = GetRandomReal(GetRectMinX(SpawnRect.Revive[random]),GetRectMaxX(SpawnRect.Revive[random]))
+    local y = GetRandomReal(GetRectMinY(SpawnRect.Revive[random]),GetRectMaxY(SpawnRect.Revive[random]))
     if Hint[GetPlayerId(killerplayer)].Kill then
         Hint[GetPlayerId(killerplayer)].Kill = false
         DisplayTimedTextToPlayer(killerplayer, 0, 0, bj_TEXT_DELAY_ALWAYSHINT, "|c0000FF40Hint:|r You have killed an enemy, collect |c00FFFC00" ..KillToWin.. "|r kills to win")
     end
     Stats[GetPlayerId(killerplayer)].Kill = Stats[GetPlayerId(killerplayer)].Kill + 1
-    if Mode.Current.DM == false then
-        Stats.Team[GetPlayerTeam(killerplayer)] = Stats.Team[killerplayer] + 1
+    if Mode.CurrentDM == false then
+        Stats.Team[GetPlayerTeam(killerplayer)] = Stats.Team[GetPlayerTeam(killerplayer)] + 1
     end
     LeaderboardSetPlayerItemValueBJ(killerplayer,ScoreTable, Stats[GetPlayerId(killerplayer)].Kill)
     LeaderboardSortItemsByValue(ScoreTable, false)
-    if Mode.Current.DM == true then
+    if Mode.CurrentDM == true then
         if Stats[GetPlayerId(killerplayer)].Kill >= KillToWin then
             print("|c0000FF40"..GetPlayerName(killerplayer).."|r player has won, congratulate him, game will be end in |c00FFFC005|r second")
             TimerStart(Timer, 5, false, function()
@@ -258,7 +258,7 @@ function Death_Actions()
     random =  GetRandomInt(3,5)
     if Hint[GetPlayerId(player)].Death then
         Hint[GetPlayerId(player)].Death = false
-        DisplayTimedTextToPlayer(player, 0, 0, bj_TEXT_DELAY_ALWAYSHINT, "|c0000FF40Hint:|r Your hero will be revive in |c00FFFC00"..random.."|r second")
+        DisplayTimedTextToPlayer(player, 0, 0, bj_TEXT_DELAY_ALWAYSHINT, "|c0000FF40Hint:|r Your hero will be Revive in |c00FFFC00"..random.."|r second")
     end
     TimerStart(t, random,false, function()
         ReviveHero(unit, x, y, true)
@@ -402,7 +402,7 @@ function Start()
         [21] = Rect(1024.0, -256.0, 1152.0, -128.0),
         [22] = Rect(1024.0, -384.0, 1152.0, -256.0),
         [23] = Rect(1024.0, -512.0, 1152.0, -384.0),
-        revive = {
+        Revive = {
             [1] = Rect(-1536.0, -1408.0, -1152.0, -896.0),
             [2] = Rect(1152.0, -1408.0, 1536.0, -896.0),
             [3] = Rect(-512.0, -3200.0, 512.0, -2816.0),
@@ -431,6 +431,10 @@ function Start()
     EntireMap()
     Slash()
     TimeElapse()
+    Stats.Team = {
+        [0] = 0,
+        [1] = 0
+    }
     for i = 0, bj_MAX_PLAYERS-1 do
         Hint[i] = {
             Death = true,
@@ -502,49 +506,49 @@ function InitCustomPlayerSlots()
     ForcePlayerStartLocation(Player(0), 0)
     SetPlayerColor(Player(0), ConvertPlayerColor(0))
     SetPlayerRacePreference(Player(0), RACE_PREF_ORC)
-    SetPlayerRaceSelectable(Player(0), false)
+    SetPlayerRaceSelectable(Player(0), true)
     SetPlayerController(Player(0), MAP_CONTROL_USER)
     SetPlayerStartLocation(Player(1), 1)
     ForcePlayerStartLocation(Player(1), 1)
     SetPlayerColor(Player(1), ConvertPlayerColor(1))
     SetPlayerRacePreference(Player(1), RACE_PREF_ORC)
-    SetPlayerRaceSelectable(Player(1), false)
+    SetPlayerRaceSelectable(Player(1), true)
     SetPlayerController(Player(1), MAP_CONTROL_USER)
     SetPlayerStartLocation(Player(2), 2)
     ForcePlayerStartLocation(Player(2), 2)
     SetPlayerColor(Player(2), ConvertPlayerColor(2))
     SetPlayerRacePreference(Player(2), RACE_PREF_ORC)
-    SetPlayerRaceSelectable(Player(2), false)
+    SetPlayerRaceSelectable(Player(2), true)
     SetPlayerController(Player(2), MAP_CONTROL_USER)
     SetPlayerStartLocation(Player(3), 3)
     ForcePlayerStartLocation(Player(3), 3)
     SetPlayerColor(Player(3), ConvertPlayerColor(3))
     SetPlayerRacePreference(Player(3), RACE_PREF_ORC)
-    SetPlayerRaceSelectable(Player(3), false)
+    SetPlayerRaceSelectable(Player(3), true)
     SetPlayerController(Player(3), MAP_CONTROL_USER)
     SetPlayerStartLocation(Player(12), 4)
     ForcePlayerStartLocation(Player(12), 4)
     SetPlayerColor(Player(12), ConvertPlayerColor(12))
     SetPlayerRacePreference(Player(12), RACE_PREF_ORC)
-    SetPlayerRaceSelectable(Player(12), false)
+    SetPlayerRaceSelectable(Player(12), true)
     SetPlayerController(Player(12), MAP_CONTROL_USER)
     SetPlayerStartLocation(Player(13), 5)
     ForcePlayerStartLocation(Player(13), 5)
     SetPlayerColor(Player(13), ConvertPlayerColor(13))
     SetPlayerRacePreference(Player(13), RACE_PREF_ORC)
-    SetPlayerRaceSelectable(Player(13), false)
+    SetPlayerRaceSelectable(Player(13), true)
     SetPlayerController(Player(13), MAP_CONTROL_USER)
     SetPlayerStartLocation(Player(14), 6)
     ForcePlayerStartLocation(Player(14), 6)
     SetPlayerColor(Player(14), ConvertPlayerColor(14))
     SetPlayerRacePreference(Player(14), RACE_PREF_ORC)
-    SetPlayerRaceSelectable(Player(14), false)
+    SetPlayerRaceSelectable(Player(14), true)
     SetPlayerController(Player(14), MAP_CONTROL_USER)
     SetPlayerStartLocation(Player(15), 7)
     ForcePlayerStartLocation(Player(15), 7)
     SetPlayerColor(Player(15), ConvertPlayerColor(15))
     SetPlayerRacePreference(Player(15), RACE_PREF_ORC)
-    SetPlayerRaceSelectable(Player(15), false)
+    SetPlayerRaceSelectable(Player(15), true)
     SetPlayerController(Player(15), MAP_CONTROL_USER)
 end
 

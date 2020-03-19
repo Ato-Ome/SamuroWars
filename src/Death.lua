@@ -5,19 +5,19 @@ function Death_Actions()
     local killerplayer = GetOwningPlayer(killer)
     local t = CreateTimer()
     local random = GetRandomInt(1,20)
-    local x = GetRandomReal(GetRectMinX(SpawnRect.revive[random]),GetRectMaxX(SpawnRect.revive[random]))
-    local y = GetRandomReal(GetRectMinY(SpawnRect.revive[random]),GetRectMaxY(SpawnRect.revive[random]))
+    local x = GetRandomReal(GetRectMinX(SpawnRect.Revive[random]),GetRectMaxX(SpawnRect.Revive[random]))
+    local y = GetRandomReal(GetRectMinY(SpawnRect.Revive[random]),GetRectMaxY(SpawnRect.Revive[random]))
     if Hint[GetPlayerId(killerplayer)].Kill then
         Hint[GetPlayerId(killerplayer)].Kill = false
         DisplayTimedTextToPlayer(killerplayer, 0, 0, bj_TEXT_DELAY_ALWAYSHINT, "|c0000FF40Hint:|r You have killed an enemy, collect |c00FFFC00" ..KillToWin.. "|r kills to win")
     end
     Stats[GetPlayerId(killerplayer)].Kill = Stats[GetPlayerId(killerplayer)].Kill + 1
-    if Mode.Current.DM == false then
-        Stats.Team[GetPlayerTeam(killerplayer)] = Stats.Team[killerplayer] + 1
+    if Mode.CurrentDM == false then
+        Stats.Team[GetPlayerTeam(killerplayer)] = Stats.Team[GetPlayerTeam(killerplayer)] + 1
     end
     LeaderboardSetPlayerItemValueBJ(killerplayer,ScoreTable, Stats[GetPlayerId(killerplayer)].Kill)
     LeaderboardSortItemsByValue(ScoreTable, false)
-    if Mode.Current.DM == true then
+    if Mode.CurrentDM == true then
         if Stats[GetPlayerId(killerplayer)].Kill >= KillToWin then
             print("|c0000FF40"..GetPlayerName(killerplayer).."|r player has won, congratulate him, game will be end in |c00FFFC005|r second")
             TimerStart(Timer, 5, false, function()
@@ -49,7 +49,7 @@ function Death_Actions()
     random =  GetRandomInt(3,5)
     if Hint[GetPlayerId(player)].Death then
         Hint[GetPlayerId(player)].Death = false
-        DisplayTimedTextToPlayer(player, 0, 0, bj_TEXT_DELAY_ALWAYSHINT, "|c0000FF40Hint:|r Your hero will be revive in |c00FFFC00"..random.."|r second")
+        DisplayTimedTextToPlayer(player, 0, 0, bj_TEXT_DELAY_ALWAYSHINT, "|c0000FF40Hint:|r Your hero will be Revive in |c00FFFC00"..random.."|r second")
     end
     TimerStart(t, random,false, function()
         ReviveHero(unit, x, y, true)
