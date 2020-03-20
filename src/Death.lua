@@ -25,7 +25,7 @@ function Death_Actions()
                     if Player(i) == killerplayer then
                         CustomVictoryBJ(killerplayer, true, true)
                     else
-                        CustomDefeatBJ(Player(i, "You are loose, come again to win"))
+                        CustomDefeatBJ(Player(i), "You are loose, come again to win")
                     end
                 end
             end)
@@ -33,13 +33,13 @@ function Death_Actions()
     else
         if Stats.Team[GetPlayerTeam(killerplayer)] >= KillToWin then
             WinTeam = GetPlayerTeam(killerplayer)
-            print("|c0000FF40"..Team.Name[GetPlayerTeam(killerplayer)].."|r team has won, congratulate them, game will be end in |c00FFFC005|r second")
+            print("|c0000FF40"..Team.Name[WinTeam].."|r team has won, congratulate them, game will be end in |c00FFFC005|r second")
             TimerStart(Timer, 5, false, function()
                 for i = 0, bj_MAX_PLAYERS-1 do
-                    if GetPlayerTeam(killerplayer) == WinTeam then
-                        CustomVictoryBJ(killerplayer, true, true)
+                    if GetPlayerTeam(Player(i)) == WinTeam then
+                        CustomVictoryBJ(Player(i), true, true)
                     else
-                        CustomDefeatBJ(Player(i, "Your team are loose, come again to win"))
+                        CustomDefeatBJ(Player(i), "Your team are loose, come again to win")
                     end
                 end
             end)

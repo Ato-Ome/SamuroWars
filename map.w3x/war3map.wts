@@ -133,12 +133,6 @@ STRING 69
 Jumps a short distance leaving a cloud of dust
 }
 
-STRING 70
-// Abilities: A002 (Bladestorm), Ubertip (Tooltip - Normal - Extended)
-{
-Surrounds the master of the blade with a whirlwind of destructive force, which deals 250 damage / sec. nearby ground enemies. |nDuration: 5 seconds |n|Cffffcc00Cannot harm enemies in a whirlwind state.|r
-}
-
 STRING 71
 // Abilities: A002 (Bladestorm), Tip (Tooltip - Normal)
 {
@@ -187,5 +181,11 @@ Player 15
 STRING 79
 {
 Player 16
+}
+
+STRING 80
+// Abilities: A002 (Bladestorm), Ubertip (Tooltip - Normal - Extended)
+{
+Surrounds the master of the blade with a whirlwind of destructive force, which deals 350 damage / sec. nearby ground enemies. |nDuration: 3 seconds |n|Cffffcc00Cannot harm enemies in a whirlwind state.|r
 }
 

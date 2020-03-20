@@ -23,13 +23,11 @@ function ChooseTimeElapse_Actions()
     else
         print("|c0000FFFFTeam vs Team|r mode was chosen by voting prepare to fight")
         Mode.CurrentDM = false
-        KillToWin = KillToWin * CountPlayersInForceBJ(GetPlayersAll())/2
-    end
-    for i = 0, bj_MAX_PLAYERS-1 do
-        DialogDisplay(Player(i),Mode.Dialog,false)
+        KillToWin = math.ceil(KillToWin * CountPlayersInForceBJ(GetPlayersAll())/2)
     end
     ScoreTable = CreateLeaderboardBJ(GetPlayersAll(), "Score Table ".."|c00FFFC00"..KillToWin.."|r kills to win")
     for i = 0,bj_MAX_PLAYERS-1 do
+        DialogDisplay(Player(i),Mode.Dialog,false)
         if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING then
             LeaderboardAddItemBJ(Player(i), ScoreTable, GetPlayerName(Player(i)), 0)
         end

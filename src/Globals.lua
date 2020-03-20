@@ -15,7 +15,7 @@ CritFactor = {}
 Stats = {
     Team = {}
 }
-KillToWin = 20
+KillToWin = 30
 Timer = CreateTimer()
 Team = {
     [0] = CreateForce(),
@@ -26,3 +26,4 @@ Team = {
     }
 }
 WinTeam = nil
+Effect = {}

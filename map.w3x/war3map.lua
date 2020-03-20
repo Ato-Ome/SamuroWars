@@ -26,7 +26,7 @@ CritFactor = {}
 Stats = {
     Team = {}
 }
-KillToWin = 20
+KillToWin = 30
 Timer = CreateTimer()
 Team = {
     [0] = CreateForce(),
@@ -37,6 +37,7 @@ Team = {
     }
 }
 WinTeam = nil
+Effect = {}
 ---@param text string
 ---@param textSize real
 ---@param x real
@@ -139,13 +140,11 @@ function ChooseTimeElapse_Actions()
     else
         print("|c0000FFFFTeam vs Team|r mode was chosen by voting prepare to fight")
         Mode.CurrentDM = false
-        KillToWin = KillToWin * CountPlayersInForceBJ(GetPlayersAll())/2
-    end
-    for i = 0, bj_MAX_PLAYERS-1 do
-        DialogDisplay(Player(i),Mode.Dialog,false)
+        KillToWin = math.ceil(KillToWin * CountPlayersInForceBJ(GetPlayersAll())/2)
     end
     ScoreTable = CreateLeaderboardBJ(GetPlayersAll(), "Score Table ".."|c00FFFC00"..KillToWin.."|r kills to win")
     for i = 0,bj_MAX_PLAYERS-1 do
+        DialogDisplay(Player(i),Mode.Dialog,false)
         if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING then
             LeaderboardAddItemBJ(Player(i), ScoreTable, GetPlayerName(Player(i)), 0)
         end
@@ -234,7 +233,7 @@ function Death_Actions()
                     if Player(i) == killerplayer then
                         CustomVictoryBJ(killerplayer, true, true)
                     else
-                        CustomDefeatBJ(Player(i, "You are loose, come again to win"))
+                        CustomDefeatBJ(Player(i), "You are loose, come again to win")
                     end
                 end
             end)
@@ -242,13 +241,13 @@ function Death_Actions()
     else
         if Stats.Team[GetPlayerTeam(killerplayer)] >= KillToWin then
             WinTeam = GetPlayerTeam(killerplayer)
-            print("|c0000FF40"..Team.Name[GetPlayerTeam(killerplayer)].."|r team has won, congratulate them, game will be end in |c00FFFC005|r second")
+            print("|c0000FF40"..Team.Name[WinTeam].."|r team has won, congratulate them, game will be end in |c00FFFC005|r second")
             TimerStart(Timer, 5, false, function()
                 for i = 0, bj_MAX_PLAYERS-1 do
-                    if GetPlayerTeam(killerplayer) == WinTeam then
-                        CustomVictoryBJ(killerplayer, true, true)
+                    if GetPlayerTeam(Player(i)) == WinTeam then
+                        CustomVictoryBJ(Player(i), true, true)
                     else
-                        CustomDefeatBJ(Player(i, "Your team are loose, come again to win"))
+                        CustomDefeatBJ(Player(i), "Your team are loose, come again to win")
                     end
                 end
             end)
@@ -278,7 +277,10 @@ function Damage_Actions()
     local source = GetEventDamageSource()
     local player = GetOwningPlayer(unit)
     local sourceplayer = GetOwningPlayer(source)
-    local damage = GetEventDamage()*CritFactor[GetPlayerId(sourceplayer)]
+    local damage = GetEventDamage()
+    if GetUnitCurrentOrder(source) ~= String2OrderIdBJ("defend") then
+        damage = damage*CritFactor[GetPlayerId(sourceplayer)]
+    end
     BlzSetEventDamage(damage)
     local effect
     if Hint[GetPlayerId(sourceplayer)].Mana then
@@ -288,34 +290,34 @@ function Damage_Actions()
     if GetUnitCurrentOrder(unit) == String2OrderIdBJ("defend") then
         if Hint[GetPlayerId(player)].Parry then
             Hint[GetPlayerId(player)].Parry = false
-            DisplayTimedTextToPlayer(player, 0, 0, bj_TEXT_DELAY_ALWAYSHINT, "|c0000FF40Hint:|r Parry returns all damage filling up your mana, also it increases your damage factor by |c00FFFC000.5|r until next attack")
+            DisplayTimedTextToPlayer(player, 0, 0, bj_TEXT_DELAY_ALWAYSHINT, "|c0000FF40Hint:|r Parry returns all damage filling up your mana, also it increases your damage factor for |c00FFFC002|r  sec")
         end
-        UnitDamageTargetBJ(unit, source, damage, BlzGetEventAttackType(), BlzGetEventDamageType())
+        UnitDamageTargetBJ(unit, source, damage, BlzGetEventAttackType(), DAMAGE_TYPE_DEFENSIVE)
         SetUnitState(unit, UNIT_STATE_MANA, GetUnitState(unit, UNIT_STATE_MANA) + damage / 5)
-        CritFactor[GetPlayerId(player)] = CritFactor[GetPlayerId(player)] + 1
+        if BlzGetEventDamageType() ~= DAMAGE_TYPE_ENHANCED then
+            CritFactor[GetPlayerId(player)] = CritFactor[GetPlayerId(player)] + 1
+        end
         if GetPlayerController(player) == MAP_CONTROL_USER then
             FlyTextTagMiss(unit, "Parry", player)
             FlyTextTagManaBurn(unit, "+" .. math.ceil(damage/5), player)
         end
         BlzSetEventDamage(0.0)
         PlaySoundOnUnitBJ(gg_snd_MetalHeavySliceMetal1, 100, unit)
-        effect = AddSpecialEffect("Abilities\\Spells\\Human\\Defend\\DefendCaster.mdl", GetUnitX(unit),GetUnitY(unit))
-        DestroyEffect(effect)
+        effect = AddSpecialEffectTarget("Abilities\\Spells\\Items\\AIda\\AIdaTarget.mdl", unit, "overhead")
+        BlzSetSpecialEffectTime(effect, 0.3)
+        TimerStart(CreateTimer(), 0.3, false, function() DestroyEffect(effect) DestroyTimer(GetExpiredTimer()) end)
     elseif GetUnitState(unit,UNIT_STATE_LIFE) < damage then
         Mana[GetPlayerId(GetOwningPlayer(unit))] = GetUnitState(unit, UNIT_STATE_MANA)
     end
     if GetEventDamage() > 0 then
         if GetPlayerController(sourceplayer) == MAP_CONTROL_USER then
-            local textsize = 0.018 + damage / 10000
+            local textsize = 0.018 + damage / 30000
             FlyTextTag("-" .. math.ceil(damage), textsize, GetUnitX(unit) - 32, GetUnitY(unit), 32, 255, 0, 0, 255, 0, 0.03, 1.5, 2, sourceplayer)
         end
         SetUnitState(source, UNIT_STATE_MANA, GetUnitState(source, UNIT_STATE_MANA) + damage / 5)
         if GetPlayerController(sourceplayer) == MAP_CONTROL_USER then
             FlyTextTagManaBurn(source, "+" .. math.ceil(damage/5), sourceplayer)
         end
-    end
-    if GetUnitCurrentOrder(source) ~= String2OrderIdBJ("defend") then
-        CritFactor[GetPlayerId(sourceplayer)] = 1
     end
 end
 
@@ -325,6 +327,7 @@ function Damage()
 end
 function EntireMap_Actions()
     TriggerRegisterUnitEvent(Trigger.Damage, GetTriggerUnit(), EVENT_UNIT_DAMAGED)
+    TriggerRegisterUnitEvent(Trigger.Damaging, GetTriggerUnit(), EVENT_UNIT_DAMAGING)
 end
 
 function EntireMap()
@@ -425,12 +428,12 @@ function Start()
             [20] = Rect(384.0, -1280.0, 1024.0, -896.0)
         }
     }
-    FogMaskEnableOff()
     Death()
     Damage()
     EntireMap()
     Slash()
     TimeElapse()
+    Parry()
     Stats.Team = {
         [0] = 0,
         [1] = 0
@@ -443,12 +446,13 @@ function Start()
             Slash = true,
             Kill = true
         }
+        FogModifierStart(CreateFogModifierRect(Player(i), FOG_OF_WAR_VISIBLE, GetPlayableMapRect(), true, false))
     end
 
     for i = 0, bj_MAX_PLAYERS-1 do
         if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING then
             unit = CreateUnit(Player(i),FourCC("O000"), GetRectCenterX(SpawnRect[i]), GetRectCenterY(SpawnRect[i]),GetPlayerTeam(Player(i))*180)
-            if GetPlayerController() == MAP_CONTROL_USER then
+            if GetPlayerController(Player(i)) == MAP_CONTROL_USER then
                 Players = Players + 1
             end
             CritFactor[i] = 1
@@ -462,9 +466,104 @@ function Start()
         end
     end
 end
+function Parry_Conditions()
+    return GetSpellAbilityId() == FourCC("A000")
+end
+
+function Parry_Actions()
+    local unit = GetTriggerUnit()
+    local player = GetOwningPlayer(unit)
+    if CritFactor[GetPlayerId(player)] ~= 1 then
+        Effect[GetPlayerId(player)] = {
+            Crit = AddSpecialEffectTargetUnitBJ("weapon", unit, "Sweep_Fire_Large.mdx")
+        }
+        TimerStart(CreateTimer(), 2, false, function()
+            CritFactor[GetPlayerId(player)] = 1
+            if Effect[GetPlayerId(player)].Crit ~= nil then
+               DestroyEffect(Effect[GetPlayerId(player)].Crit)
+            end
+            DestroyTimer(GetExpiredTimer())
+        end)
+    end
+end
+
+function Parry()
+    Trigger.Parry = CreateTrigger()
+    TriggerRegisterAnyUnitEventBJ(Trigger.Parry, EVENT_PLAYER_UNIT_SPELL_ENDCAST)
+    TriggerAddCondition(Trigger.Parry, Condition(Parry_Conditions))
+    TriggerAddAction(Trigger.Parry, Parry_Actions)
+end
+function PrintDamageType(damagetype)
+    if damagetype == DAMAGE_TYPE_UNKNOWN then
+        print("DAMAGE_TYPE_UNKNOWN")
+    end
+    if damagetype == DAMAGE_TYPE_NORMAL then
+        print("DAMAGE_TYPE_NORMAL")
+    end
+    if damagetype == DAMAGE_TYPE_ENHANCED then
+        print("DAMAGE_TYPE_ENHANCED")
+    end
+    if damagetype == DAMAGE_TYPE_FIRE then
+        print("DAMAGE_TYPE_FIRE")
+    end
+    if damagetype == DAMAGE_TYPE_COLD then
+        print("DAMAGE_TYPE_COLD")
+    end
+    if damagetype == DAMAGE_TYPE_LIGHTNING then
+        print("DAMAGE_TYPE_LIGHTNING")
+    end
+    if damagetype == DAMAGE_TYPE_POISON then
+        print("DAMAGE_TYPE_POISON")
+    end
+    if damagetype == DAMAGE_TYPE_DISEASE then
+        print("DAMAGE_TYPE_")
+    end
+    if damagetype == DAMAGE_TYPE_DIVINE then
+        print("DAMAGE_TYPE_DIVINE")
+    end
+    if damagetype == DAMAGE_TYPE_MAGIC then
+        print("DAMAGE_TYPE_MAGIC")
+    end
+    if damagetype == DAMAGE_TYPE_SONIC then
+        print("DAMAGE_TYPE_SONIC")
+    end
+    if damagetype == DAMAGE_TYPE_ACID then
+        print("DAMAGE_TYPE_ACID")
+    end
+    if damagetype == DAMAGE_TYPE_FORCE then
+        print("DAMAGE_TYPE_FORCE")
+    end
+    if damagetype == DAMAGE_TYPE_DEATH then
+        print("DAMAGE_TYPE_DEATH")
+    end
+    if damagetype == DAMAGE_TYPE_MIND then
+        print("DAMAGE_TYPE_MIND")
+    end
+    if damagetype == DAMAGE_TYPE_PLANT then
+        print("DAMAGE_TYPE_PLANT")
+    end
+    if damagetype == DAMAGE_TYPE_DEFENSIVE then
+        print("DAMAGE_TYPE_DEFENSIVE")
+    end
+    if damagetype == DAMAGE_TYPE_DEMOLITION then
+        print("DAMAGE_TYPE_DEMOLITION")
+    end
+    if damagetype == DAMAGE_TYPE_SLOW_POISON then
+        print("DAMAGE_TYPE_SLOW_POISON")
+    end
+    if damagetype == DAMAGE_TYPE_SPIRIT_LINK then
+        print("DAMAGE_TYPE_SPIRIT_LINK")
+    end
+    if damagetype == DAMAGE_TYPE_SHADOW_STRIKE then
+        print("DAMAGE_TYPE_SHADOW_STRIKE")
+    end
+    if damagetype == DAMAGE_TYPE_UNIVERSAL then
+        print("DAMAGE_TYPE_UNIVERSAL")
+    end
+end
 --CUSTOM_CODE
 function Trig_Initialization_Actions()
-    SetTimeOfDay(6.00)
+    MeleeStartingVisibility()
     SetMapMusicRandomBJ(gg_snd_great_player01)
         Start()
 end
@@ -506,49 +605,49 @@ function InitCustomPlayerSlots()
     ForcePlayerStartLocation(Player(0), 0)
     SetPlayerColor(Player(0), ConvertPlayerColor(0))
     SetPlayerRacePreference(Player(0), RACE_PREF_ORC)
-    SetPlayerRaceSelectable(Player(0), true)
+    SetPlayerRaceSelectable(Player(0), false)
     SetPlayerController(Player(0), MAP_CONTROL_USER)
     SetPlayerStartLocation(Player(1), 1)
     ForcePlayerStartLocation(Player(1), 1)
     SetPlayerColor(Player(1), ConvertPlayerColor(1))
     SetPlayerRacePreference(Player(1), RACE_PREF_ORC)
-    SetPlayerRaceSelectable(Player(1), true)
+    SetPlayerRaceSelectable(Player(1), false)
     SetPlayerController(Player(1), MAP_CONTROL_USER)
     SetPlayerStartLocation(Player(2), 2)
     ForcePlayerStartLocation(Player(2), 2)
     SetPlayerColor(Player(2), ConvertPlayerColor(2))
     SetPlayerRacePreference(Player(2), RACE_PREF_ORC)
-    SetPlayerRaceSelectable(Player(2), true)
+    SetPlayerRaceSelectable(Player(2), false)
     SetPlayerController(Player(2), MAP_CONTROL_USER)
     SetPlayerStartLocation(Player(3), 3)
     ForcePlayerStartLocation(Player(3), 3)
     SetPlayerColor(Player(3), ConvertPlayerColor(3))
     SetPlayerRacePreference(Player(3), RACE_PREF_ORC)
-    SetPlayerRaceSelectable(Player(3), true)
+    SetPlayerRaceSelectable(Player(3), false)
     SetPlayerController(Player(3), MAP_CONTROL_USER)
     SetPlayerStartLocation(Player(12), 4)
     ForcePlayerStartLocation(Player(12), 4)
     SetPlayerColor(Player(12), ConvertPlayerColor(12))
     SetPlayerRacePreference(Player(12), RACE_PREF_ORC)
-    SetPlayerRaceSelectable(Player(12), true)
+    SetPlayerRaceSelectable(Player(12), false)
     SetPlayerController(Player(12), MAP_CONTROL_USER)
     SetPlayerStartLocation(Player(13), 5)
     ForcePlayerStartLocation(Player(13), 5)
     SetPlayerColor(Player(13), ConvertPlayerColor(13))
     SetPlayerRacePreference(Player(13), RACE_PREF_ORC)
-    SetPlayerRaceSelectable(Player(13), true)
+    SetPlayerRaceSelectable(Player(13), false)
     SetPlayerController(Player(13), MAP_CONTROL_USER)
     SetPlayerStartLocation(Player(14), 6)
     ForcePlayerStartLocation(Player(14), 6)
     SetPlayerColor(Player(14), ConvertPlayerColor(14))
     SetPlayerRacePreference(Player(14), RACE_PREF_ORC)
-    SetPlayerRaceSelectable(Player(14), true)
+    SetPlayerRaceSelectable(Player(14), false)
     SetPlayerController(Player(14), MAP_CONTROL_USER)
     SetPlayerStartLocation(Player(15), 7)
     ForcePlayerStartLocation(Player(15), 7)
     SetPlayerColor(Player(15), ConvertPlayerColor(15))
     SetPlayerRacePreference(Player(15), RACE_PREF_ORC)
-    SetPlayerRaceSelectable(Player(15), true)
+    SetPlayerRaceSelectable(Player(15), false)
     SetPlayerController(Player(15), MAP_CONTROL_USER)
 end
 

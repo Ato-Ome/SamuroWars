@@ -48,12 +48,12 @@ function Start()
             [20] = Rect(384.0, -1280.0, 1024.0, -896.0)
         }
     }
-    FogMaskEnableOff()
     Death()
     Damage()
     EntireMap()
     Slash()
     TimeElapse()
+    Parry()
     Stats.Team = {
         [0] = 0,
         [1] = 0
@@ -66,12 +66,13 @@ function Start()
             Slash = true,
             Kill = true
         }
+        FogModifierStart(CreateFogModifierRect(Player(i), FOG_OF_WAR_VISIBLE, GetPlayableMapRect(), true, false))
     end
 
     for i = 0, bj_MAX_PLAYERS-1 do
         if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING then
             unit = CreateUnit(Player(i),FourCC("O000"), GetRectCenterX(SpawnRect[i]), GetRectCenterY(SpawnRect[i]),GetPlayerTeam(Player(i))*180)
-            if GetPlayerController() == MAP_CONTROL_USER then
+            if GetPlayerController(Player(i)) == MAP_CONTROL_USER then
                 Players = Players + 1
             end
             CritFactor[i] = 1

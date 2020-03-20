@@ -1,5 +1,5 @@
 require 'build' {
-    run = 'editor',
+    --run = 'editor',
     src = {
         'src\\Globals.lua',
         'src\\TextTag.lua',
@@ -8,6 +8,8 @@ require 'build' {
         'src\\Damage.lua',
         'src\\EntireMap.lua',
         'src\\Slash.lua',
-        'src\\Start.lua'
+        'src\\Start.lua',
+        'src\\Parry.lua',
+        'src\\PrintDamageType.lua'
     }
 }
