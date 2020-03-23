@@ -20,12 +20,12 @@ function Damage_Actions()
         end
         UnitDamageTargetBJ(unit, source, damage, BlzGetEventAttackType(), DAMAGE_TYPE_DEFENSIVE)
         SetUnitState(unit, UNIT_STATE_MANA, GetUnitState(unit, UNIT_STATE_MANA) + damage / 5)
-        if BlzGetEventDamageType() ~= DAMAGE_TYPE_ENHANCED then
-            CritFactor[GetPlayerId(player)] = CritFactor[GetPlayerId(player)] + 1
-        end
         if GetPlayerController(player) == MAP_CONTROL_USER then
             FlyTextTagMiss(unit, "Parry", player)
             FlyTextTagManaBurn(unit, "+" .. math.ceil(damage/5), player)
+        end
+        if BlzGetEventDamageType() ~= DAMAGE_TYPE_ENHANCED then
+            CritFactor[GetPlayerId(player)] = CritFactor[GetPlayerId(player)] + 1
         end
         BlzSetEventDamage(0.0)
         PlaySoundOnUnitBJ(gg_snd_MetalHeavySliceMetal1, 100, unit)
@@ -44,7 +44,9 @@ function Damage_Actions()
         if GetPlayerController(sourceplayer) == MAP_CONTROL_USER then
             FlyTextTagManaBurn(source, "+" .. math.ceil(damage/5), sourceplayer)
         end
+        TimerStart(CreateTimer(), 0.03, false, function() DestroyEffect(Effect[GetPlayerId(player)].Crit) CritFactor[GetPlayerId(player)] = CritDefault[GetPlayerId(player)] DestroyTimer(GetExpiredTimer()) end)
     end
+    --PrintDamage(true, damage, BlzGetEventDamageType(), BlzGetEventAttackType(), BlzGetEventWeaponType(), true, true, true)
 end
 
 function Damage()

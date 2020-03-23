@@ -1,5 +1,5 @@
 require 'build' {
-    --run = 'editor',
+    run = 'editor',
     src = {
         'src\\Globals.lua',
         'src\\TextTag.lua',

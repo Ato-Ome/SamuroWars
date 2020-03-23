@@ -12,6 +12,7 @@ Mode ={
 Players = 0
 Hint = {}
 CritFactor = {}
+CritDefault = {}
 Stats = {
     Team = {}
 }
@@ -27,3 +28,12 @@ Team = {
 }
 WinTeam = nil
 Effect = {}
+Boost = {
+    Count = 4,
+    [1] = FourCC('DAMAGE'),
+    [2] = FourCC('SPEED'),
+    [3] = FourCC('CRIT'),
+    [4] = FourCC('HEALTH'),
+    [5] = FourCC('MANA'),
+    [6] = FourCC('FIRE')
+}

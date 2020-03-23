@@ -42,10 +42,10 @@ function Start()
             [14] = Rect(640.0, -2560.0, 1152.0, -2048.0),
             [15] = Rect(-1152.0, 1536.0, -640.0, 2048.0),
             [16] = Rect(640.0, 1536.0, 1152.0, 2048.0),
-            [17] = Rect(-1024.0, 384.0, -384.0, 768.0),
-            [18] = Rect(384.0, 384.0, 1024.0, 768.0),
-            [19] = Rect(-1024.0, -1280.0, -384.0, -896.0),
-            [20] = Rect(384.0, -1280.0, 1024.0, -896.0)
+            [17] = Rect(-1024.0, 384.0, -384.0, 768.0), --center top left
+            [18] = Rect(384.0, 384.0, 1024.0, 768.0), --center top right
+            [19] = Rect(-1024.0, -1280.0, -384.0, -896.0), --center bottom left
+            [20] = Rect(384.0, -1280.0, 1024.0, -896.0)  --center bottom right
         }
     }
     Death()
@@ -76,6 +76,8 @@ function Start()
                 Players = Players + 1
             end
             CritFactor[i] = 1
+            CritDefault[i] = 1
+            print("CRIT FACTOR")
             Stats[i] = {
                 Kill = 0,
                 Death = 0,

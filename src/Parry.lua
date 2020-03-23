@@ -5,14 +5,14 @@ end
 function Parry_Actions()
     local unit = GetTriggerUnit()
     local player = GetOwningPlayer(unit)
-    if CritFactor[GetPlayerId(player)] ~= 1 then
+    if CritFactor[GetPlayerId(player)] ~= CritDefault[GetPlayerId(player)] then
         Effect[GetPlayerId(player)] = {
             Crit = AddSpecialEffectTargetUnitBJ("weapon", unit, "Sweep_Fire_Large.mdx")
         }
         TimerStart(CreateTimer(), 2, false, function()
-            CritFactor[GetPlayerId(player)] = 1
+            CritFactor[GetPlayerId(player)] = CritDefault[GetPlayerId(player)]
             if Effect[GetPlayerId(player)].Crit ~= nil then
-               DestroyEffect(Effect[GetPlayerId(player)].Crit)
+                DestroyEffect(Effect[GetPlayerId(player)].Crit)
             end
             DestroyTimer(GetExpiredTimer())
         end)
