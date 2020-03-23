@@ -1,4 +1,5 @@
 gg_snd_great_player01 = ""
+gg_snd_AchievementEarned = nil
 gg_trg_Initialization = nil
 gg_trg_AttackAllied = nil
 function InitGlobals()
@@ -6,6 +7,10 @@ end
 
 function InitSounds()
     gg_snd_great_player01 = "war3mapImported/great_player.mp3"
+    gg_snd_AchievementEarned = CreateSound("Sound/Interface/AchievementEarned.flac", false, false, false, 0, 0, "DefaultEAXON")
+    SetSoundParamsFromLabel(gg_snd_AchievementEarned, "AchievementEarned")
+    SetSoundDuration(gg_snd_AchievementEarned, 4173)
+    SetSoundVolume(gg_snd_AchievementEarned, 127)
 end
 
 --CUSTOM_CODE
@@ -40,13 +45,13 @@ Team = {
 WinTeam = nil
 Effect = {}
 Boost = {
-    Count = 4,
-    [1] = FourCC('DAMAGE'),
-    [2] = FourCC('SPEED'),
-    [3] = FourCC('CRIT'),
-    [4] = FourCC('HEALTH'),
-    [5] = FourCC('MANA'),
-    [6] = FourCC('FIRE')
+    Count = 6,
+    [1] = FourCC('I000'),
+    [2] = FourCC('I001'),
+    [3] = FourCC('I002'),
+    [4] = FourCC('I003'),
+    [5] = FourCC('I004'),
+    [6] = FourCC('I005')
 }
 ---@param text string
 ---@param textSize real
@@ -288,7 +293,7 @@ function Damage_Actions()
     local player = GetOwningPlayer(unit)
     local sourceplayer = GetOwningPlayer(source)
     local damage = GetEventDamage()
-    if GetUnitCurrentOrder(source) ~= String2OrderIdBJ("defend") then
+    if GetUnitCurrentOrder(source) ~= String2OrderIdBJ("defend") and GetUnitTypeId(source) ~= UNIT_TYPE_SUMMONED then
         damage = damage*CritFactor[GetPlayerId(sourceplayer)]
     end
     BlzSetEventDamage(damage)
@@ -328,7 +333,9 @@ function Damage_Actions()
         if GetPlayerController(sourceplayer) == MAP_CONTROL_USER then
             FlyTextTagManaBurn(source, "+" .. math.ceil(damage/5), sourceplayer)
         end
-        TimerStart(CreateTimer(), 0.03, false, function() DestroyEffect(Effect[GetPlayerId(player)].Crit) CritFactor[GetPlayerId(player)] = CritDefault[GetPlayerId(player)] DestroyTimer(GetExpiredTimer()) end)
+        if GetUnitTypeId(source) ~= UNIT_TYPE_SUMMONED then
+            TimerStart(CreateTimer(), 0.03, false, function() DestroyEffect(Effect[GetPlayerId(player)].Crit) CritFactor[GetPlayerId(player)] = CritDefault[GetPlayerId(player)] DestroyTimer(GetExpiredTimer()) end)
+        end
     end
     --PrintDamage(true, damage, BlzGetEventDamageType(), BlzGetEventAttackType(), BlzGetEventWeaponType(), true, true, true)
 end
@@ -469,7 +476,6 @@ function Start()
             end
             CritFactor[i] = 1
             CritDefault[i] = 1
-            print("CRIT FACTOR")
             Stats[i] = {
                 Kill = 0,
                 Death = 0,
@@ -479,6 +485,7 @@ function Start()
             PanCameraToForPlayer(Player(i),GetUnitX(unit),GetUnitY(unit))
         end
     end
+    TimerStart(CreateTimer(), 45, true, SpawnBoost)
 end
 function Parry_Conditions()
     return GetSpellAbilityId() == FourCC("A000")
@@ -634,6 +641,19 @@ function PrintDamage(showdamage, damage, damagetype, attacktype, weapontype, sho
             print("WEAPON_TYPE_ROCK_HEAVY_BASH")
         end
     end
+end
+function SpawnBoost()
+    local random = GetRandomInt(17, 20)
+    local rectname = {
+        [17] = "|c0000FF40top left|r",
+        [18]  = "|c0000FF40top right|r",
+        [19] = "|c0000FF40bottom left|r",
+        [20] = "|c0000FF40bottom right|r"
+    }
+    local x = GetRectCenterX(SpawnRect.Revive[random])
+    local y = GetRectCenterY(SpawnRect.Revive[random])
+    local item = CreateItem(Boost[GetRandomInt(1, Boost.Count)], x, y)
+    print("|c00FFFC00"..GetItemName(item).."|r has created in "..rectname[random].." of center region")
 end
 --CUSTOM_CODE
 function Trig_Initialization_Actions()

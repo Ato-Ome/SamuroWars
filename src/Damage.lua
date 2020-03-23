@@ -4,7 +4,7 @@ function Damage_Actions()
     local player = GetOwningPlayer(unit)
     local sourceplayer = GetOwningPlayer(source)
     local damage = GetEventDamage()
-    if GetUnitCurrentOrder(source) ~= String2OrderIdBJ("defend") then
+    if GetUnitCurrentOrder(source) ~= String2OrderIdBJ("defend") and GetUnitTypeId(source) ~= UNIT_TYPE_SUMMONED then
         damage = damage*CritFactor[GetPlayerId(sourceplayer)]
     end
     BlzSetEventDamage(damage)
@@ -44,7 +44,9 @@ function Damage_Actions()
         if GetPlayerController(sourceplayer) == MAP_CONTROL_USER then
             FlyTextTagManaBurn(source, "+" .. math.ceil(damage/5), sourceplayer)
         end
-        TimerStart(CreateTimer(), 0.03, false, function() DestroyEffect(Effect[GetPlayerId(player)].Crit) CritFactor[GetPlayerId(player)] = CritDefault[GetPlayerId(player)] DestroyTimer(GetExpiredTimer()) end)
+        if GetUnitTypeId(source) ~= UNIT_TYPE_SUMMONED then
+            TimerStart(CreateTimer(), 0.03, false, function() DestroyEffect(Effect[GetPlayerId(player)].Crit) CritFactor[GetPlayerId(player)] = CritDefault[GetPlayerId(player)] DestroyTimer(GetExpiredTimer()) end)
+        end
     end
     --PrintDamage(true, damage, BlzGetEventDamageType(), BlzGetEventAttackType(), BlzGetEventWeaponType(), true, true, true)
 end

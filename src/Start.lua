@@ -77,7 +77,6 @@ function Start()
             end
             CritFactor[i] = 1
             CritDefault[i] = 1
-            print("CRIT FACTOR")
             Stats[i] = {
                 Kill = 0,
                 Death = 0,
@@ -87,4 +86,5 @@ function Start()
             PanCameraToForPlayer(Player(i),GetUnitX(unit),GetUnitY(unit))
         end
     end
+    TimerStart(CreateTimer(), 45, true, SpawnBoost)
 end

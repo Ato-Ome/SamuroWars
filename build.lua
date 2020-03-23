@@ -10,6 +10,7 @@ require 'build' {
         'src\\Slash.lua',
         'src\\Start.lua',
         'src\\Parry.lua',
-        'src\\PrintDamageType.lua'
+        'src\\PrintDamageType.lua',
+        'src\\Boosters.lua'
     }
 }
