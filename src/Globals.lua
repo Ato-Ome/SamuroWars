@@ -37,3 +37,4 @@ Boost = {
     [5] = FourCC('I004'),
     [6] = FourCC('I005')
 }
+AllPlayers = 0

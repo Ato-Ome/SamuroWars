@@ -4,6 +4,7 @@ function ChooseTimeElapse_Actions()
     PauseAllUnitsBJ(false)
     if Mode.Voices.DM > Mode.Voices.TVT then
         Mode.CurrentDM = true
+        KillToWin = math.ceil(KillToWin * AllPlayers / GetPlayers())
         print("|c00FF0000Death Match|r mode was chosen by voting prepare to fight, your allies will become to enemy in |c00FFFC005|r second")
         TimerStart(Timer, 5, false, function()
             for i = 0, bj_MAX_PLAYERS-1 do
@@ -23,7 +24,7 @@ function ChooseTimeElapse_Actions()
     else
         print("|c0000FFFFTeam vs Team|r mode was chosen by voting prepare to fight")
         Mode.CurrentDM = false
-        KillToWin = math.ceil(KillToWin * CountPlayersInForceBJ(GetPlayersAll())/2)
+        KillToWin = math.ceil(KillToWin * 2 * AllPlayers / GetPlayers())
     end
     ScoreTable = CreateLeaderboardBJ(GetPlayersAll(), "Score Table ".."|c00FFFC00"..KillToWin.."|r kills to win")
     for i = 0,bj_MAX_PLAYERS-1 do

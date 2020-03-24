@@ -1,16 +1,19 @@
 ﻿STRING 1
 {
-Samuro Wars
+|c00FF0080Samuro Wars|r 0.1 Beta
 }
 
 STRING 3
 {
+|c00FFFC01WarCraft III: Reforged|r
+Dynamic slasher with two mode: |c0000FFFFTeam vs Team|r and |c00FF0000Death Match|r
 Prove you're the best samurai
+
 }
 
 STRING 4
 {
-Феникс (AtoOme)
+Phoenix  (AtoOme)
 }
 
 STRING 5
@@ -109,12 +112,6 @@ STRING 65
 Parry
 }
 
-STRING 66
-// Abilities: A000 (Parry), Ubertip (Tooltip - Normal - Extended)
-{
-Block and return all incoming damage
-}
-
 STRING 67
 // Abilities: A001 (Jump), Tip (Tooltip - Normal)
 {
@@ -157,12 +154,6 @@ STRING 74
 Slash Atttack
 }
 
-STRING 75
-// Abilities: A003 (Slash Attack), Ubertip (Tooltip - Normal - Extended)
-{
-Deals damage to enemies in front
-}
-
 STRING 76
 {
 Player 13
@@ -187,5 +178,67 @@ STRING 80
 // Abilities: A002 (Bladestorm), Ubertip (Tooltip - Normal - Extended)
 {
 Surrounds the master of the blade with a whirlwind of destructive force, which deals 350 damage / sec. nearby ground enemies. |nDuration: 3 seconds |n|Cffffcc00Cannot harm enemies in a whirlwind state.|r
+}
+
+STRING 81
+{
+2-8
+}
+
+STRING 82
+// Units: O000 (Samurai), Name (Name)
+{
+Samurai
+}
+
+STRING 83
+// Units: O000 (Samurai), Propernames (Proper Names)
+{
+Uesugi Kenshin,Oda Nobunaga,Ukita Hideie,Mori Motonari,Yukimura Sanada,Ishida Mitsunari,Mori Nagayoshi,Takeda Nobushige,Tadatsugu Sakai,Katakura Kagetsuna,Toyotomi Hideyoshi,Toshizou Hijikata,Sakata Gintoki,Himura Kenshin
+}
+
+STRING 84
+// Abilities: A000 (Parry), Ubertip (Tooltip - Normal - Extended)
+{
+Blocks and returns all incoming damage, also when succes increases cricital factor
+}
+
+STRING 85
+// Abilities: A003 (Slash Attack), Ubertip (Tooltip - Normal - Extended)
+{
+Slash attack deals damage to enemies in front
+}
+
+STRING 86
+// Items: I002 (Свиток защиты), Ubertip (Tooltip - Extended)
+{
++6 to allied armor near the hero for 30 sec.
+}
+
+STRING 87
+// Items: I004 (Жезл иллюзий), Ubertip (Tooltip - Extended)
+{
+Creates an illusion that deals minor damage and takes twice as much damage.
+}
+
+STRING 88
+// Items: I005 (Жезл похищения маны), Ubertip (Tooltip - Extended)
+{
+Instantly steals 100 mana from the target and transfers it to the hero.|т Charges: 2.
+}
+
+STRING 89
+{
+ 
+}
+
+STRING 90
+{
+ 
+}
+
+STRING 91
+{
+ 
 }
 

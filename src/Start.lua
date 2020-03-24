@@ -48,6 +48,7 @@ function Start()
             [20] = Rect(384.0, -1280.0, 1024.0, -896.0)  --center bottom right
         }
     }
+    
     Death()
     Damage()
     EntireMap()
@@ -75,6 +76,7 @@ function Start()
             if GetPlayerController(Player(i)) == MAP_CONTROL_USER then
                 Players = Players + 1
             end
+            AllPlayers = AllPlayers + 1
             CritFactor[i] = 1
             CritDefault[i] = 1
             Stats[i] = {
