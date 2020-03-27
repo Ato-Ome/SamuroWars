@@ -38,3 +38,5 @@ Boost = {
     [6] = FourCC('I005')
 }
 AllPlayers = 0
+
+MultiBoard = {}

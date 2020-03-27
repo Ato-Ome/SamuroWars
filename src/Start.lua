@@ -76,6 +76,7 @@ function Start()
             if GetPlayerController(Player(i)) == MAP_CONTROL_USER then
                 Players = Players + 1
             end
+            ForceAddPlayer(Team[GetPlayerTeam(Player(i))], Player(i))
             AllPlayers = AllPlayers + 1
             CritFactor[i] = 1
             CritDefault[i] = 1

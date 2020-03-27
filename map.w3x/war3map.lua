@@ -54,6 +54,8 @@ Boost = {
     [6] = FourCC('I005')
 }
 AllPlayers = 0
+
+MultiBoard = {}
 ---@param text string
 ---@param textSize real
 ---@param x real
@@ -247,10 +249,12 @@ function Death_Actions()
             print("|c0000FF40"..GetPlayerName(killerplayer).."|r player has won, congratulate him, game will be end in |c00FFFC005|r second")
             TimerStart(Timer, 5, false, function()
                 for i = 0, bj_MAX_PLAYERS-1 do
-                    if Player(i) == killerplayer then
-                        CustomVictoryBJ(killerplayer, true, true)
-                    else
-                        CustomDefeatBJ(Player(i), "You are loose, come again to win")
+                    if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING then
+                        if Player(i) == killerplayer then
+                            CustomVictoryBJ(killerplayer, true, true)
+                        else
+                            CustomDefeatBJ(Player(i), "You are loose, come again to win")
+                        end
                     end
                 end
             end)
@@ -261,10 +265,12 @@ function Death_Actions()
             print("|c0000FF40"..Team.Name[WinTeam].."|r team has won, congratulate them, game will be end in |c00FFFC005|r second")
             TimerStart(Timer, 5, false, function()
                 for i = 0, bj_MAX_PLAYERS-1 do
-                    if GetPlayerTeam(Player(i)) == WinTeam then
-                        CustomVictoryBJ(Player(i), true, true)
-                    else
-                        CustomDefeatBJ(Player(i), "Your team are loose, come again to win")
+                    if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING then
+                        if GetPlayerTeam(Player(i)) == WinTeam then
+                            CustomVictoryBJ(Player(i), true, true)
+                        else
+                            CustomDefeatBJ(Player(i), "Your team are loose, come again to win")
+                        end
                     end
                 end
             end)
@@ -449,6 +455,7 @@ function Start()
             [20] = Rect(384.0, -1280.0, 1024.0, -896.0)  --center bottom right
         }
     }
+    
     Death()
     Damage()
     EntireMap()
@@ -476,6 +483,7 @@ function Start()
             if GetPlayerController(Player(i)) == MAP_CONTROL_USER then
                 Players = Players + 1
             end
+            ForceAddPlayer(Team[GetPlayerTeam(Player(i))], Player(i))
             AllPlayers = AllPlayers + 1
             CritFactor[i] = 1
             CritDefault[i] = 1
@@ -709,43 +717,43 @@ function InitCustomPlayerSlots()
     SetPlayerColor(Player(1), ConvertPlayerColor(1))
     SetPlayerRacePreference(Player(1), RACE_PREF_ORC)
     SetPlayerRaceSelectable(Player(1), false)
-    SetPlayerController(Player(1), MAP_CONTROL_USER)
+    SetPlayerController(Player(1), MAP_CONTROL_COMPUTER)
     SetPlayerStartLocation(Player(2), 2)
     ForcePlayerStartLocation(Player(2), 2)
     SetPlayerColor(Player(2), ConvertPlayerColor(2))
     SetPlayerRacePreference(Player(2), RACE_PREF_ORC)
     SetPlayerRaceSelectable(Player(2), false)
-    SetPlayerController(Player(2), MAP_CONTROL_USER)
+    SetPlayerController(Player(2), MAP_CONTROL_COMPUTER)
     SetPlayerStartLocation(Player(3), 3)
     ForcePlayerStartLocation(Player(3), 3)
     SetPlayerColor(Player(3), ConvertPlayerColor(3))
     SetPlayerRacePreference(Player(3), RACE_PREF_ORC)
     SetPlayerRaceSelectable(Player(3), false)
-    SetPlayerController(Player(3), MAP_CONTROL_USER)
+    SetPlayerController(Player(3), MAP_CONTROL_COMPUTER)
     SetPlayerStartLocation(Player(12), 4)
     ForcePlayerStartLocation(Player(12), 4)
     SetPlayerColor(Player(12), ConvertPlayerColor(12))
     SetPlayerRacePreference(Player(12), RACE_PREF_ORC)
     SetPlayerRaceSelectable(Player(12), false)
-    SetPlayerController(Player(12), MAP_CONTROL_USER)
+    SetPlayerController(Player(12), MAP_CONTROL_COMPUTER)
     SetPlayerStartLocation(Player(13), 5)
     ForcePlayerStartLocation(Player(13), 5)
     SetPlayerColor(Player(13), ConvertPlayerColor(13))
     SetPlayerRacePreference(Player(13), RACE_PREF_ORC)
     SetPlayerRaceSelectable(Player(13), false)
-    SetPlayerController(Player(13), MAP_CONTROL_USER)
+    SetPlayerController(Player(13), MAP_CONTROL_COMPUTER)
     SetPlayerStartLocation(Player(14), 6)
     ForcePlayerStartLocation(Player(14), 6)
     SetPlayerColor(Player(14), ConvertPlayerColor(14))
     SetPlayerRacePreference(Player(14), RACE_PREF_ORC)
     SetPlayerRaceSelectable(Player(14), false)
-    SetPlayerController(Player(14), MAP_CONTROL_USER)
+    SetPlayerController(Player(14), MAP_CONTROL_COMPUTER)
     SetPlayerStartLocation(Player(15), 7)
     ForcePlayerStartLocation(Player(15), 7)
     SetPlayerColor(Player(15), ConvertPlayerColor(15))
     SetPlayerRacePreference(Player(15), RACE_PREF_ORC)
     SetPlayerRaceSelectable(Player(15), false)
-    SetPlayerController(Player(15), MAP_CONTROL_USER)
+    SetPlayerController(Player(15), MAP_CONTROL_COMPUTER)
 end
 
 function InitCustomTeams()
@@ -808,14 +816,6 @@ function InitCustomTeams()
 end
 
 function InitAllyPriorities()
-    SetStartLocPrioCount(0, 7)
-    SetStartLocPrio(0, 0, 1, MAP_LOC_PRIO_HIGH)
-    SetStartLocPrio(0, 1, 2, MAP_LOC_PRIO_HIGH)
-    SetStartLocPrio(0, 2, 3, MAP_LOC_PRIO_HIGH)
-    SetStartLocPrio(0, 3, 4, MAP_LOC_PRIO_HIGH)
-    SetStartLocPrio(0, 4, 5, MAP_LOC_PRIO_HIGH)
-    SetStartLocPrio(0, 5, 6, MAP_LOC_PRIO_HIGH)
-    SetStartLocPrio(0, 6, 7, MAP_LOC_PRIO_HIGH)
     SetStartLocPrioCount(1, 7)
     SetStartLocPrio(1, 0, 0, MAP_LOC_PRIO_HIGH)
     SetStartLocPrio(1, 1, 2, MAP_LOC_PRIO_HIGH)
@@ -893,7 +893,7 @@ function config()
     SetMapDescription("TRIGSTR_003")
     SetPlayers(8)
     SetTeams(8)
-    SetGamePlacement(MAP_PLACEMENT_TEAMS_TOGETHER)
+    SetGamePlacement(MAP_PLACEMENT_USE_MAP_SETTINGS)
     DefineStartLocation(0, 0.0, -256.0)
     DefineStartLocation(1, 0.0, -256.0)
     DefineStartLocation(2, 0.0, -256.0)

@@ -22,10 +22,12 @@ function Death_Actions()
             print("|c0000FF40"..GetPlayerName(killerplayer).."|r player has won, congratulate him, game will be end in |c00FFFC005|r second")
             TimerStart(Timer, 5, false, function()
                 for i = 0, bj_MAX_PLAYERS-1 do
-                    if Player(i) == killerplayer then
-                        CustomVictoryBJ(killerplayer, true, true)
-                    else
-                        CustomDefeatBJ(Player(i), "You are loose, come again to win")
+                    if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING then
+                        if Player(i) == killerplayer then
+                            CustomVictoryBJ(killerplayer, true, true)
+                        else
+                            CustomDefeatBJ(Player(i), "You are loose, come again to win")
+                        end
                     end
                 end
             end)
@@ -36,10 +38,12 @@ function Death_Actions()
             print("|c0000FF40"..Team.Name[WinTeam].."|r team has won, congratulate them, game will be end in |c00FFFC005|r second")
             TimerStart(Timer, 5, false, function()
                 for i = 0, bj_MAX_PLAYERS-1 do
-                    if GetPlayerTeam(Player(i)) == WinTeam then
-                        CustomVictoryBJ(Player(i), true, true)
-                    else
-                        CustomDefeatBJ(Player(i), "Your team are loose, come again to win")
+                    if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING then
+                        if GetPlayerTeam(Player(i)) == WinTeam then
+                            CustomVictoryBJ(Player(i), true, true)
+                        else
+                            CustomDefeatBJ(Player(i), "Your team are loose, come again to win")
+                        end
                     end
                 end
             end)
