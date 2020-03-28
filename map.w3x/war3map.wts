@@ -73,19 +73,19 @@ STRING 44
 }
 
 STRING 46
-// Abilities: A001 (Jump), Researchhotkey (Hotkey - Learn)
+// Abilities: A000 (Parry), Hotkey (Hotkey - Normal)
 {
 W
 }
 
 STRING 47
-// Abilities: A001 (Jump), Hotkey (Hotkey - Normal)
+// Abilities: A001 (Jump), Researchhotkey (Hotkey - Learn)
 {
 W
 }
 
 STRING 48
-// Abilities: A000 (Parry), Hotkey (Hotkey - Normal)
+// Abilities: A004 (Counter Attack), Hotkey (Hotkey - Normal)
 {
 E
 }
@@ -241,5 +241,29 @@ STRING 90
 STRING 91
 {
  
+}
+
+STRING 92
+// Abilities: A001 (Jump), Hotkey (Hotkey - Normal)
+{
+D
+}
+
+STRING 93
+// Abilities: A004 (Counter Attack), Name (Name)
+{
+Counter Attack
+}
+
+STRING 94
+// Abilities: A004 (Counter Attack), Tip (Tooltip - Normal)
+{
+Counter Attack
+}
+
+STRING 95
+// Abilities: A004 (Counter Attack), Ubertip (Tooltip - Normal - Extended)
+{
+Counter attack deals 100 damage to enemies around
 }
 

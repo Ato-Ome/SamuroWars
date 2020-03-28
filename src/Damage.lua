@@ -18,6 +18,17 @@ function Damage_Actions()
             Hint[GetPlayerId(player)].Parry = false
             DisplayTimedTextToPlayer(player, 0, 0, bj_TEXT_DELAY_ALWAYSHINT, "|c0000FF40Hint:|r Parry returns all damage filling up your mana, also it increases your damage factor for |c00FFFC002|r  sec")
         end
+        if Counter[GetPlayerId(player)] then
+            Counter[GetPlayerId(player)] = false
+            UnitAddAbility(unit, FourCC('A004'))
+            if GetPlayerController(player) == MAP_CONTROL_USER then
+                FlyTextTagMiss(unit, "Counter", player)
+            end
+            TimerStart(CreateTimer(), 1, false, function()
+                UnitRemoveAbility(unit, FourCC('A004'))
+                DestroyTimer(GetExpiredTimer())
+            end)
+        end
         UnitDamageTargetBJ(unit, source, damage, BlzGetEventAttackType(), DAMAGE_TYPE_DEFENSIVE)
         SetUnitState(unit, UNIT_STATE_MANA, GetUnitState(unit, UNIT_STATE_MANA) + damage / 5)
         if GetPlayerController(player) == MAP_CONTROL_USER then
@@ -44,8 +55,8 @@ function Damage_Actions()
         if GetPlayerController(sourceplayer) == MAP_CONTROL_USER then
             FlyTextTagManaBurn(source, "+" .. math.ceil(damage/5), sourceplayer)
         end
-        if GetUnitTypeId(source) ~= UNIT_TYPE_SUMMONED then
-            TimerStart(CreateTimer(), 0.03, false, function() DestroyEffect(Effect[GetPlayerId(player)].Crit) CritFactor[GetPlayerId(player)] = CritDefault[GetPlayerId(player)] DestroyTimer(GetExpiredTimer()) end)
+        if GetUnitTypeId(source) ~= UNIT_TYPE_SUMMONED and BlzGetEventDamageType() ~= DAMAGE_TYPE_DEFENSIVE then
+            TimerStart(CreateTimer(), 0.03, false, function() DestroyEffect(Effect[GetPlayerId(sourceplayer)].Crit) CritFactor[GetPlayerId(sourceplayer)] = CritDefault[GetPlayerId(sourceplayer)] DestroyTimer(GetExpiredTimer()) end)
         end
     end
     --PrintDamage(true, damage, BlzGetEventDamageType(), BlzGetEventAttackType(), BlzGetEventWeaponType(), true, true, true)

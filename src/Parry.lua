@@ -1,3 +1,12 @@
+function ParryEffect_Actions()
+    local player = GetOwningPlayer(GetTriggerUnit())
+    Counter[GetPlayerId(player)] = true
+    TimerStart(CreateTimer(), 0.3, false, function()
+        Counter[GetPlayerId(player)] = false
+        DestroyTimer(GetExpiredTimer())
+    end)
+end
+
 function Parry_Conditions()
     return GetSpellAbilityId() == FourCC("A000")
 end
@@ -24,4 +33,8 @@ function Parry()
     TriggerRegisterAnyUnitEventBJ(Trigger.Parry, EVENT_PLAYER_UNIT_SPELL_ENDCAST)
     TriggerAddCondition(Trigger.Parry, Condition(Parry_Conditions))
     TriggerAddAction(Trigger.Parry, Parry_Actions)
+    Trigger.ParryEffect = CreateTrigger()
+    TriggerRegisterAnyUnitEventBJ(Trigger.ParryEffect, EVENT_PLAYER_UNIT_SPELL_CHANNEL)
+    TriggerAddCondition(Trigger.ParryEffect, Condition(Parry_Conditions))
+    TriggerAddAction(Trigger.ParryEffect, ParryEffect_Actions)
 end

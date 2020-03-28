@@ -2,6 +2,7 @@ gg_snd_great_player01 = ""
 gg_snd_AchievementEarned = nil
 gg_trg_Initialization = nil
 gg_trg_AttackAllied = nil
+gg_trg_Counter = nil
 function InitGlobals()
 end
 
@@ -29,6 +30,7 @@ Players = 0
 Hint = {}
 CritFactor = {}
 CritDefault = {}
+Counter = {}
 Stats = {
     Team = {}
 }
@@ -315,6 +317,17 @@ function Damage_Actions()
             Hint[GetPlayerId(player)].Parry = false
             DisplayTimedTextToPlayer(player, 0, 0, bj_TEXT_DELAY_ALWAYSHINT, "|c0000FF40Hint:|r Parry returns all damage filling up your mana, also it increases your damage factor for |c00FFFC002|r  sec")
         end
+        if Counter[GetPlayerId(player)] then
+            Counter[GetPlayerId(player)] = false
+            UnitAddAbility(unit, FourCC('A004'))
+            if GetPlayerController(player) == MAP_CONTROL_USER then
+                FlyTextTagMiss(unit, "Counter", player)
+            end
+            TimerStart(CreateTimer(), 1, false, function()
+                UnitRemoveAbility(unit, FourCC('A004'))
+                DestroyTimer(GetExpiredTimer())
+            end)
+        end
         UnitDamageTargetBJ(unit, source, damage, BlzGetEventAttackType(), DAMAGE_TYPE_DEFENSIVE)
         SetUnitState(unit, UNIT_STATE_MANA, GetUnitState(unit, UNIT_STATE_MANA) + damage / 5)
         if GetPlayerController(player) == MAP_CONTROL_USER then
@@ -341,8 +354,8 @@ function Damage_Actions()
         if GetPlayerController(sourceplayer) == MAP_CONTROL_USER then
             FlyTextTagManaBurn(source, "+" .. math.ceil(damage/5), sourceplayer)
         end
-        if GetUnitTypeId(source) ~= UNIT_TYPE_SUMMONED then
-            TimerStart(CreateTimer(), 0.03, false, function() DestroyEffect(Effect[GetPlayerId(player)].Crit) CritFactor[GetPlayerId(player)] = CritDefault[GetPlayerId(player)] DestroyTimer(GetExpiredTimer()) end)
+        if GetUnitTypeId(source) ~= UNIT_TYPE_SUMMONED and BlzGetEventDamageType() ~= DAMAGE_TYPE_DEFENSIVE then
+            TimerStart(CreateTimer(), 0.03, false, function() DestroyEffect(Effect[GetPlayerId(sourceplayer)].Crit) CritFactor[GetPlayerId(sourceplayer)] = CritDefault[GetPlayerId(sourceplayer)] DestroyTimer(GetExpiredTimer()) end)
         end
     end
     --PrintDamage(true, damage, BlzGetEventDamageType(), BlzGetEventAttackType(), BlzGetEventWeaponType(), true, true, true)
@@ -498,6 +511,15 @@ function Start()
     end
     TimerStart(CreateTimer(), 45, true, SpawnBoost)
 end
+function ParryEffect_Actions()
+    local player = GetOwningPlayer(GetTriggerUnit())
+    Counter[GetPlayerId(player)] = true
+    TimerStart(CreateTimer(), 0.3, false, function()
+        Counter[GetPlayerId(player)] = false
+        DestroyTimer(GetExpiredTimer())
+    end)
+end
+
 function Parry_Conditions()
     return GetSpellAbilityId() == FourCC("A000")
 end
@@ -524,6 +546,10 @@ function Parry()
     TriggerRegisterAnyUnitEventBJ(Trigger.Parry, EVENT_PLAYER_UNIT_SPELL_ENDCAST)
     TriggerAddCondition(Trigger.Parry, Condition(Parry_Conditions))
     TriggerAddAction(Trigger.Parry, Parry_Actions)
+    Trigger.ParryEffect = CreateTrigger()
+    TriggerRegisterAnyUnitEventBJ(Trigger.ParryEffect, EVENT_PLAYER_UNIT_SPELL_CHANNEL)
+    TriggerAddCondition(Trigger.ParryEffect, Condition(Parry_Conditions))
+    TriggerAddAction(Trigger.ParryEffect, ParryEffect_Actions)
 end
 ---@param showdamage boolean
 ---@param damage real
@@ -696,9 +722,45 @@ function InitTrig_AttackAllied()
     TriggerAddAction(gg_trg_AttackAllied, Trig_AttackAllied_Actions)
 end
 
+function Trig_Counter_Conditions()
+    if (not (GetSpellAbilityId() == FourCC("A004"))) then
+        return false
+    end
+    return true
+end
+
+function Trig_Counter_Func001001003001()
+    return (IsUnitEnemy(GetFilterUnit(), GetOwningPlayer(GetTriggerUnit())) == true)
+end
+
+function Trig_Counter_Func001001003002()
+    return (IsUnitAliveBJ(GetFilterUnit()) == true)
+end
+
+function Trig_Counter_Func001001003()
+    return GetBooleanAnd(Trig_Counter_Func001001003001(), Trig_Counter_Func001001003002())
+end
+
+function Trig_Counter_Func001002()
+    UnitDamageTargetBJ(GetTriggerUnit(), GetEnumUnit(), 75.00, ATTACK_TYPE_MELEE, DAMAGE_TYPE_MAGIC)
+end
+
+function Trig_Counter_Actions()
+    ForGroupBJ(GetUnitsInRangeOfLocMatching(250.00, GetUnitLoc(GetTriggerUnit()), Condition(Trig_Counter_Func001001003)), Trig_Counter_Func001002)
+        TimerStart(CreateTimer(), 0.05, false, function() UnitRemoveAbility(GetTriggerUnit(), FourCC('A004')) DestroyTimer(GetExpiredTimer()) end)
+end
+
+function InitTrig_Counter()
+    gg_trg_Counter = CreateTrigger()
+    TriggerRegisterAnyUnitEventBJ(gg_trg_Counter, EVENT_PLAYER_UNIT_SPELL_CAST)
+    TriggerAddCondition(gg_trg_Counter, Condition(Trig_Counter_Conditions))
+    TriggerAddAction(gg_trg_Counter, Trig_Counter_Actions)
+end
+
 function InitCustomTriggers()
     InitTrig_Initialization()
     InitTrig_AttackAllied()
+    InitTrig_Counter()
 end
 
 function RunInitializationTriggers()

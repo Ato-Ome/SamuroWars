@@ -13,6 +13,7 @@ Players = 0
 Hint = {}
 CritFactor = {}
 CritDefault = {}
+Counter = {}
 Stats = {
     Team = {}
 }
