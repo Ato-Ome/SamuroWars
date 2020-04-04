@@ -3,6 +3,7 @@ gg_snd_AchievementEarned = nil
 gg_trg_Initialization = nil
 gg_trg_AttackAllied = nil
 gg_trg_Counter = nil
+gg_trg_Leave = nil
 function InitGlobals()
 end
 
@@ -757,10 +758,44 @@ function InitTrig_Counter()
     TriggerAddAction(gg_trg_Counter, Trig_Counter_Actions)
 end
 
+function Trig_Leave_Actions()
+        print("|c00FFFC00"..GetPlayerName(GetTriggerPlayer()).."|r Has left the game")
+end
+
+function InitTrig_Leave()
+    gg_trg_Leave = CreateTrigger()
+    TriggerRegisterPlayerEventLeave(gg_trg_Leave, Player(0))
+    TriggerRegisterPlayerEventLeave(gg_trg_Leave, Player(1))
+    TriggerRegisterPlayerEventLeave(gg_trg_Leave, Player(2))
+    TriggerRegisterPlayerEventLeave(gg_trg_Leave, Player(3))
+    TriggerRegisterPlayerEventLeave(gg_trg_Leave, Player(4))
+    TriggerRegisterPlayerEventLeave(gg_trg_Leave, Player(5))
+    TriggerRegisterPlayerEventLeave(gg_trg_Leave, Player(6))
+    TriggerRegisterPlayerEventLeave(gg_trg_Leave, Player(7))
+    TriggerRegisterPlayerEventLeave(gg_trg_Leave, Player(8))
+    TriggerRegisterPlayerEventLeave(gg_trg_Leave, Player(9))
+    TriggerRegisterPlayerEventLeave(gg_trg_Leave, Player(10))
+    TriggerRegisterPlayerEventLeave(gg_trg_Leave, Player(11))
+    TriggerRegisterPlayerEventLeave(gg_trg_Leave, Player(12))
+    TriggerRegisterPlayerEventLeave(gg_trg_Leave, Player(13))
+    TriggerRegisterPlayerEventLeave(gg_trg_Leave, Player(14))
+    TriggerRegisterPlayerEventLeave(gg_trg_Leave, Player(15))
+    TriggerRegisterPlayerEventLeave(gg_trg_Leave, Player(16))
+    TriggerRegisterPlayerEventLeave(gg_trg_Leave, Player(17))
+    TriggerRegisterPlayerEventLeave(gg_trg_Leave, Player(18))
+    TriggerRegisterPlayerEventLeave(gg_trg_Leave, Player(19))
+    TriggerRegisterPlayerEventLeave(gg_trg_Leave, Player(20))
+    TriggerRegisterPlayerEventLeave(gg_trg_Leave, Player(21))
+    TriggerRegisterPlayerEventLeave(gg_trg_Leave, Player(22))
+    TriggerRegisterPlayerEventLeave(gg_trg_Leave, Player(23))
+    TriggerAddAction(gg_trg_Leave, Trig_Leave_Actions)
+end
+
 function InitCustomTriggers()
     InitTrig_Initialization()
     InitTrig_AttackAllied()
     InitTrig_Counter()
+    InitTrig_Leave()
 end
 
 function RunInitializationTriggers()
