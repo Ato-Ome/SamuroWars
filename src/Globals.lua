@@ -1,4 +1,4 @@
---xgm github
+--xgm github update
 SpawnRect = {}
 Trigger = {}
 Mana = {}
