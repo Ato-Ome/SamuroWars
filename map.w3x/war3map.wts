@@ -1,6 +1,6 @@
 ﻿STRING 1
 {
-|c00FF0080Samuro Wars|r 0.1a Beta
+|c00FF0080Samuro Wars|r 0.2 Beta
 }
 
 STRING 3
@@ -210,24 +210,6 @@ STRING 85
 Slash attack deals damage to enemies in front
 }
 
-STRING 86
-// Items: I002 (Свиток защиты), Ubertip (Tooltip - Extended)
-{
-+6 to allied armor near the hero for 30 sec.
-}
-
-STRING 87
-// Items: I004 (Жезл иллюзий), Ubertip (Tooltip - Extended)
-{
-Creates an illusion that deals minor damage and takes twice as much damage.
-}
-
-STRING 88
-// Items: I005 (Жезл похищения маны), Ubertip (Tooltip - Extended)
-{
-Instantly steals 100 mana from the target and transfers it to the hero.|т Charges: 2.
-}
-
 STRING 89
 {
  
@@ -265,5 +247,97 @@ STRING 95
 // Abilities: A004 (Counter Attack), Ubertip (Tooltip - Normal - Extended)
 {
 Counter attack deals 100 damage to enemies around
+}
+
+STRING 96
+// Items: I000 (Healing Rune), Name (Name)
+{
+Healing Rune
+}
+
+STRING 97
+// Items: I000 (Healing Rune), Description (Description)
+{
+Heals 250 hit points
+}
+
+STRING 98
+// Items: I001 (Mana Rune), Name (Name)
+{
+Mana Rune
+}
+
+STRING 99
+// Items: I001 (Mana Rune), Description (Description)
+{
+Heals 150 mana points
+}
+
+STRING 100
+// Items: I002 (Illusion Rune), Name (Name)
+{
+Illusion Rune
+}
+
+STRING 101
+// Items: I002 (Illusion Rune), Description (Description)
+{
+Creates 2 illusion coppies
+}
+
+STRING 102
+// Items: I003 (Windwalk Rune), Name (Name)
+{
+Windwalk Rune
+}
+
+STRING 103
+// Items: I003 (Windwalk Rune), Description (Description)
+{
+Gives invisible
+}
+
+STRING 104
+// Items: I004 (Lightning Rune), Name (Name)
+{
+Lightning Rune
+}
+
+STRING 105
+// Items: I004 (Lightning Rune), Description (Description)
+{
+Gives lightning shield
+}
+
+STRING 106
+// Items: I005 (Combat Rune), Name (Name)
+{
+Combat Rune
+}
+
+STRING 107
+// Items: I005 (Combat Rune), Description (Description)
+{
+Increases combat attributes
+}
+
+STRING 108
+{
+Player 5
+}
+
+STRING 109
+{
+Player 6
+}
+
+STRING 110
+{
+Player 17
+}
+
+STRING 111
+{
+Player 18
 }
 

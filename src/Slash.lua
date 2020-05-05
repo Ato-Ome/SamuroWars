@@ -28,7 +28,7 @@ function Slash_Actions()
     GroupEnumUnitsInRange(group,GetUnitX(unit), GetUnitY(unit),250, Filter(Slash_Filter))
     for i = 1, CountUnitsInGroup(group) do
         first = FirstOfGroup(group)
-        UnitDamageTarget(unit,first,150,true,false,ATTACK_TYPE_HERO,DAMAGE_TYPE_NORMAL, WEAPON_TYPE_WHOKNOWS)
+        UnitDamageTarget(unit,first,250,true,false, ATTACK_TYPE_HERO,DAMAGE_TYPE_NORMAL, WEAPON_TYPE_WHOKNOWS)
         effect = AddSpecialEffect("Objects\\Spawnmodels\\Human\\HumanBlood\\HumanBloodKnight.mdl", GetUnitX(first),GetUnitY(first))
         DestroyEffect(effect)
         GroupRemoveUnit(group,first)

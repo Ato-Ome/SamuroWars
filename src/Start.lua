@@ -89,5 +89,5 @@ function Start()
             PanCameraToForPlayer(Player(i),GetUnitX(unit),GetUnitY(unit))
         end
     end
-    TimerStart(CreateTimer(), 45, true, SpawnBoost)
+    TimerStart(CreateTimer(), 15, true, SpawnBoost)
 end

@@ -7,46 +7,49 @@ function Death_Actions()
     local random = GetRandomInt(1,20)
     local x = GetRandomReal(GetRectMinX(SpawnRect.Revive[random]),GetRectMaxX(SpawnRect.Revive[random]))
     local y = GetRandomReal(GetRectMinY(SpawnRect.Revive[random]),GetRectMaxY(SpawnRect.Revive[random]))
-    if Hint[GetPlayerId(killerplayer)].Kill then
-        Hint[GetPlayerId(killerplayer)].Kill = false
-        DisplayTimedTextToPlayer(killerplayer, 0, 0, bj_TEXT_DELAY_ALWAYSHINT, "|c0000FF40Hint:|r You have killed an enemy, collect |c00FFFC00" ..KillToWin.. "|r kills to win")
-    end
-    Stats[GetPlayerId(killerplayer)].Kill = Stats[GetPlayerId(killerplayer)].Kill + 1
-    if Mode.CurrentDM == false then
-        Stats.Team[GetPlayerTeam(killerplayer)] = Stats.Team[GetPlayerTeam(killerplayer)] + 1
-    end
-    LeaderboardSetPlayerItemValueBJ(killerplayer,ScoreTable, Stats[GetPlayerId(killerplayer)].Kill)
-    LeaderboardSortItemsByValue(ScoreTable, false)
-    if Mode.CurrentDM == true then
-        if Stats[GetPlayerId(killerplayer)].Kill >= KillToWin then
-            print("|c0000FF40"..GetPlayerName(killerplayer).."|r player has won, congratulate him, game will be end in |c00FFFC005|r second")
-            TimerStart(Timer, 5, false, function()
-                for i = 0, bj_MAX_PLAYERS-1 do
-                    if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING then
-                        if Player(i) == killerplayer then
-                            CustomVictoryBJ(killerplayer, true, true)
-                        else
-                            CustomDefeatBJ(Player(i), "You are loose, come again to win")
-                        end
-                    end
-                end
-            end)
+    if IsUnitType(unit, UNIT_TYPE_HERO) == true then
+        if Hint[GetPlayerId(killerplayer)].Kill then
+            Hint[GetPlayerId(killerplayer)].Kill = false
+            DisplayTimedTextToPlayer(killerplayer, 0, 0, bj_TEXT_DELAY_ALWAYSHINT, "|c0000FF40Hint:|r You have killed an enemy, collect |c00FFFC00" ..KillToWin.. "|r kills to win")
         end
-    else
-        if Stats.Team[GetPlayerTeam(killerplayer)] >= KillToWin then
-            WinTeam = GetPlayerTeam(killerplayer)
-            print("|c0000FF40"..Team.Name[WinTeam].."|r team has won, congratulate them, game will be end in |c00FFFC005|r second")
-            TimerStart(Timer, 5, false, function()
-                for i = 0, bj_MAX_PLAYERS-1 do
-                    if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING then
-                        if GetPlayerTeam(Player(i)) == WinTeam then
-                            CustomVictoryBJ(Player(i), true, true)
-                        else
-                            CustomDefeatBJ(Player(i), "Your team are loose, come again to win")
+        Stats[GetPlayerId(killerplayer)].Kill = Stats[GetPlayerId(killerplayer)].Kill + 1
+        print(Color[GetPlayerId(killerplayer)+ 1]..GetPlayerName(killerplayer).."|r has killed a "..Color[GetPlayerId(player)+ 1]..GetPlayerName(player).."|r")
+        if Mode.CurrentDM == false then
+            Stats.Team[GetPlayerTeam(killerplayer)] = Stats.Team[GetPlayerTeam(killerplayer)] + 1
+        end
+        LeaderboardSetPlayerItemValueBJ(killerplayer,ScoreTable, Stats[GetPlayerId(killerplayer)].Kill)
+        LeaderboardSortItemsByValue(ScoreTable, false)
+        if Mode.CurrentDM == true then
+            if Stats[GetPlayerId(killerplayer)].Kill >= KillToWin then
+                print("|c0000FF40"..GetPlayerName(killerplayer).."|r player has won, congratulate him, game will be end in |c00FFFC005|r second")
+                TimerStart(Timer, 5, false, function()
+                    for i = 0, bj_MAX_PLAYERS-1 do
+                        if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING then
+                            if Player(i) == killerplayer then
+                                CustomVictoryBJ(killerplayer, true, true)
+                            else
+                                CustomDefeatBJ(Player(i), "You are loose, come again to win")
+                            end
                         end
                     end
-                end
-            end)
+                end)
+            end
+        else
+            if Stats.Team[GetPlayerTeam(killerplayer)] >= KillToWin then
+                WinTeam = GetPlayerTeam(killerplayer)
+                print("|c0000FF40"..Team.Name[WinTeam].."|r team has won, congratulate them, game will be end in |c00FFFC005|r second")
+                TimerStart(Timer, 5, false, function()
+                    for i = 0, bj_MAX_PLAYERS-1 do
+                        if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING then
+                            if GetPlayerTeam(Player(i)) == WinTeam then
+                                CustomVictoryBJ(Player(i), true, true)
+                            else
+                                CustomDefeatBJ(Player(i), "Your team are loose, come again to win")
+                            end
+                        end
+                    end
+                end)
+            end
         end
     end
     Stats[GetPlayerId(player)].Death = Stats[GetPlayerId(player)].Death + 1
