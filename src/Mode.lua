@@ -5,7 +5,7 @@ function ChooseTimeElapse_Actions()
     if Mode.Voices.DM > Mode.Voices.TVT then
         Mode.CurrentDM = true
         KillToWin = math.ceil(KillToWin * AllPlayers / GetPlayers())
-        print("|c00FF0000Death Match|r mode was chosen by voting prepare to fight, your allies will become to enemy in |c00FFFC005|r second")
+        print(String[BlzGetLocale()].Mode.DM)
         TimerStart(Timer, 5, false, function()
             for i = 0, bj_MAX_PLAYERS-1 do
                 for j = 0, bj_MAX_PLAYERS-1 do
@@ -16,17 +16,16 @@ function ChooseTimeElapse_Actions()
             end
             TimerDialogDisplay(dialog, false)
             DestroyTimerDialog(Dialog)
-            DisableTrigger(gg_trg_AttackAllied)
         end)
         dialog = CreateTimerDialog(Timer)
-        TimerDialogSetTitle(dialog, "Game Start")
+        TimerDialogSetTitle(dialog, String[BlzGetLocale()].Mode.DMTimer)
         TimerDialogDisplay(dialog, true)
     else
-        print("|c0000FFFFTeam vs Team|r mode was chosen by voting prepare to fight")
+        print(String[BlzGetLocale()].Mode.TVT)
         Mode.CurrentDM = false
         KillToWin = math.ceil(KillToWin * 2 * AllPlayers / GetPlayers())
     end
-    ScoreTable = CreateLeaderboardBJ(GetPlayersAll(), "Score Table ".."|c00FFFC00"..KillToWin.."|r kills to win")
+    ScoreTable = CreateLeaderboardBJ(GetPlayersAll(), String[BlzGetLocale()].Mode.ScoreTable[1]..KillToWin..String[BlzGetLocale()].Mode.ScoreTable[2])
     for i = 0,bj_MAX_PLAYERS-1 do
         DialogDisplay(Player(i),Mode.Dialog,false)
         if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING then
@@ -37,7 +36,7 @@ end
 
 function ButtonClickDM_Actions()
     Mode.Voices.DM = Mode.Voices.DM + 1
-    DisplayTimedTextToPlayer(GetTriggerPlayer(), 0, 0, bj_TEXT_DELAY_ALWAYSHINT, "You have voted |c00FF0000Death Match|r mode, wait for others")
+    DisplayTimedTextToPlayer(GetTriggerPlayer(), 0, 0, bj_TEXT_DELAY_ALWAYSHINT, String[BlzGetLocale()].Mode.DMVote)
     if Mode.Voices.TVT + Mode.Voices.DM >= Players then
         DestroyTimer(Timer)
         Timer = CreateTimer()
@@ -53,7 +52,7 @@ end
 
 function ButtonClickTVT_Actions()
     Mode.Voices.TVT = Mode.Voices.TVT + 1
-    DisplayTimedTextToPlayer(GetTriggerPlayer(), 0, 0, bj_TEXT_DELAY_ALWAYSHINT, "You have voted |c0000FFFFTeam vs Team|r mode, wait for others")
+    DisplayTimedTextToPlayer(GetTriggerPlayer(), 0, 0, bj_TEXT_DELAY_ALWAYSHINT, String[BlzGetLocale()].Mode.TVTVote)
     if Mode.Voices.TVT + Mode.Voices.DM >= Players then
         DestroyTimer(Timer)
         Timer = CreateTimer()
@@ -69,14 +68,14 @@ end
 
 function TimeElapse_Actions()
     PauseAllUnitsBJ(true)
-    DialogSetMessage(Mode.Dialog, "Mode choose")
-    Mode.Button.DM = DialogAddButton(Mode.Dialog, "Death Match [|Cfffed312D|r]", 68)
-    Mode.Button.TVT = DialogAddButton(Mode.Dialog, "Team vs Team [|Cfffed312T|r]", 84)
+    DialogSetMessage(Mode.Dialog, String[BlzGetLocale()].Mode.Choose)
+    Mode.Button.DM = DialogAddButton(Mode.Dialog, String[BlzGetLocale()].Mode.DMButton, 68)
+    Mode.Button.TVT = DialogAddButton(Mode.Dialog, String[BlzGetLocale()].Mode.TVTButton, 84)
     ButtonClickTVT()
     ButtonClickDM()
     TimerStart(Timer, 7, false, ChooseTimeElapse_Actions)
     dialog = CreateTimerDialog(Timer)
-    TimerDialogSetTitle(dialog, "Voting ends")
+    TimerDialogSetTitle(dialog, String[BlzGetLocale()].Mode.VotingEnd)
     TimerDialogDisplay(dialog, true)
     for i = 0, bj_MAX_PLAYERS-1 do
         if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING then

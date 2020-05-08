@@ -11,12 +11,12 @@ function InitSounds()
     gg_snd_great_player01 = "war3mapImported/great_player.mp3"
     gg_snd_AchievementEarned = CreateSound("Sound/Interface/AchievementEarned.flac", false, false, false, 0, 0, "DefaultEAXON")
     SetSoundParamsFromLabel(gg_snd_AchievementEarned, "AchievementEarned")
-    SetSoundDuration(gg_snd_AchievementEarned, 4173)
     SetSoundVolume(gg_snd_AchievementEarned, 127)
 end
 
 --CUSTOM_CODE
 --xgm github update
+String = {}
 SpawnRect = {}
 Trigger = {}
 Mana = {}
@@ -40,11 +40,7 @@ KillToWin = 30
 Timer = CreateTimer()
 Team = {
     [0] = CreateForce(),
-    [1] = CreateForce(),
-    Name = {
-        [0] = "Force 1",
-        [1] = "Force 2"
-    }
+    [1] = CreateForce()
 }
 WinTeam = nil
 Effect = {}
@@ -171,7 +167,7 @@ function ChooseTimeElapse_Actions()
     if Mode.Voices.DM > Mode.Voices.TVT then
         Mode.CurrentDM = true
         KillToWin = math.ceil(KillToWin * AllPlayers / GetPlayers())
-        print("|c00FF0000Death Match|r mode was chosen by voting prepare to fight, your allies will become to enemy in |c00FFFC005|r second")
+        print(String[BlzGetLocale()].Mode.DM)
         TimerStart(Timer, 5, false, function()
             for i = 0, bj_MAX_PLAYERS-1 do
                 for j = 0, bj_MAX_PLAYERS-1 do
@@ -182,17 +178,16 @@ function ChooseTimeElapse_Actions()
             end
             TimerDialogDisplay(dialog, false)
             DestroyTimerDialog(Dialog)
-            DisableTrigger(gg_trg_AttackAllied)
         end)
         dialog = CreateTimerDialog(Timer)
-        TimerDialogSetTitle(dialog, "Game Start")
+        TimerDialogSetTitle(dialog, String[BlzGetLocale()].Mode.DMTimer)
         TimerDialogDisplay(dialog, true)
     else
-        print("|c0000FFFFTeam vs Team|r mode was chosen by voting prepare to fight")
+        print(String[BlzGetLocale()].Mode.TVT)
         Mode.CurrentDM = false
         KillToWin = math.ceil(KillToWin * 2 * AllPlayers / GetPlayers())
     end
-    ScoreTable = CreateLeaderboardBJ(GetPlayersAll(), "Score Table ".."|c00FFFC00"..KillToWin.."|r kills to win")
+    ScoreTable = CreateLeaderboardBJ(GetPlayersAll(), String[BlzGetLocale()].Mode.ScoreTable[1]..KillToWin..String[BlzGetLocale()].Mode.ScoreTable[2])
     for i = 0,bj_MAX_PLAYERS-1 do
         DialogDisplay(Player(i),Mode.Dialog,false)
         if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING then
@@ -203,7 +198,7 @@ end
 
 function ButtonClickDM_Actions()
     Mode.Voices.DM = Mode.Voices.DM + 1
-    DisplayTimedTextToPlayer(GetTriggerPlayer(), 0, 0, bj_TEXT_DELAY_ALWAYSHINT, "You have voted |c00FF0000Death Match|r mode, wait for others")
+    DisplayTimedTextToPlayer(GetTriggerPlayer(), 0, 0, bj_TEXT_DELAY_ALWAYSHINT, String[BlzGetLocale()].Mode.DMVote)
     if Mode.Voices.TVT + Mode.Voices.DM >= Players then
         DestroyTimer(Timer)
         Timer = CreateTimer()
@@ -219,7 +214,7 @@ end
 
 function ButtonClickTVT_Actions()
     Mode.Voices.TVT = Mode.Voices.TVT + 1
-    DisplayTimedTextToPlayer(GetTriggerPlayer(), 0, 0, bj_TEXT_DELAY_ALWAYSHINT, "You have voted |c0000FFFFTeam vs Team|r mode, wait for others")
+    DisplayTimedTextToPlayer(GetTriggerPlayer(), 0, 0, bj_TEXT_DELAY_ALWAYSHINT, String[BlzGetLocale()].Mode.TVTVote)
     if Mode.Voices.TVT + Mode.Voices.DM >= Players then
         DestroyTimer(Timer)
         Timer = CreateTimer()
@@ -235,14 +230,14 @@ end
 
 function TimeElapse_Actions()
     PauseAllUnitsBJ(true)
-    DialogSetMessage(Mode.Dialog, "Mode choose")
-    Mode.Button.DM = DialogAddButton(Mode.Dialog, "Death Match [|Cfffed312D|r]", 68)
-    Mode.Button.TVT = DialogAddButton(Mode.Dialog, "Team vs Team [|Cfffed312T|r]", 84)
+    DialogSetMessage(Mode.Dialog, String[BlzGetLocale()].Mode.Choose)
+    Mode.Button.DM = DialogAddButton(Mode.Dialog, String[BlzGetLocale()].Mode.DMButton, 68)
+    Mode.Button.TVT = DialogAddButton(Mode.Dialog, String[BlzGetLocale()].Mode.TVTButton, 84)
     ButtonClickTVT()
     ButtonClickDM()
     TimerStart(Timer, 7, false, ChooseTimeElapse_Actions)
     dialog = CreateTimerDialog(Timer)
-    TimerDialogSetTitle(dialog, "Voting ends")
+    TimerDialogSetTitle(dialog, String[BlzGetLocale()].Mode.VotingEnd)
     TimerDialogDisplay(dialog, true)
     for i = 0, bj_MAX_PLAYERS-1 do
         if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING then
@@ -256,6 +251,10 @@ function TimeElapse()
     TriggerRegisterTimerEventSingle(Trigger.TimeElapsed, 1)
     TriggerAddAction(Trigger.TimeElapsed, TimeElapse_Actions)
 end
+function Death_Conditions()
+    return IsUnitType(GetDyingUnit(), UNIT_TYPE_HERO) == true
+end
+
 function Death_Actions()
     local unit = GetDyingUnit()
     local player = GetOwningPlayer(unit)
@@ -265,56 +264,58 @@ function Death_Actions()
     local random = GetRandomInt(1,20)
     local x = GetRandomReal(GetRectMinX(SpawnRect.Revive[random]),GetRectMaxX(SpawnRect.Revive[random]))
     local y = GetRandomReal(GetRectMinY(SpawnRect.Revive[random]),GetRectMaxY(SpawnRect.Revive[random]))
-    if IsUnitType(unit, UNIT_TYPE_HERO) == true then
-        if Hint[GetPlayerId(killerplayer)].Kill then
-            Hint[GetPlayerId(killerplayer)].Kill = false
-            DisplayTimedTextToPlayer(killerplayer, 0, 0, bj_TEXT_DELAY_ALWAYSHINT, "|c0000FF40Hint:|r You have killed an enemy, collect |c00FFFC00" ..KillToWin.. "|r kills to win")
-        end
-        Stats[GetPlayerId(killerplayer)].Kill = Stats[GetPlayerId(killerplayer)].Kill + 1
-        print(Color[GetPlayerId(killerplayer)+ 1]..GetPlayerName(killerplayer).."|r has killed a "..Color[GetPlayerId(player)+ 1]..GetPlayerName(player).."|r")
-        if Mode.CurrentDM == false then
-            Stats.Team[GetPlayerTeam(killerplayer)] = Stats.Team[GetPlayerTeam(killerplayer)] + 1
-        end
-        LeaderboardSetPlayerItemValueBJ(killerplayer,ScoreTable, Stats[GetPlayerId(killerplayer)].Kill)
-        LeaderboardSortItemsByValue(ScoreTable, false)
-        if Mode.CurrentDM == true then
-            if Stats[GetPlayerId(killerplayer)].Kill >= KillToWin then
-                print("|c0000FF40"..GetPlayerName(killerplayer).."|r player has won, congratulate him, game will be end in |c00FFFC005|r second")
-                TimerStart(Timer, 5, false, function()
-                    for i = 0, bj_MAX_PLAYERS-1 do
-                        if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING then
-                            if Player(i) == killerplayer then
-                                CustomVictoryBJ(killerplayer, true, true)
-                            else
-                                CustomDefeatBJ(Player(i), "You are loose, come again to win")
-                            end
+    if Hint[GetPlayerId(killerplayer)].Kill then
+        Hint[GetPlayerId(killerplayer)].Kill = false
+        DisplayTimedTextToPlayer(killerplayer, 0, 0, bj_TEXT_DELAY_ALWAYSHINT, String[BlzGetLocale()].Hint.Kill[1]..KillToWin..String[BlzGetLocale()].Hint.Kill[2])
+    end
+    Stats[GetPlayerId(killerplayer)].Kill = Stats[GetPlayerId(killerplayer)].Kill + 1
+    print(Color[GetPlayerId(killerplayer)+ 1]..GetPlayerName(killerplayer)..String[BlzGetLocale()].Kill..Color[GetPlayerId(player)+ 1]..GetPlayerName(player).."|r")
+    if Mode.CurrentDM == false then
+        Stats.Team[GetPlayerTeam(killerplayer)] = Stats.Team[GetPlayerTeam(killerplayer)] + 1
+    end
+    LeaderboardSetPlayerItemValueBJ(killerplayer,ScoreTable, Stats[GetPlayerId(killerplayer)].Kill)
+    LeaderboardSortItemsByValue(ScoreTable, false)
+    if Mode.CurrentDM == true then
+        if Stats[GetPlayerId(killerplayer)].Kill >= KillToWin then
+            print("|c0000FF40"..GetPlayerName(killerplayer)..String[BlzGetLocale()].Win.Player)
+            PauseAllUnitsBJ(true)
+            DestroyTrigger(Trigger.Death)
+            TimerStart(Timer, 5, false, function()
+                for i = 0, bj_MAX_PLAYERS-1 do
+                    if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING then
+                        if Player(i) == killerplayer then
+                            CustomVictoryBJ(killerplayer, true, true)
+                        else
+                            CustomDefeatBJ(Player(i), String[BlzGetLocale()].Loose.DM)
                         end
                     end
-                end)
-            end
-        else
-            if Stats.Team[GetPlayerTeam(killerplayer)] >= KillToWin then
-                WinTeam = GetPlayerTeam(killerplayer)
-                print("|c0000FF40"..Team.Name[WinTeam].."|r team has won, congratulate them, game will be end in |c00FFFC005|r second")
-                TimerStart(Timer, 5, false, function()
-                    for i = 0, bj_MAX_PLAYERS-1 do
-                        if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING then
-                            if GetPlayerTeam(Player(i)) == WinTeam then
-                                CustomVictoryBJ(Player(i), true, true)
-                            else
-                                CustomDefeatBJ(Player(i), "Your team are loose, come again to win")
-                            end
+                end
+            end)
+        end
+    else
+        if Stats.Team[GetPlayerTeam(killerplayer)] >= KillToWin then
+            WinTeam = GetPlayerTeam(killerplayer)
+            DestroyTrigger(Trigger.Death)
+            print("|c0000FF40"..Team.Name[WinTeam]..String[BlzGetLocale()].Win.Team)
+            PauseAllUnitsBJ(true)
+            TimerStart(Timer, 5, false, function()
+                for i = 0, bj_MAX_PLAYERS-1 do
+                    if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING then
+                        if GetPlayerTeam(Player(i)) == WinTeam then
+                            CustomVictoryBJ(Player(i), true, true)
+                        else
+                            CustomDefeatBJ(Player(i), String[BlzGetLocale()].Loose.TVT)
                         end
                     end
-                end)
-            end
+                end
+            end)
         end
     end
     Stats[GetPlayerId(player)].Death = Stats[GetPlayerId(player)].Death + 1
     random =  GetRandomInt(3,5)
     if Hint[GetPlayerId(player)].Death then
         Hint[GetPlayerId(player)].Death = false
-        DisplayTimedTextToPlayer(player, 0, 0, bj_TEXT_DELAY_ALWAYSHINT, "|c0000FF40Hint:|r Your hero will be Revive in |c00FFFC00"..random.."|r second")
+        DisplayTimedTextToPlayer(player, 0, 0, bj_TEXT_DELAY_ALWAYSHINT, String[BlzGetLocale()].Hint.Death[1]..random..String[BlzGetLocale()].Hint.Death[2])
     end
     TimerStart(t, random,false, function()
         ReviveHero(unit, x, y, true)
@@ -327,6 +328,7 @@ end
 function Death()
     Trigger.Death = CreateTrigger()
     TriggerRegisterAnyUnitEventBJ(Trigger.Death, EVENT_PLAYER_UNIT_DEATH)
+    TriggerAddCondition(Trigger.Death, Condition(Death_Conditions))
     TriggerAddAction(Trigger.Death, Death_Actions)
 end
 function Damage_Actions()
@@ -342,28 +344,25 @@ function Damage_Actions()
     local effect
     if Hint[GetPlayerId(sourceplayer)].Mana then
         Hint[GetPlayerId(sourceplayer)].Mana = false
-        DisplayTimedTextToPlayer(sourceplayer, 0, 0, bj_TEXT_DELAY_ALWAYSHINT, "|c0000FF40Hint:|r Damage dealt will fill your mana")
+        DisplayTimedTextToPlayer(sourceplayer, 0, 0, bj_TEXT_DELAY_ALWAYSHINT, String[BlzGetLocale()].Hint.Damage)
     end
     if GetUnitCurrentOrder(unit) == String2OrderIdBJ("defend") then
         if Hint[GetPlayerId(player)].Parry then
             Hint[GetPlayerId(player)].Parry = false
-            DisplayTimedTextToPlayer(player, 0, 0, bj_TEXT_DELAY_ALWAYSHINT, "|c0000FF40Hint:|r Parry returns all damage filling up your mana, also it increases your damage factor for |c00FFFC002|r  sec")
+            DisplayTimedTextToPlayer(player, 0, 0, bj_TEXT_DELAY_ALWAYSHINT, String[BlzGetLocale()].Hint.Parry)
         end
         if Counter[GetPlayerId(player)] then
             Counter[GetPlayerId(player)] = false
             UnitAddAbility(unit, FourCC('A004'))
             if GetPlayerController(player) == MAP_CONTROL_USER then
-                FlyTextTagMiss(unit, "Counter", player)
+                FlyTextTagMiss(unit, String[BlzGetLocale()].Hint.CounterFT, player)
             end
-            TimerStart(CreateTimer(), 1, false, function()
-                UnitRemoveAbility(unit, FourCC('A004'))
-                DestroyTimer(GetExpiredTimer())
-            end)
+            IssueImmediateOrder(unit, "thunderclap")
         end
         UnitDamageTargetBJ(unit, source, damage, BlzGetEventAttackType(), DAMAGE_TYPE_DEFENSIVE)
         SetUnitState(unit, UNIT_STATE_MANA, GetUnitState(unit, UNIT_STATE_MANA) + damage / 5)
         if GetPlayerController(player) == MAP_CONTROL_USER then
-            FlyTextTagMiss(unit, "Parry", player)
+            FlyTextTagMiss(unit, String[BlzGetLocale()].Hint.ParryFT, player)
             FlyTextTagManaBurn(unit, "+" .. math.ceil(damage/5), player)
         end
         if BlzGetEventDamageType() ~= DAMAGE_TYPE_ENHANCED then
@@ -430,7 +429,7 @@ function Slash_Actions()
     local player = GetOwningPlayer(unit)
     if Hint[GetPlayerId(player)].Slash then
         Hint[GetPlayerId(player)].Slash = false
-        DisplayTimedTextToPlayer(player, 0, 0, bj_TEXT_DELAY_ALWAYSHINT, "|c0000FF40Hint:|r Slashing strike deals damage to enemies in front of you, but be careful, it can also be parried")
+        DisplayTimedTextToPlayer(player, 0, 0, bj_TEXT_DELAY_ALWAYSHINT, String[BlzGetLocale()].Hint.Slash)
     end
     local first
     local effect
@@ -500,7 +499,662 @@ function Start()
             [20] = Rect(384.0, -1280.0, 1024.0, -896.0)  --center bottom right
         }
     }
-    
+    String = {
+        enUS = {
+            Rune = {
+                [1] = "|r has created in ",
+                [2] = " of center region"
+            },
+            Win = {
+                Player = "|r player has won, congratulate him, game will be end in |c00FFFC005|r second",
+                Team = "|r team has won, congratulate them, game will be end in |c00FFFC005|r second"
+            },
+            Loose = {
+                TVT = "Your team are loose, come again to win",
+                DM = "You are loose, come again to win",
+            },
+            Kill = "|r has killed a ",
+            Hint = {
+                Slash = "|c0000FF40Hint:|r Slashing strike deals damage to enemies in front of you, but be careful, it can also be parried",
+                Kill = {
+                    [1] = "|c0000FF40Hint:|r You have killed an enemy, collect |c00FFFC00",
+                    [2] = "|r kills to win"
+                },
+                Death = {
+                    [1] = "|c0000FF40Hint:|r Your hero will be Revive in |c00FFFC00",
+                    [2] = "|r second"
+                },
+                Damage = "|c0000FF40Hint:|r Damage dealt will fill your mana",
+                Parry = "|c0000FF40Hint:|r Parry returns all damage filling up your mana, also it increases your damage factor for |c00FFFC002|r  sec",
+                CounterFT = "Counter",
+                ParryFT = "Parry"
+            },
+            Rect = {
+                [1] = "|r has created in ",
+                [2] = " of center region",
+                TL = "|c0000FF40top left|r",
+                TR= "|c0000FF40top right|r",
+                BL = "|c0000FF40bottom left|r",
+                BR = "|c0000FF40bottom right|r"
+            },
+            Force = "Force",
+            Mode = {
+                DM = "|c00FF0000Death Match|r mode was chosen by voting prepare to fight, your allies will become to enemy in |c00FFFC005|r second",
+                TVT = "|c0000FFFFTeam vs Team|r mode was chosen by voting prepare to fight",
+                DMTimer = "Game Start",
+                DMVote = "You have voted |c00FF0000Death Match|r mode, wait for others",
+                TVTVote = "You have voted |c00FF0000Team vs Team|r mode, wait for others",
+                Choose = "Mode choose",
+                VotingEnd = "Voting ends",
+                DMButton = "Death Match [|Cfffed312D|r]",
+                TVTButton = "Team vs Team [|Cfffed312T|r]",
+                ScoreTable = {
+                    [1] = "Score Table |c00FFFC00|n",
+                    [2] = "|r kills to win"
+                },
+            }
+        },
+        ruRU = {
+            Rune = {
+                [1] = "|r создана в ",
+                [2] = " центральной области"
+            },
+            Win = {
+                Player = "|r победил, поздравьте его, игра закончится через |c00FFFC005|r second",
+                Team = "|r победила, поздравьте их, игра закончится через |c00FFFC005|r second"
+            },
+            Loose = {
+                TVT = "Ваша команда проиграла, возвращайся снова, чтобы победить",
+                DM = "Ты проиграл, возвращайся снова, чтобы победить",
+            },
+            Kill = "|r убил ",
+            Hint = {
+                Slash = "|c0000FF40Подсказка:|r Режущий удар наносит урон врагам впереди, но будьте осторожны, он может быть паррирован.",
+                Kill = {
+                    [1] = "|c0000FF40Подсказка:|r Вы убили врага, соберите |c00FFFC00",
+                    [2] = "|r убийств для победы"
+                },
+                Death = {
+                    [1] = "|c0000FF40Подсказка:|r Ваш герой будет воскрешен через |c00FFFC00",
+                    [2] = "|r секунд"
+                },
+                Damage = "|c0000FF40Подсказка:|r Наносимый урон будет восполнять ваш запас маны",
+                Parry = "|c0000FF40Подсказка:|r Парирование отражает весь урон, восполняя запас маны, также увеличивает критический фактор на |c00FFFC002|r  секунды",
+                CounterFT = "Контрудар",
+                ParryFT = "Парирование"
+            },
+            Rect = {
+                [1] = "|r создана в ",
+                [2] = " центральной области",
+                TL = "|c0000FF40верхнем левом углу|r",
+                TR= "|c0000FF40верхнем правом углу|r",
+                BL = "|c0000FF40нижнем левом углу|r",
+                BR = "|c0000FF40нижнем правом углу|r"
+            },
+            Force = "Команда",
+            Mode = {
+                DM = "|c00FF0000Death Match|r режим был выбран путем голосования, приготовьтесь к бою, ваши союзники станут врагами через |c00FFFC005|r секунд",
+                TVT = "|c0000FFFFTeam vs Team|r режим был выбран путем голосования, приготовьтесь к бою",
+                DMTimer = "Начало игры",
+                DMVote = "Вы проголосовали за |c00FF0000Death Match|r мод, дождитесь остальных",
+                TVTVote = "Вы проголосовали за |c00FF0000Team vs Team|r мод, дождитесь остальных",
+                Choose = "Выбор мода",
+                VotingEnd = "Конец голосования",
+                DMButton = "Death Match [|Cfffed312D|r]",
+                TVTButton = "Team vs Team [|Cfffed312T|r]",
+                ScoreTable = {
+                    [1] = "Таблица лидеров |c00FFFC00|n",
+                    [2] = "|r убийств для победы"
+                }
+            }
+        },
+        zhCN = {
+            Rune = {
+                [1] = "|r 已在 ",
+                [2] = " 中心区域"
+            },
+            Win = {
+                Player = "|r 玩家赢了，恭喜他，比赛将在 |c00FFFC005|r 第二",
+                Team = "|r 球队赢了，祝贺他们，比赛将以 |c00FFFC005|r 第二"
+            },
+            Loose = {
+                TVT = "您的团队很松散，再次获胜",
+                DM = "你很松，再来赢",
+            },
+            Kill = "|r 杀死了一个 ",
+            Hint = {
+                Slash = "|c0000FF40暗示:|r 猛烈的打击会对前方的敌人造成伤害，但请注意，它也可以招架",
+                Kill = {
+                    [1] = "|c0000FF40暗示:|r 你杀了一个敌人，收集 |c00FFFC00",
+                    [2] = "|r 杀死胜利"
+                },
+                Death = {
+                    [1] = "|c0000FF40暗示:|r 您的英雄将复活 |c00FFFC00",
+                    [2] = "|r 第二"
+                },
+                Damage = "|c0000FF40暗示:|r 造成的伤害将填补你的法力值",
+                Parry = "|c0000FF40暗示:|r 帕里退还所有伤害，填满您的法力，同时也会增加您的伤害系数 |c00FFFC002|r  第二",
+                CounterFT = "计数器",
+                ParryFT = "帕里"
+            },
+            Rect = {
+                [1] = "|r 已在 ",
+                [2] = " 中心区域",
+                TL = "|c0000FF40左上方|r",
+                TR= "|c0000FF40右上|r",
+                BL = "|c0000FF40左下方|r",
+                BR = "|c0000FF40右下|r"
+            },
+            Force = "力",
+            Mode = {
+                DM = "|c00FF0000死亡竞赛|r模式是通过投票准备战斗而选择的，您的盟友将在|c00FFFC005|r秒内成为敌人",
+                TVT = "|c0000FFFF团队vs团队|r模式通过投票准备战斗",
+                DMTimer = "游戏开始",
+                DMVote = "您已投票|c00FF0000死亡竞赛|r模式，等待其他人",
+                TVTVote = "您已投票|c00FF0000团队vs团队|r模式，等待其他人",
+                Choose = "模式选择",
+                VotingEnd = "投票结束",
+                DMButton = "死亡竞赛 [|Cfffed312D|r]",
+                TVTButton = "团队vs团队 [|Cfffed312T|r]",
+                ScoreTable = {
+                    [1] = "得分表 |c00FFFC00|n",
+                    [2] = "|r 杀死胜利"
+                }
+            }
+        },
+        esES = {
+            Rune = {
+                [1] = "|r has created in ",
+                [2] = " of center region"
+            },
+            Win = {
+                Player = "|r player has won, congratulate him, game will be end in |c00FFFC005|r second",
+                Team = "|r team has won, congratulate them, game will be end in |c00FFFC005|r second"
+            },
+            Loose = {
+                TVT = "Your team are loose, come again to win",
+                DM = "You are loose, come again to win",
+            },
+            Kill = "|r has killed a ",
+            Hint = {
+                Slash = "|c0000FF40Hint:|r Slashing strike deals damage to enemies in front of you, but be careful, it can also be parried",
+                Kill = {
+                    [1] = "|c0000FF40Hint:|r You have killed an enemy, collect |c00FFFC00",
+                    [2] = "|r kills to win"
+                },
+                Death = {
+                    [1] = "|c0000FF40Hint:|r Your hero will be Revive in |c00FFFC00",
+                    [2] = "|r second"
+                },
+                Damage = "|c0000FF40Hint:|r Damage dealt will fill your mana",
+                Parry = "|c0000FF40Hint:|r Parry returns all damage filling up your mana, also it increases your damage factor for |c00FFFC002|r  sec",
+                CounterFT = "Counter",
+                ParryFT = "Parry"
+            },
+            Rect = {
+                [1] = "|r has created in ",
+                [2] = " of center region",
+                TL = "|c0000FF40top left|r",
+                TR= "|c0000FF40top right|r",
+                BL = "|c0000FF40bottom left|r",
+                BR = "|c0000FF40bottom right|r"
+            },
+            Force = "Force",
+            Mode = {
+                DM = "|c00FF0000Death Match|r mode was chosen by voting prepare to fight, your allies will become to enemy in |c00FFFC005|r second",
+                TVT = "|c0000FFFFTeam vs Team|r mode was chosen by voting prepare to fight",
+                DMTimer = "Game Start",
+                DMVote = "You have voted |c00FF0000Death Match|r mode, wait for others",
+                TVTVote = "You have voted |c00FF0000Team vs Team|r mode, wait for others",
+                Choose = "Mode choose",
+                VotingEnd = "Voting ends",
+                DMButton = "Death Match [|Cfffed312D|r]",
+                TVTButton = "Team vs Team [|Cfffed312T|r]",
+                ScoreTable = {
+                    [1] = "Score Table |c00FFFC00|n",
+                    [2] = "|r kills to win"
+                },
+            }
+        },
+        deDE = {
+            Rune = {
+                [1] = "|r has created in ",
+                [2] = " of center region"
+            },
+            Win = {
+                Player = "|r player has won, congratulate him, game will be end in |c00FFFC005|r second",
+                Team = "|r team has won, congratulate them, game will be end in |c00FFFC005|r second"
+            },
+            Loose = {
+                TVT = "Your team are loose, come again to win",
+                DM = "You are loose, come again to win",
+            },
+            Kill = "|r has killed a ",
+            Hint = {
+                Slash = "|c0000FF40Hint:|r Slashing strike deals damage to enemies in front of you, but be careful, it can also be parried",
+                Kill = {
+                    [1] = "|c0000FF40Hint:|r You have killed an enemy, collect |c00FFFC00",
+                    [2] = "|r kills to win"
+                },
+                Death = {
+                    [1] = "|c0000FF40Hint:|r Your hero will be Revive in |c00FFFC00",
+                    [2] = "|r second"
+                },
+                Damage = "|c0000FF40Hint:|r Damage dealt will fill your mana",
+                Parry = "|c0000FF40Hint:|r Parry returns all damage filling up your mana, also it increases your damage factor for |c00FFFC002|r  sec",
+                CounterFT = "Counter",
+                ParryFT = "Parry"
+            },
+            Rect = {
+                [1] = "|r has created in ",
+                [2] = " of center region",
+                TL = "|c0000FF40top left|r",
+                TR= "|c0000FF40top right|r",
+                BL = "|c0000FF40bottom left|r",
+                BR = "|c0000FF40bottom right|r"
+            },
+            Force = "Force",
+            Mode = {
+                DM = "|c00FF0000Death Match|r mode was chosen by voting prepare to fight, your allies will become to enemy in |c00FFFC005|r second",
+                TVT = "|c0000FFFFTeam vs Team|r mode was chosen by voting prepare to fight",
+                DMTimer = "Game Start",
+                DMVote = "You have voted |c00FF0000Death Match|r mode, wait for others",
+                TVTVote = "You have voted |c00FF0000Team vs Team|r mode, wait for others",
+                Choose = "Mode choose",
+                VotingEnd = "Voting ends",
+                DMButton = "Death Match [|Cfffed312D|r]",
+                TVTButton = "Team vs Team [|Cfffed312T|r]",
+                ScoreTable = {
+                    [1] = "Score Table |c00FFFC00|n",
+                    [2] = "|r kills to win"
+                },
+            }
+        },
+        esMX = {
+            Rune = {
+                [1] = "|r has created in ",
+                [2] = " of center region"
+            },
+            Win = {
+                Player = "|r player has won, congratulate him, game will be end in |c00FFFC005|r second",
+                Team = "|r team has won, congratulate them, game will be end in |c00FFFC005|r second"
+            },
+            Loose = {
+                TVT = "Your team are loose, come again to win",
+                DM = "You are loose, come again to win",
+            },
+            Kill = "|r has killed a ",
+            Hint = {
+                Slash = "|c0000FF40Hint:|r Slashing strike deals damage to enemies in front of you, but be careful, it can also be parried",
+                Kill = {
+                    [1] = "|c0000FF40Hint:|r You have killed an enemy, collect |c00FFFC00",
+                    [2] = "|r kills to win"
+                },
+                Death = {
+                    [1] = "|c0000FF40Hint:|r Your hero will be Revive in |c00FFFC00",
+                    [2] = "|r second"
+                },
+                Damage = "|c0000FF40Hint:|r Damage dealt will fill your mana",
+                Parry = "|c0000FF40Hint:|r Parry returns all damage filling up your mana, also it increases your damage factor for |c00FFFC002|r  sec",
+                CounterFT = "Counter",
+                ParryFT = "Parry"
+            },
+            Rect = {
+                [1] = "|r has created in ",
+                [2] = " of center region",
+                TL = "|c0000FF40top left|r",
+                TR= "|c0000FF40top right|r",
+                BL = "|c0000FF40bottom left|r",
+                BR = "|c0000FF40bottom right|r"
+            },
+            Force = "Force",
+            Mode = {
+                DM = "|c00FF0000Death Match|r mode was chosen by voting prepare to fight, your allies will become to enemy in |c00FFFC005|r second",
+                TVT = "|c0000FFFFTeam vs Team|r mode was chosen by voting prepare to fight",
+                DMTimer = "Game Start",
+                DMVote = "You have voted |c00FF0000Death Match|r mode, wait for others",
+                TVTVote = "You have voted |c00FF0000Team vs Team|r mode, wait for others",
+                Choose = "Mode choose",
+                VotingEnd = "Voting ends",
+                DMButton = "Death Match [|Cfffed312D|r]",
+                TVTButton = "Team vs Team [|Cfffed312T|r]",
+                ScoreTable = {
+                    [1] = "Score Table |c00FFFC00|n",
+                    [2] = "|r kills to win"
+                },
+            }
+        },
+        frFR = {
+            Rune = {
+                [1] = "|r has created in ",
+                [2] = " of center region"
+            },
+            Win = {
+                Player = "|r player has won, congratulate him, game will be end in |c00FFFC005|r second",
+                Team = "|r team has won, congratulate them, game will be end in |c00FFFC005|r second"
+            },
+            Loose = {
+                TVT = "Your team are loose, come again to win",
+                DM = "You are loose, come again to win",
+            },
+            Kill = "|r has killed a ",
+            Hint = {
+                Slash = "|c0000FF40Hint:|r Slashing strike deals damage to enemies in front of you, but be careful, it can also be parried",
+                Kill = {
+                    [1] = "|c0000FF40Hint:|r You have killed an enemy, collect |c00FFFC00",
+                    [2] = "|r kills to win"
+                },
+                Death = {
+                    [1] = "|c0000FF40Hint:|r Your hero will be Revive in |c00FFFC00",
+                    [2] = "|r second"
+                },
+                Damage = "|c0000FF40Hint:|r Damage dealt will fill your mana",
+                Parry = "|c0000FF40Hint:|r Parry returns all damage filling up your mana, also it increases your damage factor for |c00FFFC002|r  sec",
+                CounterFT = "Counter",
+                ParryFT = "Parry"
+            },
+            Rect = {
+                [1] = "|r has created in ",
+                [2] = " of center region",
+                TL = "|c0000FF40top left|r",
+                TR= "|c0000FF40top right|r",
+                BL = "|c0000FF40bottom left|r",
+                BR = "|c0000FF40bottom right|r"
+            },
+            Force = "Force",
+            Mode = {
+                DM = "|c00FF0000Death Match|r mode was chosen by voting prepare to fight, your allies will become to enemy in |c00FFFC005|r second",
+                TVT = "|c0000FFFFTeam vs Team|r mode was chosen by voting prepare to fight",
+                DMTimer = "Game Start",
+                DMVote = "You have voted |c00FF0000Death Match|r mode, wait for others",
+                TVTVote = "You have voted |c00FF0000Team vs Team|r mode, wait for others",
+                Choose = "Mode choose",
+                VotingEnd = "Voting ends",
+                DMButton = "Death Match [|Cfffed312D|r]",
+                TVTButton = "Team vs Team [|Cfffed312T|r]",
+                ScoreTable = {
+                    [1] = "Score Table |c00FFFC00|n",
+                    [2] = "|r kills to win"
+                },
+            }
+        },
+        itIT = {
+            Rune = {
+                [1] = "|r has created in ",
+                [2] = " of center region"
+            },
+            Win = {
+                Player = "|r player has won, congratulate him, game will be end in |c00FFFC005|r second",
+                Team = "|r team has won, congratulate them, game will be end in |c00FFFC005|r second"
+            },
+            Loose = {
+                TVT = "Your team are loose, come again to win",
+                DM = "You are loose, come again to win",
+            },
+            Kill = "|r has killed a ",
+            Hint = {
+                Slash = "|c0000FF40Hint:|r Slashing strike deals damage to enemies in front of you, but be careful, it can also be parried",
+                Kill = {
+                    [1] = "|c0000FF40Hint:|r You have killed an enemy, collect |c00FFFC00",
+                    [2] = "|r kills to win"
+                },
+                Death = {
+                    [1] = "|c0000FF40Hint:|r Your hero will be Revive in |c00FFFC00",
+                    [2] = "|r second"
+                },
+                Damage = "|c0000FF40Hint:|r Damage dealt will fill your mana",
+                Parry = "|c0000FF40Hint:|r Parry returns all damage filling up your mana, also it increases your damage factor for |c00FFFC002|r  sec",
+                CounterFT = "Counter",
+                ParryFT = "Parry"
+            },
+            Rect = {
+                [1] = "|r has created in ",
+                [2] = " of center region",
+                TL = "|c0000FF40top left|r",
+                TR= "|c0000FF40top right|r",
+                BL = "|c0000FF40bottom left|r",
+                BR = "|c0000FF40bottom right|r"
+            },
+            Force = "Force",
+            Mode = {
+                DM = "|c00FF0000Death Match|r mode was chosen by voting prepare to fight, your allies will become to enemy in |c00FFFC005|r second",
+                TVT = "|c0000FFFFTeam vs Team|r mode was chosen by voting prepare to fight",
+                DMTimer = "Game Start",
+                DMVote = "You have voted |c00FF0000Death Match|r mode, wait for others",
+                TVTVote = "You have voted |c00FF0000Team vs Team|r mode, wait for others",
+                Choose = "Mode choose",
+                VotingEnd = "Voting ends",
+                DMButton = "Death Match [|Cfffed312D|r]",
+                TVTButton = "Team vs Team [|Cfffed312T|r]",
+                ScoreTable = {
+                    [1] = "Score Table |c00FFFC00|n",
+                    [2] = "|r kills to win"
+                },
+            }
+        },
+        koKR = {
+            Rune = {
+                [1] = "|r has created in ",
+                [2] = " of center region"
+            },
+            Win = {
+                Player = "|r player has won, congratulate him, game will be end in |c00FFFC005|r second",
+                Team = "|r team has won, congratulate them, game will be end in |c00FFFC005|r second"
+            },
+            Loose = {
+                TVT = "Your team are loose, come again to win",
+                DM = "You are loose, come again to win",
+            },
+            Kill = "|r has killed a ",
+            Hint = {
+                Slash = "|c0000FF40Hint:|r Slashing strike deals damage to enemies in front of you, but be careful, it can also be parried",
+                Kill = {
+                    [1] = "|c0000FF40Hint:|r You have killed an enemy, collect |c00FFFC00",
+                    [2] = "|r kills to win"
+                },
+                Death = {
+                    [1] = "|c0000FF40Hint:|r Your hero will be Revive in |c00FFFC00",
+                    [2] = "|r second"
+                },
+                Damage = "|c0000FF40Hint:|r Damage dealt will fill your mana",
+                Parry = "|c0000FF40Hint:|r Parry returns all damage filling up your mana, also it increases your damage factor for |c00FFFC002|r  sec",
+                CounterFT = "Counter",
+                ParryFT = "Parry"
+            },
+            Rect = {
+                [1] = "|r has created in ",
+                [2] = " of center region",
+                TL = "|c0000FF40top left|r",
+                TR= "|c0000FF40top right|r",
+                BL = "|c0000FF40bottom left|r",
+                BR = "|c0000FF40bottom right|r"
+            },
+            Force = "Force",
+            Mode = {
+                DM = "|c00FF0000Death Match|r mode was chosen by voting prepare to fight, your allies will become to enemy in |c00FFFC005|r second",
+                TVT = "|c0000FFFFTeam vs Team|r mode was chosen by voting prepare to fight",
+                DMTimer = "Game Start",
+                DMVote = "You have voted |c00FF0000Death Match|r mode, wait for others",
+                TVTVote = "You have voted |c00FF0000Team vs Team|r mode, wait for others",
+                Choose = "Mode choose",
+                VotingEnd = "Voting ends",
+                DMButton = "Death Match [|Cfffed312D|r]",
+                TVTButton = "Team vs Team [|Cfffed312T|r]",
+                ScoreTable = {
+                    [1] = "Score Table |c00FFFC00|n",
+                    [2] = "|r kills to win"
+                },
+            }
+        },
+        plPL = {
+            Rune = {
+                [1] = "|r has created in ",
+                [2] = " of center region"
+            },
+            Win = {
+                Player = "|r player has won, congratulate him, game will be end in |c00FFFC005|r second",
+                Team = "|r team has won, congratulate them, game will be end in |c00FFFC005|r second"
+            },
+            Loose = {
+                TVT = "Your team are loose, come again to win",
+                DM = "You are loose, come again to win",
+            },
+            Kill = "|r has killed a ",
+            Hint = {
+                Slash = "|c0000FF40Hint:|r Slashing strike deals damage to enemies in front of you, but be careful, it can also be parried",
+                Kill = {
+                    [1] = "|c0000FF40Hint:|r You have killed an enemy, collect |c00FFFC00",
+                    [2] = "|r kills to win"
+                },
+                Death = {
+                    [1] = "|c0000FF40Hint:|r Your hero will be Revive in |c00FFFC00",
+                    [2] = "|r second"
+                },
+                Damage = "|c0000FF40Hint:|r Damage dealt will fill your mana",
+                Parry = "|c0000FF40Hint:|r Parry returns all damage filling up your mana, also it increases your damage factor for |c00FFFC002|r  sec",
+                CounterFT = "Counter",
+                ParryFT = "Parry"
+            },
+            Rect = {
+                [1] = "|r has created in ",
+                [2] = " of center region",
+                TL = "|c0000FF40top left|r",
+                TR= "|c0000FF40top right|r",
+                BL = "|c0000FF40bottom left|r",
+                BR = "|c0000FF40bottom right|r"
+            },
+            Force = "Force",
+            Mode = {
+                DM = "|c00FF0000Death Match|r mode was chosen by voting prepare to fight, your allies will become to enemy in |c00FFFC005|r second",
+                TVT = "|c0000FFFFTeam vs Team|r mode was chosen by voting prepare to fight",
+                DMTimer = "Game Start",
+                DMVote = "You have voted |c00FF0000Death Match|r mode, wait for others",
+                TVTVote = "You have voted |c00FF0000Team vs Team|r mode, wait for others",
+                Choose = "Mode choose",
+                VotingEnd = "Voting ends",
+                DMButton = "Death Match [|Cfffed312D|r]",
+                TVTButton = "Team vs Team [|Cfffed312T|r]",
+                ScoreTable = {
+                    [1] = "Score Table |c00FFFC00|n",
+                    [2] = "|r kills to win"
+                },
+            }
+        },
+        ptBR = {
+            Rune = {
+                [1] = "|r has created in ",
+                [2] = " of center region"
+            },
+            Win = {
+                Player = "|r player has won, congratulate him, game will be end in |c00FFFC005|r second",
+                Team = "|r team has won, congratulate them, game will be end in |c00FFFC005|r second"
+            },
+            Loose = {
+                TVT = "Your team are loose, come again to win",
+                DM = "You are loose, come again to win",
+            },
+            Kill = "|r has killed a ",
+            Hint = {
+                Slash = "|c0000FF40Hint:|r Slashing strike deals damage to enemies in front of you, but be careful, it can also be parried",
+                Kill = {
+                    [1] = "|c0000FF40Hint:|r You have killed an enemy, collect |c00FFFC00",
+                    [2] = "|r kills to win"
+                },
+                Death = {
+                    [1] = "|c0000FF40Hint:|r Your hero will be Revive in |c00FFFC00",
+                    [2] = "|r second"
+                },
+                Damage = "|c0000FF40Hint:|r Damage dealt will fill your mana",
+                Parry = "|c0000FF40Hint:|r Parry returns all damage filling up your mana, also it increases your damage factor for |c00FFFC002|r  sec",
+                CounterFT = "Counter",
+                ParryFT = "Parry"
+            },
+            Rect = {
+                [1] = "|r has created in ",
+                [2] = " of center region",
+                TL = "|c0000FF40top left|r",
+                TR= "|c0000FF40top right|r",
+                BL = "|c0000FF40bottom left|r",
+                BR = "|c0000FF40bottom right|r"
+            },
+            Force = "Force",
+            Mode = {
+                DM = "|c00FF0000Death Match|r mode was chosen by voting prepare to fight, your allies will become to enemy in |c00FFFC005|r second",
+                TVT = "|c0000FFFFTeam vs Team|r mode was chosen by voting prepare to fight",
+                DMTimer = "Game Start",
+                DMVote = "You have voted |c00FF0000Death Match|r mode, wait for others",
+                TVTVote = "You have voted |c00FF0000Team vs Team|r mode, wait for others",
+                Choose = "Mode choose",
+                VotingEnd = "Voting ends",
+                DMButton = "Death Match [|Cfffed312D|r]",
+                TVTButton = "Team vs Team [|Cfffed312T|r]",
+                ScoreTable = {
+                    [1] = "Score Table |c00FFFC00|n",
+                    [2] = "|r kills to win"
+                },
+            }
+        },
+        zhTW = {
+            Rune = {
+                [1] = "|r has created in ",
+                [2] = " of center region"
+            },
+            Win = {
+                Player = "|r player has won, congratulate him, game will be end in |c00FFFC005|r second",
+                Team = "|r team has won, congratulate them, game will be end in |c00FFFC005|r second"
+            },
+            Loose = {
+                TVT = "Your team are loose, come again to win",
+                DM = "You are loose, come again to win",
+            },
+            Kill = "|r has killed a ",
+            Hint = {
+                Slash = "|c0000FF40Hint:|r Slashing strike deals damage to enemies in front of you, but be careful, it can also be parried",
+                Kill = {
+                    [1] = "|c0000FF40Hint:|r You have killed an enemy, collect |c00FFFC00",
+                    [2] = "|r kills to win"
+                },
+                Death = {
+                    [1] = "|c0000FF40Hint:|r Your hero will be Revive in |c00FFFC00",
+                    [2] = "|r second"
+                },
+                Damage = "|c0000FF40Hint:|r Damage dealt will fill your mana",
+                Parry = "|c0000FF40Hint:|r Parry returns all damage filling up your mana, also it increases your damage factor for |c00FFFC002|r  sec",
+                CounterFT = "Counter",
+                ParryFT = "Parry"
+            },
+            Rect = {
+                [1] = "|r has created in ",
+                [2] = " of center region",
+                TL = "|c0000FF40top left|r",
+                TR= "|c0000FF40top right|r",
+                BL = "|c0000FF40bottom left|r",
+                BR = "|c0000FF40bottom right|r"
+            },
+            Force = "Force",
+            Mode = {
+                DM = "|c00FF0000Death Match|r mode was chosen by voting prepare to fight, your allies will become to enemy in |c00FFFC005|r second",
+                TVT = "|c0000FFFFTeam vs Team|r mode was chosen by voting prepare to fight",
+                DMTimer = "Game Start",
+                DMVote = "You have voted |c00FF0000Death Match|r mode, wait for others",
+                TVTVote = "You have voted |c00FF0000Team vs Team|r mode, wait for others",
+                Choose = "Mode choose",
+                VotingEnd = "Voting ends",
+                DMButton = "Death Match [|Cfffed312D|r]",
+                TVTButton = "Team vs Team [|Cfffed312T|r]",
+                ScoreTable = {
+                    [1] = "Score Table |c00FFFC00|n",
+                    [2] = "|r kills to win"
+                },
+            }
+        }
+    }
+    Team = {
+        Name = {
+            [0] = String[BlzGetLocale()].Force.."1",
+            [0] = String[BlzGetLocale()].Force.."2",
+        }
+    }
     Death()
     Damage()
     EntireMap()
@@ -714,21 +1368,22 @@ end
 function SpawnBoost()
     local random = GetRandomInt(17, 20)
     local rectname = {
-        [17] = "|c0000FF40top left|r",
-        [18]  = "|c0000FF40top right|r",
-        [19] = "|c0000FF40bottom left|r",
-        [20] = "|c0000FF40bottom right|r"
+        [17] = String[BlzGetLocale()].Rect.TL,
+        [18]  = String[BlzGetLocale()].Rect.TR,
+        [19] = String[BlzGetLocale()].Rect.BL,
+        [20] = String[BlzGetLocale()].Rect.BR
     }
     local x = GetRectCenterX(SpawnRect.Revive[random])
     local y = GetRectCenterY(SpawnRect.Revive[random])
     local item = CreateItem(Boost[GetRandomInt(1, Boost.Count)], x, y)
-    print("|c00FFFC00"..GetItemName(item).."|r has created in "..rectname[random].." of center region")
+    print("|c00FFFC00"..GetItemName(item)..String[BlzGetLocale()].Rune[1]..rectname[random]..String[BlzGetLocale()].Rune[2])
 end
 --CUSTOM_CODE
 function Trig_Initialization_Actions()
     MeleeStartingVisibility()
     SetMapMusicRandomBJ(gg_snd_great_player01)
         Start()
+        BlzChangeMinimapTerrainTex("map.blp")
 end
 
 function InitTrig_Initialization()
@@ -774,7 +1429,7 @@ function Trig_Counter_Func001001003()
 end
 
 function Trig_Counter_Func001002()
-    UnitDamageTargetBJ(GetTriggerUnit(), GetEnumUnit(), 75.00, ATTACK_TYPE_MELEE, DAMAGE_TYPE_MAGIC)
+    UnitDamageTargetBJ(GetTriggerUnit(), GetEnumUnit(), 150.00, ATTACK_TYPE_MELEE, DAMAGE_TYPE_MAGIC)
 end
 
 function Trig_Counter_Actions()
@@ -915,148 +1570,132 @@ function InitCustomTeams()
     SetPlayerTeam(Player(3), 0)
     SetPlayerTeam(Player(4), 0)
     SetPlayerTeam(Player(5), 0)
-    SetPlayerTeam(Player(16), 0)
-    SetPlayerTeam(Player(17), 0)
     SetPlayerAllianceStateAllyBJ(Player(0), Player(1), true)
     SetPlayerAllianceStateAllyBJ(Player(0), Player(2), true)
     SetPlayerAllianceStateAllyBJ(Player(0), Player(3), true)
     SetPlayerAllianceStateAllyBJ(Player(0), Player(4), true)
     SetPlayerAllianceStateAllyBJ(Player(0), Player(5), true)
-    SetPlayerAllianceStateAllyBJ(Player(0), Player(16), true)
-    SetPlayerAllianceStateAllyBJ(Player(0), Player(17), true)
     SetPlayerAllianceStateAllyBJ(Player(1), Player(0), true)
     SetPlayerAllianceStateAllyBJ(Player(1), Player(2), true)
     SetPlayerAllianceStateAllyBJ(Player(1), Player(3), true)
     SetPlayerAllianceStateAllyBJ(Player(1), Player(4), true)
     SetPlayerAllianceStateAllyBJ(Player(1), Player(5), true)
-    SetPlayerAllianceStateAllyBJ(Player(1), Player(16), true)
-    SetPlayerAllianceStateAllyBJ(Player(1), Player(17), true)
     SetPlayerAllianceStateAllyBJ(Player(2), Player(0), true)
     SetPlayerAllianceStateAllyBJ(Player(2), Player(1), true)
     SetPlayerAllianceStateAllyBJ(Player(2), Player(3), true)
     SetPlayerAllianceStateAllyBJ(Player(2), Player(4), true)
     SetPlayerAllianceStateAllyBJ(Player(2), Player(5), true)
-    SetPlayerAllianceStateAllyBJ(Player(2), Player(16), true)
-    SetPlayerAllianceStateAllyBJ(Player(2), Player(17), true)
     SetPlayerAllianceStateAllyBJ(Player(3), Player(0), true)
     SetPlayerAllianceStateAllyBJ(Player(3), Player(1), true)
     SetPlayerAllianceStateAllyBJ(Player(3), Player(2), true)
     SetPlayerAllianceStateAllyBJ(Player(3), Player(4), true)
     SetPlayerAllianceStateAllyBJ(Player(3), Player(5), true)
-    SetPlayerAllianceStateAllyBJ(Player(3), Player(16), true)
-    SetPlayerAllianceStateAllyBJ(Player(3), Player(17), true)
     SetPlayerAllianceStateAllyBJ(Player(4), Player(0), true)
     SetPlayerAllianceStateAllyBJ(Player(4), Player(1), true)
     SetPlayerAllianceStateAllyBJ(Player(4), Player(2), true)
     SetPlayerAllianceStateAllyBJ(Player(4), Player(3), true)
     SetPlayerAllianceStateAllyBJ(Player(4), Player(5), true)
-    SetPlayerAllianceStateAllyBJ(Player(4), Player(16), true)
-    SetPlayerAllianceStateAllyBJ(Player(4), Player(17), true)
     SetPlayerAllianceStateAllyBJ(Player(5), Player(0), true)
     SetPlayerAllianceStateAllyBJ(Player(5), Player(1), true)
     SetPlayerAllianceStateAllyBJ(Player(5), Player(2), true)
     SetPlayerAllianceStateAllyBJ(Player(5), Player(3), true)
     SetPlayerAllianceStateAllyBJ(Player(5), Player(4), true)
-    SetPlayerAllianceStateAllyBJ(Player(5), Player(16), true)
-    SetPlayerAllianceStateAllyBJ(Player(5), Player(17), true)
-    SetPlayerAllianceStateAllyBJ(Player(16), Player(0), true)
-    SetPlayerAllianceStateAllyBJ(Player(16), Player(1), true)
-    SetPlayerAllianceStateAllyBJ(Player(16), Player(2), true)
-    SetPlayerAllianceStateAllyBJ(Player(16), Player(3), true)
-    SetPlayerAllianceStateAllyBJ(Player(16), Player(4), true)
-    SetPlayerAllianceStateAllyBJ(Player(16), Player(5), true)
-    SetPlayerAllianceStateAllyBJ(Player(16), Player(17), true)
-    SetPlayerAllianceStateAllyBJ(Player(17), Player(0), true)
-    SetPlayerAllianceStateAllyBJ(Player(17), Player(1), true)
-    SetPlayerAllianceStateAllyBJ(Player(17), Player(2), true)
-    SetPlayerAllianceStateAllyBJ(Player(17), Player(3), true)
-    SetPlayerAllianceStateAllyBJ(Player(17), Player(4), true)
-    SetPlayerAllianceStateAllyBJ(Player(17), Player(5), true)
-    SetPlayerAllianceStateAllyBJ(Player(17), Player(16), true)
     SetPlayerAllianceStateVisionBJ(Player(0), Player(1), true)
     SetPlayerAllianceStateVisionBJ(Player(0), Player(2), true)
     SetPlayerAllianceStateVisionBJ(Player(0), Player(3), true)
     SetPlayerAllianceStateVisionBJ(Player(0), Player(4), true)
     SetPlayerAllianceStateVisionBJ(Player(0), Player(5), true)
-    SetPlayerAllianceStateVisionBJ(Player(0), Player(16), true)
-    SetPlayerAllianceStateVisionBJ(Player(0), Player(17), true)
     SetPlayerAllianceStateVisionBJ(Player(1), Player(0), true)
     SetPlayerAllianceStateVisionBJ(Player(1), Player(2), true)
     SetPlayerAllianceStateVisionBJ(Player(1), Player(3), true)
     SetPlayerAllianceStateVisionBJ(Player(1), Player(4), true)
     SetPlayerAllianceStateVisionBJ(Player(1), Player(5), true)
-    SetPlayerAllianceStateVisionBJ(Player(1), Player(16), true)
-    SetPlayerAllianceStateVisionBJ(Player(1), Player(17), true)
     SetPlayerAllianceStateVisionBJ(Player(2), Player(0), true)
     SetPlayerAllianceStateVisionBJ(Player(2), Player(1), true)
     SetPlayerAllianceStateVisionBJ(Player(2), Player(3), true)
     SetPlayerAllianceStateVisionBJ(Player(2), Player(4), true)
     SetPlayerAllianceStateVisionBJ(Player(2), Player(5), true)
-    SetPlayerAllianceStateVisionBJ(Player(2), Player(16), true)
-    SetPlayerAllianceStateVisionBJ(Player(2), Player(17), true)
     SetPlayerAllianceStateVisionBJ(Player(3), Player(0), true)
     SetPlayerAllianceStateVisionBJ(Player(3), Player(1), true)
     SetPlayerAllianceStateVisionBJ(Player(3), Player(2), true)
     SetPlayerAllianceStateVisionBJ(Player(3), Player(4), true)
     SetPlayerAllianceStateVisionBJ(Player(3), Player(5), true)
-    SetPlayerAllianceStateVisionBJ(Player(3), Player(16), true)
-    SetPlayerAllianceStateVisionBJ(Player(3), Player(17), true)
     SetPlayerAllianceStateVisionBJ(Player(4), Player(0), true)
     SetPlayerAllianceStateVisionBJ(Player(4), Player(1), true)
     SetPlayerAllianceStateVisionBJ(Player(4), Player(2), true)
     SetPlayerAllianceStateVisionBJ(Player(4), Player(3), true)
     SetPlayerAllianceStateVisionBJ(Player(4), Player(5), true)
-    SetPlayerAllianceStateVisionBJ(Player(4), Player(16), true)
-    SetPlayerAllianceStateVisionBJ(Player(4), Player(17), true)
     SetPlayerAllianceStateVisionBJ(Player(5), Player(0), true)
     SetPlayerAllianceStateVisionBJ(Player(5), Player(1), true)
     SetPlayerAllianceStateVisionBJ(Player(5), Player(2), true)
     SetPlayerAllianceStateVisionBJ(Player(5), Player(3), true)
     SetPlayerAllianceStateVisionBJ(Player(5), Player(4), true)
-    SetPlayerAllianceStateVisionBJ(Player(5), Player(16), true)
-    SetPlayerAllianceStateVisionBJ(Player(5), Player(17), true)
-    SetPlayerAllianceStateVisionBJ(Player(16), Player(0), true)
-    SetPlayerAllianceStateVisionBJ(Player(16), Player(1), true)
-    SetPlayerAllianceStateVisionBJ(Player(16), Player(2), true)
-    SetPlayerAllianceStateVisionBJ(Player(16), Player(3), true)
-    SetPlayerAllianceStateVisionBJ(Player(16), Player(4), true)
-    SetPlayerAllianceStateVisionBJ(Player(16), Player(5), true)
-    SetPlayerAllianceStateVisionBJ(Player(16), Player(17), true)
-    SetPlayerAllianceStateVisionBJ(Player(17), Player(0), true)
-    SetPlayerAllianceStateVisionBJ(Player(17), Player(1), true)
-    SetPlayerAllianceStateVisionBJ(Player(17), Player(2), true)
-    SetPlayerAllianceStateVisionBJ(Player(17), Player(3), true)
-    SetPlayerAllianceStateVisionBJ(Player(17), Player(4), true)
-    SetPlayerAllianceStateVisionBJ(Player(17), Player(5), true)
-    SetPlayerAllianceStateVisionBJ(Player(17), Player(16), true)
     SetPlayerTeam(Player(12), 1)
     SetPlayerTeam(Player(13), 1)
     SetPlayerTeam(Player(14), 1)
     SetPlayerTeam(Player(15), 1)
+    SetPlayerTeam(Player(16), 1)
+    SetPlayerTeam(Player(17), 1)
     SetPlayerAllianceStateAllyBJ(Player(12), Player(13), true)
     SetPlayerAllianceStateAllyBJ(Player(12), Player(14), true)
     SetPlayerAllianceStateAllyBJ(Player(12), Player(15), true)
+    SetPlayerAllianceStateAllyBJ(Player(12), Player(16), true)
+    SetPlayerAllianceStateAllyBJ(Player(12), Player(17), true)
     SetPlayerAllianceStateAllyBJ(Player(13), Player(12), true)
     SetPlayerAllianceStateAllyBJ(Player(13), Player(14), true)
     SetPlayerAllianceStateAllyBJ(Player(13), Player(15), true)
+    SetPlayerAllianceStateAllyBJ(Player(13), Player(16), true)
+    SetPlayerAllianceStateAllyBJ(Player(13), Player(17), true)
     SetPlayerAllianceStateAllyBJ(Player(14), Player(12), true)
     SetPlayerAllianceStateAllyBJ(Player(14), Player(13), true)
     SetPlayerAllianceStateAllyBJ(Player(14), Player(15), true)
+    SetPlayerAllianceStateAllyBJ(Player(14), Player(16), true)
+    SetPlayerAllianceStateAllyBJ(Player(14), Player(17), true)
     SetPlayerAllianceStateAllyBJ(Player(15), Player(12), true)
     SetPlayerAllianceStateAllyBJ(Player(15), Player(13), true)
     SetPlayerAllianceStateAllyBJ(Player(15), Player(14), true)
+    SetPlayerAllianceStateAllyBJ(Player(15), Player(16), true)
+    SetPlayerAllianceStateAllyBJ(Player(15), Player(17), true)
+    SetPlayerAllianceStateAllyBJ(Player(16), Player(12), true)
+    SetPlayerAllianceStateAllyBJ(Player(16), Player(13), true)
+    SetPlayerAllianceStateAllyBJ(Player(16), Player(14), true)
+    SetPlayerAllianceStateAllyBJ(Player(16), Player(15), true)
+    SetPlayerAllianceStateAllyBJ(Player(16), Player(17), true)
+    SetPlayerAllianceStateAllyBJ(Player(17), Player(12), true)
+    SetPlayerAllianceStateAllyBJ(Player(17), Player(13), true)
+    SetPlayerAllianceStateAllyBJ(Player(17), Player(14), true)
+    SetPlayerAllianceStateAllyBJ(Player(17), Player(15), true)
+    SetPlayerAllianceStateAllyBJ(Player(17), Player(16), true)
     SetPlayerAllianceStateVisionBJ(Player(12), Player(13), true)
     SetPlayerAllianceStateVisionBJ(Player(12), Player(14), true)
     SetPlayerAllianceStateVisionBJ(Player(12), Player(15), true)
+    SetPlayerAllianceStateVisionBJ(Player(12), Player(16), true)
+    SetPlayerAllianceStateVisionBJ(Player(12), Player(17), true)
     SetPlayerAllianceStateVisionBJ(Player(13), Player(12), true)
     SetPlayerAllianceStateVisionBJ(Player(13), Player(14), true)
     SetPlayerAllianceStateVisionBJ(Player(13), Player(15), true)
+    SetPlayerAllianceStateVisionBJ(Player(13), Player(16), true)
+    SetPlayerAllianceStateVisionBJ(Player(13), Player(17), true)
     SetPlayerAllianceStateVisionBJ(Player(14), Player(12), true)
     SetPlayerAllianceStateVisionBJ(Player(14), Player(13), true)
     SetPlayerAllianceStateVisionBJ(Player(14), Player(15), true)
+    SetPlayerAllianceStateVisionBJ(Player(14), Player(16), true)
+    SetPlayerAllianceStateVisionBJ(Player(14), Player(17), true)
     SetPlayerAllianceStateVisionBJ(Player(15), Player(12), true)
     SetPlayerAllianceStateVisionBJ(Player(15), Player(13), true)
     SetPlayerAllianceStateVisionBJ(Player(15), Player(14), true)
+    SetPlayerAllianceStateVisionBJ(Player(15), Player(16), true)
+    SetPlayerAllianceStateVisionBJ(Player(15), Player(17), true)
+    SetPlayerAllianceStateVisionBJ(Player(16), Player(12), true)
+    SetPlayerAllianceStateVisionBJ(Player(16), Player(13), true)
+    SetPlayerAllianceStateVisionBJ(Player(16), Player(14), true)
+    SetPlayerAllianceStateVisionBJ(Player(16), Player(15), true)
+    SetPlayerAllianceStateVisionBJ(Player(16), Player(17), true)
+    SetPlayerAllianceStateVisionBJ(Player(17), Player(12), true)
+    SetPlayerAllianceStateVisionBJ(Player(17), Player(13), true)
+    SetPlayerAllianceStateVisionBJ(Player(17), Player(14), true)
+    SetPlayerAllianceStateVisionBJ(Player(17), Player(15), true)
+    SetPlayerAllianceStateVisionBJ(Player(17), Player(16), true)
 end
 
 function InitAllyPriorities()
@@ -1226,18 +1865,18 @@ function config()
     SetPlayers(12)
     SetTeams(12)
     SetGamePlacement(MAP_PLACEMENT_TEAMS_TOGETHER)
-    DefineStartLocation(0, 0.0, -256.0)
-    DefineStartLocation(1, 0.0, -256.0)
-    DefineStartLocation(2, 0.0, -256.0)
-    DefineStartLocation(3, 0.0, -256.0)
-    DefineStartLocation(4, 0.0, -256.0)
-    DefineStartLocation(5, 0.0, -256.0)
-    DefineStartLocation(6, 0.0, -256.0)
-    DefineStartLocation(7, 0.0, -256.0)
-    DefineStartLocation(8, 0.0, -256.0)
-    DefineStartLocation(9, 0.0, -256.0)
-    DefineStartLocation(10, 0.0, -256.0)
-    DefineStartLocation(11, 0.0, -256.0)
+    DefineStartLocation(0, 3008.0, 3968.0)
+    DefineStartLocation(1, 3008.0, 3968.0)
+    DefineStartLocation(2, 3008.0, 3968.0)
+    DefineStartLocation(3, 3008.0, 3968.0)
+    DefineStartLocation(4, 3008.0, 3968.0)
+    DefineStartLocation(5, 3008.0, 3968.0)
+    DefineStartLocation(6, 3008.0, 3968.0)
+    DefineStartLocation(7, 3008.0, 3968.0)
+    DefineStartLocation(8, 3008.0, 3968.0)
+    DefineStartLocation(9, 3008.0, 3968.0)
+    DefineStartLocation(10, 3008.0, 3968.0)
+    DefineStartLocation(11, 3008.0, 3968.0)
     InitCustomPlayerSlots()
     InitCustomTeams()
     InitAllyPriorities()

@@ -11,28 +11,25 @@ function Damage_Actions()
     local effect
     if Hint[GetPlayerId(sourceplayer)].Mana then
         Hint[GetPlayerId(sourceplayer)].Mana = false
-        DisplayTimedTextToPlayer(sourceplayer, 0, 0, bj_TEXT_DELAY_ALWAYSHINT, "|c0000FF40Hint:|r Damage dealt will fill your mana")
+        DisplayTimedTextToPlayer(sourceplayer, 0, 0, bj_TEXT_DELAY_ALWAYSHINT, String[BlzGetLocale()].Hint.Damage)
     end
     if GetUnitCurrentOrder(unit) == String2OrderIdBJ("defend") then
         if Hint[GetPlayerId(player)].Parry then
             Hint[GetPlayerId(player)].Parry = false
-            DisplayTimedTextToPlayer(player, 0, 0, bj_TEXT_DELAY_ALWAYSHINT, "|c0000FF40Hint:|r Parry returns all damage filling up your mana, also it increases your damage factor for |c00FFFC002|r  sec")
+            DisplayTimedTextToPlayer(player, 0, 0, bj_TEXT_DELAY_ALWAYSHINT, String[BlzGetLocale()].Hint.Parry)
         end
         if Counter[GetPlayerId(player)] then
             Counter[GetPlayerId(player)] = false
             UnitAddAbility(unit, FourCC('A004'))
             if GetPlayerController(player) == MAP_CONTROL_USER then
-                FlyTextTagMiss(unit, "Counter", player)
+                FlyTextTagMiss(unit, String[BlzGetLocale()].Hint.CounterFT, player)
             end
-            TimerStart(CreateTimer(), 1, false, function()
-                UnitRemoveAbility(unit, FourCC('A004'))
-                DestroyTimer(GetExpiredTimer())
-            end)
+            IssueImmediateOrder(unit, "thunderclap")
         end
         UnitDamageTargetBJ(unit, source, damage, BlzGetEventAttackType(), DAMAGE_TYPE_DEFENSIVE)
         SetUnitState(unit, UNIT_STATE_MANA, GetUnitState(unit, UNIT_STATE_MANA) + damage / 5)
         if GetPlayerController(player) == MAP_CONTROL_USER then
-            FlyTextTagMiss(unit, "Parry", player)
+            FlyTextTagMiss(unit, String[BlzGetLocale()].Hint.ParryFT, player)
             FlyTextTagManaBurn(unit, "+" .. math.ceil(damage/5), player)
         end
         if BlzGetEventDamageType() ~= DAMAGE_TYPE_ENHANCED then

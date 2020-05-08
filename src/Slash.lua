@@ -21,7 +21,7 @@ function Slash_Actions()
     local player = GetOwningPlayer(unit)
     if Hint[GetPlayerId(player)].Slash then
         Hint[GetPlayerId(player)].Slash = false
-        DisplayTimedTextToPlayer(player, 0, 0, bj_TEXT_DELAY_ALWAYSHINT, "|c0000FF40Hint:|r Slashing strike deals damage to enemies in front of you, but be careful, it can also be parried")
+        DisplayTimedTextToPlayer(player, 0, 0, bj_TEXT_DELAY_ALWAYSHINT, String[BlzGetLocale()].Hint.Slash)
     end
     local first
     local effect

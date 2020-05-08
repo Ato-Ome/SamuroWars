@@ -1,4 +1,5 @@
 --xgm github update
+String = {}
 SpawnRect = {}
 Trigger = {}
 Mana = {}
@@ -22,11 +23,7 @@ KillToWin = 30
 Timer = CreateTimer()
 Team = {
     [0] = CreateForce(),
-    [1] = CreateForce(),
-    Name = {
-        [0] = "Force 1",
-        [1] = "Force 2"
-    }
+    [1] = CreateForce()
 }
 WinTeam = nil
 Effect = {}
