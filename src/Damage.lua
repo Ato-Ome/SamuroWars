@@ -25,6 +25,8 @@ function Damage_Actions()
                 FlyTextTagMiss(unit, String[BlzGetLocale()].Hint.CounterFT, player)
             end
             IssueImmediateOrder(unit, "thunderclap")
+            --PlaySoundOnUnitBJ(gg_snd_RyuKanSenTsumui, 100, GetTriggerUnit())
+            TimerStart(CreateTimer(), 0.05, false, function() UnitRemoveAbility(unit, FourCC('A004')) DestroyTimer(GetExpiredTimer()) end)
         end
         UnitDamageTargetBJ(unit, source, damage, BlzGetEventAttackType(), DAMAGE_TYPE_DEFENSIVE)
         SetUnitState(unit, UNIT_STATE_MANA, GetUnitState(unit, UNIT_STATE_MANA) + damage / 5)

@@ -1,3 +1,70 @@
+function ParryAI_Actions()
+    local unit = GetTriggerUnit()
+    local player = GetOwningPlayer(unit)
+    local group = CreateGroup()
+    local first
+    local point
+    GroupEnumUnitsInRange(group, GetUnitX(unit), GetUnitY(unit), 250, nil)
+    for i = 1, CountUnitsInGroup(group) do
+        first = FirstOfGroup(group)
+        if first ~= unit and IsUnitEnemy(first, player) and IsUnitVisible(first, player) and GetPlayerController(GetOwningPlayer(first)) == MAP_CONTROL_COMPUTER then
+            if BlzGetUnitAbilityCooldownRemaining(first, FourCC('A000')) == 0 then
+                IssueImmediateOrder(first, "defend")
+            elseif BlzGetUnitAbilityCooldownRemaining(first, FourCC('A001')) == 0 and GetUnitState(first, UNIT_STATE_MANA) > 25 then
+                point = GetRandomLocInRect(bj_mapInitialPlayableArea)
+                IssuePointOrderLoc(first, "blink", point)
+                RemoveLocation(point)
+            end
+        end
+        GroupRemoveUnit(group, first)
+    end
+    DestroyGroup(group)
+end
+
+function AttackAI_Actions()
+    local unit = GetTriggerUnit()
+    local attacker = GetAttacker()
+    SetUnitFacingToFaceUnitTimed(unit, attacker, 0)
+    IssueImmediateOrder(unit, "shockwave")
+end
+
+function AttackAI_Conditions()
+    local unit = GetTriggerUnit()
+    return BlzGetUnitAbilityCooldownRemaining(unit, FourCC('A003')) == 0
+end
+
+function SlashAI_Actions()
+    local unit = GetTriggerUnit()
+    local player = GetOwningPlayer(unit)
+    local group = CreateGroup()
+    local first
+    GroupEnumUnitsInRange(group, GetUnitX(unit), GetUnitY(unit), 250, nil)
+    for i = 1, CountUnitsInGroup(group) do
+        first = FirstOfGroup(group)
+        if first ~= unit and IsUnitEnemy(first, player) and IsUnitVisible(first, player) and GetPlayerController(GetOwningPlayer(first)) == MAP_CONTROL_COMPUTER and BlzGetUnitAbilityCooldownRemaining(first, FourCC('A003')) == 0 then
+            SetUnitFacingToFaceUnitTimed(first, unit, 0)
+            IssueImmediateOrder(first, "shockwave")
+        end
+        GroupRemoveUnit(group, first)
+    end
+    DestroyGroup(group)
+end
+
+function SlashAI()
+    Trigger.SlashAI = CreateTrigger()
+    TriggerAddAction(Trigger.SlashAI, SlashAI_Actions)
+
+    Trigger.AttackAI = CreateTrigger()
+    TriggerAddCondition(Trigger.AttackAI, Condition(AttackAI_Conditions))
+    TriggerAddAction(Trigger.AttackAI, AttackAI_Actions)
+
+    Trigger.ParryAI = CreateTrigger()
+    TriggerRegisterAnyUnitEventBJ(Trigger.ParryAI, EVENT_PLAYER_UNIT_SPELL_CAST)
+    TriggerAddCondition(Trigger.ParryAI, Condition(Slash_Conditions))
+    TriggerAddAction(Trigger.ParryAI, ParryAI_Actions)
+end
+
+
 function Slash_Filter()
     local unit = GetTriggerUnit()
     local filterunit = GetFilterUnit()
@@ -33,6 +100,7 @@ function Slash_Actions()
         DestroyEffect(effect)
         GroupRemoveUnit(group,first)
     end
+    DestroyGroup(group)
 end
 
 function Slash()

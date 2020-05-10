@@ -1,5 +1,6 @@
 gg_snd_great_player01 = ""
 gg_snd_AchievementEarned = nil
+gg_snd_RyuKanSenTsumui = nil
 gg_trg_Initialization = nil
 gg_trg_AttackAllied = nil
 gg_trg_Counter = nil
@@ -11,7 +12,18 @@ function InitSounds()
     gg_snd_great_player01 = "war3mapImported/great_player.mp3"
     gg_snd_AchievementEarned = CreateSound("Sound/Interface/AchievementEarned.flac", false, false, false, 0, 0, "DefaultEAXON")
     SetSoundParamsFromLabel(gg_snd_AchievementEarned, "AchievementEarned")
+    SetSoundDuration(gg_snd_AchievementEarned, 171)
     SetSoundVolume(gg_snd_AchievementEarned, 127)
+    gg_snd_RyuKanSenTsumui = CreateSound("war3mapImported/RyuKanSenTsumui.wav", false, false, false, 1, 1, "SpellsEAX")
+    SetSoundDuration(gg_snd_RyuKanSenTsumui, 1171)
+    SetSoundChannel(gg_snd_RyuKanSenTsumui, 0)
+    SetSoundVolume(gg_snd_RyuKanSenTsumui, 127)
+    SetSoundPitch(gg_snd_RyuKanSenTsumui, 1.0)
+end
+
+function CreateAllItems()
+    local itemID
+    BlzCreateItemWithSkin(FourCC("I006"), -5.9, -256.6, FourCC("I006"))
 end
 
 --CUSTOM_CODE
@@ -33,10 +45,8 @@ Hint = {}
 CritFactor = {}
 CritDefault = {}
 Counter = {}
-Stats = {
-    Team = {}
-}
-KillToWin = 30
+Stats = {}
+KillToWin = 40
 Timer = CreateTimer()
 Team = {
     [0] = CreateForce(),
@@ -54,8 +64,6 @@ Boost = {
     [6] = FourCC('I005')
 }
 AllPlayers = 0
-
-MultiBoard = {}
 
 Color = {
     [1] = "|cffff0303",
@@ -82,6 +90,688 @@ Color = {
     [22] = "|cffEBF0FF",
     [23] = "|cff00781E",
     [24] = "|cffA46F33"
+}
+
+PlayerColors = {
+    [1] = {R = 255, G = 3, B = 3}, --Red
+    [2] = {R = 0, G = 66, B = 255}, --Blue
+    [3] = {R = 230, G = 185, B = 84}, --Teal
+    [4] = {R = 84, G = 0, B = 129}, --Purple
+    [5] = {R = 255, G = 252, B = 0}, --Yellow
+    [6] = {R = 254, G = 138, B = 14}, --Orange
+    [7] = {R = 32, G = 192, B = 0}, --Green
+    [8] = {R = 229, G = 91, B = 176}, --Pink
+    [9] = {R = 149, G = 150, B = 151}, --Gray
+    [10] = {R = 126, G = 191, B = 241}, --LightBlue
+    [11] = {R = 16, G = 98, B = 70}, --DarkGreen
+    [12] = {R = 78, G = 42, B = 4}, --Brown
+    [13] = {R = 155, G = 0, B = 0}, --Maroon
+    [14] = {R = 0, G = 0, B = 195}, --Navy
+    [15] = {R = 0, G = 254, B = 255}, --Turqoise
+    [16] = {R = 190, G = 0, B = 254}, --Violet
+    [17] = {R = 235, G = 205, B = 135}, --Wheat
+    [18] = {R = 248, G = 164, B = 139}, --Peach
+    [19] = {R = 191, G = 255, B = 128}, --Mint
+    [20] = {R = 220, G = 185, B = 235}, --Lavender
+    [21] = {R = 40, G = 40, B = 40}, --Coal
+    [22] = {R = 235, G = 240, B = 255}, --Snow
+    [23] = {R = 0, G = 120, B = 38}, --Emerald
+    [24] = {R = 164, G = 111, B = 51} --Peanut
+}
+
+String = {
+    enUS = {
+        Multiboard = {
+            Player = "Player",
+            Kills = "Kills",
+        },
+        Rune = {
+            [1] = "|r has created in ",
+            [2] = " of center region"
+        },
+        Win = {
+            Player = "|r player has won, congratulate him, game will be end in |c00FFFC005|r second",
+            Team = "|r team has won, congratulate them, game will be end in |c00FFFC005|r second"
+        },
+        Loose = {
+            TVT = "Your team are loose, come again to win",
+            DM = "You are loose, come again to win",
+        },
+        Kill = "|r has killed a ",
+        Hint = {
+            Slash = "|c0000FF40Hint:|r Slashing strike deals damage to enemies in front of you, but be careful, it can also be parried",
+            Kill = {
+                [1] = "|c0000FF40Hint:|r You have killed an enemy, collect |c00FFFC00",
+                [2] = "|r kills to win"
+            },
+            Death = {
+                [1] = "|c0000FF40Hint:|r Your hero will be Revive in |c00FFFC00",
+                [2] = "|r second"
+            },
+            Damage = "|c0000FF40Hint:|r Damage dealt will fill your mana",
+            Parry = "|c0000FF40Hint:|r Parry returns all damage filling up your mana, also it increases your damage factor for |c00FFFC002|r  sec",
+            CounterFT = "Counter",
+            ParryFT = "Parry"
+        },
+        Rect = {
+            [1] = "|r has created in ",
+            [2] = " of center region",
+            TL = "|c0000FF40top left|r",
+            TR= "|c0000FF40top right|r",
+            BL = "|c0000FF40bottom left|r",
+            BR = "|c0000FF40bottom right|r"
+        },
+        Force = "Force",
+        Mode = {
+            DM = "|c00FF0000Death Match|r mode was chosen by voting prepare to fight, your allies will become to enemy in |c00FFFC005|r second",
+            TVT = "|c0000FFFFTeam vs Team|r mode was chosen by voting prepare to fight",
+            DMTimer = "Game Start",
+            DMVote = "You have voted |c00FF0000Death Match|r mode, wait for others",
+            TVTVote = "You have voted |c00FF0000Team vs Team|r mode, wait for others",
+            Choose = "Mode choose",
+            VotingEnd = "Voting ends",
+            DMButton = "Death Match [|Cfffed312D|r]",
+            TVTButton = "Team vs Team [|Cfffed312T|r]",
+            ScoreTable = {
+                [1] = "Score Table |c00FFFC00|n",
+                [2] = "|r kills to win"
+            },
+        }
+    },
+    ruRU = {
+        Rune = {
+            [1] = "|r создана в ",
+            [2] = " центральной области"
+        },
+        Win = {
+            Player = "|r победил, поздравьте его, игра закончится через |c00FFFC005|r second",
+            Team = "|r победила, поздравьте их, игра закончится через |c00FFFC005|r second"
+        },
+        Loose = {
+            TVT = "Ваша команда проиграла, возвращайся снова, чтобы победить",
+            DM = "Ты проиграл, возвращайся снова, чтобы победить",
+        },
+        Kill = "|r убил ",
+        Hint = {
+            Slash = "|c0000FF40Подсказка:|r Режущий удар наносит урон врагам впереди, но будьте осторожны, он может быть паррирован.",
+            Kill = {
+                [1] = "|c0000FF40Подсказка:|r Вы убили врага, соберите |c00FFFC00",
+                [2] = "|r убийств для победы"
+            },
+            Death = {
+                [1] = "|c0000FF40Подсказка:|r Ваш герой будет воскрешен через |c00FFFC00",
+                [2] = "|r секунд"
+            },
+            Damage = "|c0000FF40Подсказка:|r Наносимый урон будет восполнять ваш запас маны",
+            Parry = "|c0000FF40Подсказка:|r Парирование отражает весь урон, восполняя запас маны, также увеличивает критический фактор на |c00FFFC002|r  секунды",
+            CounterFT = "Контрудар",
+            ParryFT = "Парирование"
+        },
+        Rect = {
+            [1] = "|r создана в ",
+            [2] = " центральной области",
+            TL = "|c0000FF40верхнем левом углу|r",
+            TR= "|c0000FF40верхнем правом углу|r",
+            BL = "|c0000FF40нижнем левом углу|r",
+            BR = "|c0000FF40нижнем правом углу|r"
+        },
+        Force = "Команда",
+        Mode = {
+            DM = "|c00FF0000Death Match|r режим был выбран путем голосования, приготовьтесь к бою, ваши союзники станут врагами через |c00FFFC005|r секунд",
+            TVT = "|c0000FFFFTeam vs Team|r режим был выбран путем голосования, приготовьтесь к бою",
+            DMTimer = "Начало игры",
+            DMVote = "Вы проголосовали за |c00FF0000Death Match|r мод, дождитесь остальных",
+            TVTVote = "Вы проголосовали за |c00FF0000Team vs Team|r мод, дождитесь остальных",
+            Choose = "Выбор мода",
+            VotingEnd = "Конец голосования",
+            DMButton = "Death Match [|Cfffed312D|r]",
+            TVTButton = "Team vs Team [|Cfffed312T|r]",
+            ScoreTable = {
+                [1] = "Таблица лидеров |c00FFFC00|n",
+                [2] = "|r убийств для победы"
+            }
+        }
+    },
+    zhCN = {
+        Rune = {
+            [1] = "|r 已在 ",
+            [2] = " 中心区域"
+        },
+        Win = {
+            Player = "|r 玩家赢了，恭喜他，比赛将在 |c00FFFC005|r 第二",
+            Team = "|r 球队赢了，祝贺他们，比赛将以 |c00FFFC005|r 第二"
+        },
+        Loose = {
+            TVT = "您的团队很松散，再次获胜",
+            DM = "你很松，再来赢",
+        },
+        Kill = "|r 杀死了一个 ",
+        Hint = {
+            Slash = "|c0000FF40暗示:|r 猛烈的打击会对前方的敌人造成伤害，但请注意，它也可以招架",
+            Kill = {
+                [1] = "|c0000FF40暗示:|r 你杀了一个敌人，收集 |c00FFFC00",
+                [2] = "|r 杀死胜利"
+            },
+            Death = {
+                [1] = "|c0000FF40暗示:|r 您的英雄将复活 |c00FFFC00",
+                [2] = "|r 第二"
+            },
+            Damage = "|c0000FF40暗示:|r 造成的伤害将填补你的法力值",
+            Parry = "|c0000FF40暗示:|r 帕里退还所有伤害，填满您的法力，同时也会增加您的伤害系数 |c00FFFC002|r  第二",
+            CounterFT = "计数器",
+            ParryFT = "帕里"
+        },
+        Rect = {
+            [1] = "|r 已在 ",
+            [2] = " 中心区域",
+            TL = "|c0000FF40左上方|r",
+            TR= "|c0000FF40右上|r",
+            BL = "|c0000FF40左下方|r",
+            BR = "|c0000FF40右下|r"
+        },
+        Force = "力",
+        Mode = {
+            DM = "|c00FF0000死亡竞赛|r模式是通过投票准备战斗而选择的，您的盟友将在|c00FFFC005|r秒内成为敌人",
+            TVT = "|c0000FFFF团队vs团队|r模式通过投票准备战斗",
+            DMTimer = "游戏开始",
+            DMVote = "您已投票|c00FF0000死亡竞赛|r模式，等待其他人",
+            TVTVote = "您已投票|c00FF0000团队vs团队|r模式，等待其他人",
+            Choose = "模式选择",
+            VotingEnd = "投票结束",
+            DMButton = "死亡竞赛 [|Cfffed312D|r]",
+            TVTButton = "团队vs团队 [|Cfffed312T|r]",
+            ScoreTable = {
+                [1] = "得分表 |c00FFFC00|n",
+                [2] = "|r 杀死胜利"
+            }
+        }
+    },
+    esES = {
+        Rune = {
+            [1] = "|r has created in ",
+            [2] = " of center region"
+        },
+        Win = {
+            Player = "|r player has won, congratulate him, game will be end in |c00FFFC005|r second",
+            Team = "|r team has won, congratulate them, game will be end in |c00FFFC005|r second"
+        },
+        Loose = {
+            TVT = "Your team are loose, come again to win",
+            DM = "You are loose, come again to win",
+        },
+        Kill = "|r has killed a ",
+        Hint = {
+            Slash = "|c0000FF40Hint:|r Slashing strike deals damage to enemies in front of you, but be careful, it can also be parried",
+            Kill = {
+                [1] = "|c0000FF40Hint:|r You have killed an enemy, collect |c00FFFC00",
+                [2] = "|r kills to win"
+            },
+            Death = {
+                [1] = "|c0000FF40Hint:|r Your hero will be Revive in |c00FFFC00",
+                [2] = "|r second"
+            },
+            Damage = "|c0000FF40Hint:|r Damage dealt will fill your mana",
+            Parry = "|c0000FF40Hint:|r Parry returns all damage filling up your mana, also it increases your damage factor for |c00FFFC002|r  sec",
+            CounterFT = "Counter",
+            ParryFT = "Parry"
+        },
+        Rect = {
+            [1] = "|r has created in ",
+            [2] = " of center region",
+            TL = "|c0000FF40top left|r",
+            TR= "|c0000FF40top right|r",
+            BL = "|c0000FF40bottom left|r",
+            BR = "|c0000FF40bottom right|r"
+        },
+        Force = "Force",
+        Mode = {
+            DM = "|c00FF0000Death Match|r mode was chosen by voting prepare to fight, your allies will become to enemy in |c00FFFC005|r second",
+            TVT = "|c0000FFFFTeam vs Team|r mode was chosen by voting prepare to fight",
+            DMTimer = "Game Start",
+            DMVote = "You have voted |c00FF0000Death Match|r mode, wait for others",
+            TVTVote = "You have voted |c00FF0000Team vs Team|r mode, wait for others",
+            Choose = "Mode choose",
+            VotingEnd = "Voting ends",
+            DMButton = "Death Match [|Cfffed312D|r]",
+            TVTButton = "Team vs Team [|Cfffed312T|r]",
+            ScoreTable = {
+                [1] = "Score Table |c00FFFC00|n",
+                [2] = "|r kills to win"
+            },
+        }
+    },
+    deDE = {
+        Rune = {
+            [1] = "|r has created in ",
+            [2] = " of center region"
+        },
+        Win = {
+            Player = "|r player has won, congratulate him, game will be end in |c00FFFC005|r second",
+            Team = "|r team has won, congratulate them, game will be end in |c00FFFC005|r second"
+        },
+        Loose = {
+            TVT = "Your team are loose, come again to win",
+            DM = "You are loose, come again to win",
+        },
+        Kill = "|r has killed a ",
+        Hint = {
+            Slash = "|c0000FF40Hint:|r Slashing strike deals damage to enemies in front of you, but be careful, it can also be parried",
+            Kill = {
+                [1] = "|c0000FF40Hint:|r You have killed an enemy, collect |c00FFFC00",
+                [2] = "|r kills to win"
+            },
+            Death = {
+                [1] = "|c0000FF40Hint:|r Your hero will be Revive in |c00FFFC00",
+                [2] = "|r second"
+            },
+            Damage = "|c0000FF40Hint:|r Damage dealt will fill your mana",
+            Parry = "|c0000FF40Hint:|r Parry returns all damage filling up your mana, also it increases your damage factor for |c00FFFC002|r  sec",
+            CounterFT = "Counter",
+            ParryFT = "Parry"
+        },
+        Rect = {
+            [1] = "|r has created in ",
+            [2] = " of center region",
+            TL = "|c0000FF40top left|r",
+            TR= "|c0000FF40top right|r",
+            BL = "|c0000FF40bottom left|r",
+            BR = "|c0000FF40bottom right|r"
+        },
+        Force = "Force",
+        Mode = {
+            DM = "|c00FF0000Death Match|r mode was chosen by voting prepare to fight, your allies will become to enemy in |c00FFFC005|r second",
+            TVT = "|c0000FFFFTeam vs Team|r mode was chosen by voting prepare to fight",
+            DMTimer = "Game Start",
+            DMVote = "You have voted |c00FF0000Death Match|r mode, wait for others",
+            TVTVote = "You have voted |c00FF0000Team vs Team|r mode, wait for others",
+            Choose = "Mode choose",
+            VotingEnd = "Voting ends",
+            DMButton = "Death Match [|Cfffed312D|r]",
+            TVTButton = "Team vs Team [|Cfffed312T|r]",
+            ScoreTable = {
+                [1] = "Score Table |c00FFFC00|n",
+                [2] = "|r kills to win"
+            },
+        }
+    },
+    esMX = {
+        Rune = {
+            [1] = "|r has created in ",
+            [2] = " of center region"
+        },
+        Win = {
+            Player = "|r player has won, congratulate him, game will be end in |c00FFFC005|r second",
+            Team = "|r team has won, congratulate them, game will be end in |c00FFFC005|r second"
+        },
+        Loose = {
+            TVT = "Your team are loose, come again to win",
+            DM = "You are loose, come again to win",
+        },
+        Kill = "|r has killed a ",
+        Hint = {
+            Slash = "|c0000FF40Hint:|r Slashing strike deals damage to enemies in front of you, but be careful, it can also be parried",
+            Kill = {
+                [1] = "|c0000FF40Hint:|r You have killed an enemy, collect |c00FFFC00",
+                [2] = "|r kills to win"
+            },
+            Death = {
+                [1] = "|c0000FF40Hint:|r Your hero will be Revive in |c00FFFC00",
+                [2] = "|r second"
+            },
+            Damage = "|c0000FF40Hint:|r Damage dealt will fill your mana",
+            Parry = "|c0000FF40Hint:|r Parry returns all damage filling up your mana, also it increases your damage factor for |c00FFFC002|r  sec",
+            CounterFT = "Counter",
+            ParryFT = "Parry"
+        },
+        Rect = {
+            [1] = "|r has created in ",
+            [2] = " of center region",
+            TL = "|c0000FF40top left|r",
+            TR= "|c0000FF40top right|r",
+            BL = "|c0000FF40bottom left|r",
+            BR = "|c0000FF40bottom right|r"
+        },
+        Force = "Force",
+        Mode = {
+            DM = "|c00FF0000Death Match|r mode was chosen by voting prepare to fight, your allies will become to enemy in |c00FFFC005|r second",
+            TVT = "|c0000FFFFTeam vs Team|r mode was chosen by voting prepare to fight",
+            DMTimer = "Game Start",
+            DMVote = "You have voted |c00FF0000Death Match|r mode, wait for others",
+            TVTVote = "You have voted |c00FF0000Team vs Team|r mode, wait for others",
+            Choose = "Mode choose",
+            VotingEnd = "Voting ends",
+            DMButton = "Death Match [|Cfffed312D|r]",
+            TVTButton = "Team vs Team [|Cfffed312T|r]",
+            ScoreTable = {
+                [1] = "Score Table |c00FFFC00|n",
+                [2] = "|r kills to win"
+            },
+        }
+    },
+    frFR = {
+        Rune = {
+            [1] = "|r has created in ",
+            [2] = " of center region"
+        },
+        Win = {
+            Player = "|r player has won, congratulate him, game will be end in |c00FFFC005|r second",
+            Team = "|r team has won, congratulate them, game will be end in |c00FFFC005|r second"
+        },
+        Loose = {
+            TVT = "Your team are loose, come again to win",
+            DM = "You are loose, come again to win",
+        },
+        Kill = "|r has killed a ",
+        Hint = {
+            Slash = "|c0000FF40Hint:|r Slashing strike deals damage to enemies in front of you, but be careful, it can also be parried",
+            Kill = {
+                [1] = "|c0000FF40Hint:|r You have killed an enemy, collect |c00FFFC00",
+                [2] = "|r kills to win"
+            },
+            Death = {
+                [1] = "|c0000FF40Hint:|r Your hero will be Revive in |c00FFFC00",
+                [2] = "|r second"
+            },
+            Damage = "|c0000FF40Hint:|r Damage dealt will fill your mana",
+            Parry = "|c0000FF40Hint:|r Parry returns all damage filling up your mana, also it increases your damage factor for |c00FFFC002|r  sec",
+            CounterFT = "Counter",
+            ParryFT = "Parry"
+        },
+        Rect = {
+            [1] = "|r has created in ",
+            [2] = " of center region",
+            TL = "|c0000FF40top left|r",
+            TR= "|c0000FF40top right|r",
+            BL = "|c0000FF40bottom left|r",
+            BR = "|c0000FF40bottom right|r"
+        },
+        Force = "Force",
+        Mode = {
+            DM = "|c00FF0000Death Match|r mode was chosen by voting prepare to fight, your allies will become to enemy in |c00FFFC005|r second",
+            TVT = "|c0000FFFFTeam vs Team|r mode was chosen by voting prepare to fight",
+            DMTimer = "Game Start",
+            DMVote = "You have voted |c00FF0000Death Match|r mode, wait for others",
+            TVTVote = "You have voted |c00FF0000Team vs Team|r mode, wait for others",
+            Choose = "Mode choose",
+            VotingEnd = "Voting ends",
+            DMButton = "Death Match [|Cfffed312D|r]",
+            TVTButton = "Team vs Team [|Cfffed312T|r]",
+            ScoreTable = {
+                [1] = "Score Table |c00FFFC00|n",
+                [2] = "|r kills to win"
+            },
+        }
+    },
+    itIT = {
+        Rune = {
+            [1] = "|r has created in ",
+            [2] = " of center region"
+        },
+        Win = {
+            Player = "|r player has won, congratulate him, game will be end in |c00FFFC005|r second",
+            Team = "|r team has won, congratulate them, game will be end in |c00FFFC005|r second"
+        },
+        Loose = {
+            TVT = "Your team are loose, come again to win",
+            DM = "You are loose, come again to win",
+        },
+        Kill = "|r has killed a ",
+        Hint = {
+            Slash = "|c0000FF40Hint:|r Slashing strike deals damage to enemies in front of you, but be careful, it can also be parried",
+            Kill = {
+                [1] = "|c0000FF40Hint:|r You have killed an enemy, collect |c00FFFC00",
+                [2] = "|r kills to win"
+            },
+            Death = {
+                [1] = "|c0000FF40Hint:|r Your hero will be Revive in |c00FFFC00",
+                [2] = "|r second"
+            },
+            Damage = "|c0000FF40Hint:|r Damage dealt will fill your mana",
+            Parry = "|c0000FF40Hint:|r Parry returns all damage filling up your mana, also it increases your damage factor for |c00FFFC002|r  sec",
+            CounterFT = "Counter",
+            ParryFT = "Parry"
+        },
+        Rect = {
+            [1] = "|r has created in ",
+            [2] = " of center region",
+            TL = "|c0000FF40top left|r",
+            TR= "|c0000FF40top right|r",
+            BL = "|c0000FF40bottom left|r",
+            BR = "|c0000FF40bottom right|r"
+        },
+        Force = "Force",
+        Mode = {
+            DM = "|c00FF0000Death Match|r mode was chosen by voting prepare to fight, your allies will become to enemy in |c00FFFC005|r second",
+            TVT = "|c0000FFFFTeam vs Team|r mode was chosen by voting prepare to fight",
+            DMTimer = "Game Start",
+            DMVote = "You have voted |c00FF0000Death Match|r mode, wait for others",
+            TVTVote = "You have voted |c00FF0000Team vs Team|r mode, wait for others",
+            Choose = "Mode choose",
+            VotingEnd = "Voting ends",
+            DMButton = "Death Match [|Cfffed312D|r]",
+            TVTButton = "Team vs Team [|Cfffed312T|r]",
+            ScoreTable = {
+                [1] = "Score Table |c00FFFC00|n",
+                [2] = "|r kills to win"
+            },
+        }
+    },
+    koKR = {
+        Rune = {
+            [1] = "|r has created in ",
+            [2] = " of center region"
+        },
+        Win = {
+            Player = "|r player has won, congratulate him, game will be end in |c00FFFC005|r second",
+            Team = "|r team has won, congratulate them, game will be end in |c00FFFC005|r second"
+        },
+        Loose = {
+            TVT = "Your team are loose, come again to win",
+            DM = "You are loose, come again to win",
+        },
+        Kill = "|r has killed a ",
+        Hint = {
+            Slash = "|c0000FF40Hint:|r Slashing strike deals damage to enemies in front of you, but be careful, it can also be parried",
+            Kill = {
+                [1] = "|c0000FF40Hint:|r You have killed an enemy, collect |c00FFFC00",
+                [2] = "|r kills to win"
+            },
+            Death = {
+                [1] = "|c0000FF40Hint:|r Your hero will be Revive in |c00FFFC00",
+                [2] = "|r second"
+            },
+            Damage = "|c0000FF40Hint:|r Damage dealt will fill your mana",
+            Parry = "|c0000FF40Hint:|r Parry returns all damage filling up your mana, also it increases your damage factor for |c00FFFC002|r  sec",
+            CounterFT = "Counter",
+            ParryFT = "Parry"
+        },
+        Rect = {
+            [1] = "|r has created in ",
+            [2] = " of center region",
+            TL = "|c0000FF40top left|r",
+            TR= "|c0000FF40top right|r",
+            BL = "|c0000FF40bottom left|r",
+            BR = "|c0000FF40bottom right|r"
+        },
+        Force = "Force",
+        Mode = {
+            DM = "|c00FF0000Death Match|r mode was chosen by voting prepare to fight, your allies will become to enemy in |c00FFFC005|r second",
+            TVT = "|c0000FFFFTeam vs Team|r mode was chosen by voting prepare to fight",
+            DMTimer = "Game Start",
+            DMVote = "You have voted |c00FF0000Death Match|r mode, wait for others",
+            TVTVote = "You have voted |c00FF0000Team vs Team|r mode, wait for others",
+            Choose = "Mode choose",
+            VotingEnd = "Voting ends",
+            DMButton = "Death Match [|Cfffed312D|r]",
+            TVTButton = "Team vs Team [|Cfffed312T|r]",
+            ScoreTable = {
+                [1] = "Score Table |c00FFFC00|n",
+                [2] = "|r kills to win"
+            },
+        }
+    },
+    plPL = {
+        Rune = {
+            [1] = "|r has created in ",
+            [2] = " of center region"
+        },
+        Win = {
+            Player = "|r player has won, congratulate him, game will be end in |c00FFFC005|r second",
+            Team = "|r team has won, congratulate them, game will be end in |c00FFFC005|r second"
+        },
+        Loose = {
+            TVT = "Your team are loose, come again to win",
+            DM = "You are loose, come again to win",
+        },
+        Kill = "|r has killed a ",
+        Hint = {
+            Slash = "|c0000FF40Hint:|r Slashing strike deals damage to enemies in front of you, but be careful, it can also be parried",
+            Kill = {
+                [1] = "|c0000FF40Hint:|r You have killed an enemy, collect |c00FFFC00",
+                [2] = "|r kills to win"
+            },
+            Death = {
+                [1] = "|c0000FF40Hint:|r Your hero will be Revive in |c00FFFC00",
+                [2] = "|r second"
+            },
+            Damage = "|c0000FF40Hint:|r Damage dealt will fill your mana",
+            Parry = "|c0000FF40Hint:|r Parry returns all damage filling up your mana, also it increases your damage factor for |c00FFFC002|r  sec",
+            CounterFT = "Counter",
+            ParryFT = "Parry"
+        },
+        Rect = {
+            [1] = "|r has created in ",
+            [2] = " of center region",
+            TL = "|c0000FF40top left|r",
+            TR= "|c0000FF40top right|r",
+            BL = "|c0000FF40bottom left|r",
+            BR = "|c0000FF40bottom right|r"
+        },
+        Force = "Force",
+        Mode = {
+            DM = "|c00FF0000Death Match|r mode was chosen by voting prepare to fight, your allies will become to enemy in |c00FFFC005|r second",
+            TVT = "|c0000FFFFTeam vs Team|r mode was chosen by voting prepare to fight",
+            DMTimer = "Game Start",
+            DMVote = "You have voted |c00FF0000Death Match|r mode, wait for others",
+            TVTVote = "You have voted |c00FF0000Team vs Team|r mode, wait for others",
+            Choose = "Mode choose",
+            VotingEnd = "Voting ends",
+            DMButton = "Death Match [|Cfffed312D|r]",
+            TVTButton = "Team vs Team [|Cfffed312T|r]",
+            ScoreTable = {
+                [1] = "Score Table |c00FFFC00|n",
+                [2] = "|r kills to win"
+            },
+        }
+    },
+    ptBR = {
+        Rune = {
+            [1] = "|r has created in ",
+            [2] = " of center region"
+        },
+        Win = {
+            Player = "|r player has won, congratulate him, game will be end in |c00FFFC005|r second",
+            Team = "|r team has won, congratulate them, game will be end in |c00FFFC005|r second"
+        },
+        Loose = {
+            TVT = "Your team are loose, come again to win",
+            DM = "You are loose, come again to win",
+        },
+        Kill = "|r has killed a ",
+        Hint = {
+            Slash = "|c0000FF40Hint:|r Slashing strike deals damage to enemies in front of you, but be careful, it can also be parried",
+            Kill = {
+                [1] = "|c0000FF40Hint:|r You have killed an enemy, collect |c00FFFC00",
+                [2] = "|r kills to win"
+            },
+            Death = {
+                [1] = "|c0000FF40Hint:|r Your hero will be Revive in |c00FFFC00",
+                [2] = "|r second"
+            },
+            Damage = "|c0000FF40Hint:|r Damage dealt will fill your mana",
+            Parry = "|c0000FF40Hint:|r Parry returns all damage filling up your mana, also it increases your damage factor for |c00FFFC002|r  sec",
+            CounterFT = "Counter",
+            ParryFT = "Parry"
+        },
+        Rect = {
+            [1] = "|r has created in ",
+            [2] = " of center region",
+            TL = "|c0000FF40top left|r",
+            TR= "|c0000FF40top right|r",
+            BL = "|c0000FF40bottom left|r",
+            BR = "|c0000FF40bottom right|r"
+        },
+        Force = "Force",
+        Mode = {
+            DM = "|c00FF0000Death Match|r mode was chosen by voting prepare to fight, your allies will become to enemy in |c00FFFC005|r second",
+            TVT = "|c0000FFFFTeam vs Team|r mode was chosen by voting prepare to fight",
+            DMTimer = "Game Start",
+            DMVote = "You have voted |c00FF0000Death Match|r mode, wait for others",
+            TVTVote = "You have voted |c00FF0000Team vs Team|r mode, wait for others",
+            Choose = "Mode choose",
+            VotingEnd = "Voting ends",
+            DMButton = "Death Match [|Cfffed312D|r]",
+            TVTButton = "Team vs Team [|Cfffed312T|r]",
+            ScoreTable = {
+                [1] = "Score Table |c00FFFC00|n",
+                [2] = "|r kills to win"
+            },
+        }
+    },
+    zhTW = {
+        Rune = {
+            [1] = "|r has created in ",
+            [2] = " of center region"
+        },
+        Win = {
+            Player = "|r player has won, congratulate him, game will be end in |c00FFFC005|r second",
+            Team = "|r team has won, congratulate them, game will be end in |c00FFFC005|r second"
+        },
+        Loose = {
+            TVT = "Your team are loose, come again to win",
+            DM = "You are loose, come again to win",
+        },
+        Kill = "|r has killed a ",
+        Hint = {
+            Slash = "|c0000FF40Hint:|r Slashing strike deals damage to enemies in front of you, but be careful, it can also be parried",
+            Kill = {
+                [1] = "|c0000FF40Hint:|r You have killed an enemy, collect |c00FFFC00",
+                [2] = "|r kills to win"
+            },
+            Death = {
+                [1] = "|c0000FF40Hint:|r Your hero will be Revive in |c00FFFC00",
+                [2] = "|r second"
+            },
+            Damage = "|c0000FF40Hint:|r Damage dealt will fill your mana",
+            Parry = "|c0000FF40Hint:|r Parry returns all damage filling up your mana, also it increases your damage factor for |c00FFFC002|r  sec",
+            CounterFT = "Counter",
+            ParryFT = "Parry"
+        },
+        Rect = {
+            [1] = "|r has created in ",
+            [2] = " of center region",
+            TL = "|c0000FF40top left|r",
+            TR= "|c0000FF40top right|r",
+            BL = "|c0000FF40bottom left|r",
+            BR = "|c0000FF40bottom right|r"
+        },
+        Force = "Force",
+        Mode = {
+            DM = "|c00FF0000Death Match|r mode was chosen by voting prepare to fight, your allies will become to enemy in |c00FFFC005|r second",
+            TVT = "|c0000FFFFTeam vs Team|r mode was chosen by voting prepare to fight",
+            DMTimer = "Game Start",
+            DMVote = "You have voted |c00FF0000Death Match|r mode, wait for others",
+            TVTVote = "You have voted |c00FF0000Team vs Team|r mode, wait for others",
+            Choose = "Mode choose",
+            VotingEnd = "Voting ends",
+            DMButton = "Death Match [|Cfffed312D|r]",
+            TVTButton = "Team vs Team [|Cfffed312T|r]",
+            ScoreTable = {
+                [1] = "Score Table |c00FFFC00|n",
+                [2] = "|r kills to win"
+            },
+        }
+    }
 }
 ---@param text string
 ---@param textSize real
@@ -163,7 +853,6 @@ end
 function ChooseTimeElapse_Actions()
     TimerDialogDisplay(dialog, false)
     DestroyTimerDialog(Dialog)
-    PauseAllUnitsBJ(false)
     if Mode.Voices.DM > Mode.Voices.TVT then
         Mode.CurrentDM = true
         KillToWin = math.ceil(KillToWin * AllPlayers / GetPlayers())
@@ -178,6 +867,7 @@ function ChooseTimeElapse_Actions()
             end
             TimerDialogDisplay(dialog, false)
             DestroyTimerDialog(Dialog)
+            PauseAllUnitsBJ(false)
         end)
         dialog = CreateTimerDialog(Timer)
         TimerDialogSetTitle(dialog, String[BlzGetLocale()].Mode.DMTimer)
@@ -186,6 +876,7 @@ function ChooseTimeElapse_Actions()
         print(String[BlzGetLocale()].Mode.TVT)
         Mode.CurrentDM = false
         KillToWin = math.ceil(KillToWin * 2 * AllPlayers / GetPlayers())
+        PauseAllUnitsBJ(false)
     end
     ScoreTable = CreateLeaderboardBJ(GetPlayersAll(), String[BlzGetLocale()].Mode.ScoreTable[1]..KillToWin..String[BlzGetLocale()].Mode.ScoreTable[2])
     for i = 0,bj_MAX_PLAYERS-1 do
@@ -358,6 +1049,8 @@ function Damage_Actions()
                 FlyTextTagMiss(unit, String[BlzGetLocale()].Hint.CounterFT, player)
             end
             IssueImmediateOrder(unit, "thunderclap")
+            --PlaySoundOnUnitBJ(gg_snd_RyuKanSenTsumui, 100, GetTriggerUnit())
+            TimerStart(CreateTimer(), 0.05, false, function() UnitRemoveAbility(unit, FourCC('A004')) DestroyTimer(GetExpiredTimer()) end)
         end
         UnitDamageTargetBJ(unit, source, damage, BlzGetEventAttackType(), DAMAGE_TYPE_DEFENSIVE)
         SetUnitState(unit, UNIT_STATE_MANA, GetUnitState(unit, UNIT_STATE_MANA) + damage / 5)
@@ -406,6 +1099,73 @@ function EntireMap()
     TriggerRegisterEnterRectSimple(Trigger.EntireMap, GetPlayableMapRect())
     TriggerAddAction(Trigger.EntireMap, EntireMap_Actions)
 end
+function ParryAI_Actions()
+    local unit = GetTriggerUnit()
+    local player = GetOwningPlayer(unit)
+    local group = CreateGroup()
+    local first
+    local point
+    GroupEnumUnitsInRange(group, GetUnitX(unit), GetUnitY(unit), 250, nil)
+    for i = 1, CountUnitsInGroup(group) do
+        first = FirstOfGroup(group)
+        if first ~= unit and IsUnitEnemy(first, player) and IsUnitVisible(first, player) and GetPlayerController(GetOwningPlayer(first)) == MAP_CONTROL_COMPUTER then
+            if BlzGetUnitAbilityCooldownRemaining(first, FourCC('A000')) == 0 then
+                IssueImmediateOrder(first, "defend")
+            elseif BlzGetUnitAbilityCooldownRemaining(first, FourCC('A001')) == 0 and GetUnitState(first, UNIT_STATE_MANA) > 25 then
+                point = GetRandomLocInRect(bj_mapInitialPlayableArea)
+                IssuePointOrderLoc(first, "blink", point)
+                RemoveLocation(point)
+            end
+        end
+        GroupRemoveUnit(group, first)
+    end
+    DestroyGroup(group)
+end
+
+function AttackAI_Actions()
+    local unit = GetTriggerUnit()
+    local attacker = GetAttacker()
+    SetUnitFacingToFaceUnitTimed(unit, attacker, 0)
+    IssueImmediateOrder(unit, "shockwave")
+end
+
+function AttackAI_Conditions()
+    local unit = GetTriggerUnit()
+    return BlzGetUnitAbilityCooldownRemaining(unit, FourCC('A003')) == 0
+end
+
+function SlashAI_Actions()
+    local unit = GetTriggerUnit()
+    local player = GetOwningPlayer(unit)
+    local group = CreateGroup()
+    local first
+    GroupEnumUnitsInRange(group, GetUnitX(unit), GetUnitY(unit), 250, nil)
+    for i = 1, CountUnitsInGroup(group) do
+        first = FirstOfGroup(group)
+        if first ~= unit and IsUnitEnemy(first, player) and IsUnitVisible(first, player) and GetPlayerController(GetOwningPlayer(first)) == MAP_CONTROL_COMPUTER and BlzGetUnitAbilityCooldownRemaining(first, FourCC('A003')) == 0 then
+            SetUnitFacingToFaceUnitTimed(first, unit, 0)
+            IssueImmediateOrder(first, "shockwave")
+        end
+        GroupRemoveUnit(group, first)
+    end
+    DestroyGroup(group)
+end
+
+function SlashAI()
+    Trigger.SlashAI = CreateTrigger()
+    TriggerAddAction(Trigger.SlashAI, SlashAI_Actions)
+
+    Trigger.AttackAI = CreateTrigger()
+    TriggerAddCondition(Trigger.AttackAI, Condition(AttackAI_Conditions))
+    TriggerAddAction(Trigger.AttackAI, AttackAI_Actions)
+
+    Trigger.ParryAI = CreateTrigger()
+    TriggerRegisterAnyUnitEventBJ(Trigger.ParryAI, EVENT_PLAYER_UNIT_SPELL_CAST)
+    TriggerAddCondition(Trigger.ParryAI, Condition(Slash_Conditions))
+    TriggerAddAction(Trigger.ParryAI, ParryAI_Actions)
+end
+
+
 function Slash_Filter()
     local unit = GetTriggerUnit()
     local filterunit = GetFilterUnit()
@@ -441,6 +1201,7 @@ function Slash_Actions()
         DestroyEffect(effect)
         GroupRemoveUnit(group,first)
     end
+    DestroyGroup(group)
 end
 
 function Slash()
@@ -499,660 +1260,10 @@ function Start()
             [20] = Rect(384.0, -1280.0, 1024.0, -896.0)  --center bottom right
         }
     }
-    String = {
-        enUS = {
-            Rune = {
-                [1] = "|r has created in ",
-                [2] = " of center region"
-            },
-            Win = {
-                Player = "|r player has won, congratulate him, game will be end in |c00FFFC005|r second",
-                Team = "|r team has won, congratulate them, game will be end in |c00FFFC005|r second"
-            },
-            Loose = {
-                TVT = "Your team are loose, come again to win",
-                DM = "You are loose, come again to win",
-            },
-            Kill = "|r has killed a ",
-            Hint = {
-                Slash = "|c0000FF40Hint:|r Slashing strike deals damage to enemies in front of you, but be careful, it can also be parried",
-                Kill = {
-                    [1] = "|c0000FF40Hint:|r You have killed an enemy, collect |c00FFFC00",
-                    [2] = "|r kills to win"
-                },
-                Death = {
-                    [1] = "|c0000FF40Hint:|r Your hero will be Revive in |c00FFFC00",
-                    [2] = "|r second"
-                },
-                Damage = "|c0000FF40Hint:|r Damage dealt will fill your mana",
-                Parry = "|c0000FF40Hint:|r Parry returns all damage filling up your mana, also it increases your damage factor for |c00FFFC002|r  sec",
-                CounterFT = "Counter",
-                ParryFT = "Parry"
-            },
-            Rect = {
-                [1] = "|r has created in ",
-                [2] = " of center region",
-                TL = "|c0000FF40top left|r",
-                TR= "|c0000FF40top right|r",
-                BL = "|c0000FF40bottom left|r",
-                BR = "|c0000FF40bottom right|r"
-            },
-            Force = "Force",
-            Mode = {
-                DM = "|c00FF0000Death Match|r mode was chosen by voting prepare to fight, your allies will become to enemy in |c00FFFC005|r second",
-                TVT = "|c0000FFFFTeam vs Team|r mode was chosen by voting prepare to fight",
-                DMTimer = "Game Start",
-                DMVote = "You have voted |c00FF0000Death Match|r mode, wait for others",
-                TVTVote = "You have voted |c00FF0000Team vs Team|r mode, wait for others",
-                Choose = "Mode choose",
-                VotingEnd = "Voting ends",
-                DMButton = "Death Match [|Cfffed312D|r]",
-                TVTButton = "Team vs Team [|Cfffed312T|r]",
-                ScoreTable = {
-                    [1] = "Score Table |c00FFFC00|n",
-                    [2] = "|r kills to win"
-                },
-            }
-        },
-        ruRU = {
-            Rune = {
-                [1] = "|r создана в ",
-                [2] = " центральной области"
-            },
-            Win = {
-                Player = "|r победил, поздравьте его, игра закончится через |c00FFFC005|r second",
-                Team = "|r победила, поздравьте их, игра закончится через |c00FFFC005|r second"
-            },
-            Loose = {
-                TVT = "Ваша команда проиграла, возвращайся снова, чтобы победить",
-                DM = "Ты проиграл, возвращайся снова, чтобы победить",
-            },
-            Kill = "|r убил ",
-            Hint = {
-                Slash = "|c0000FF40Подсказка:|r Режущий удар наносит урон врагам впереди, но будьте осторожны, он может быть паррирован.",
-                Kill = {
-                    [1] = "|c0000FF40Подсказка:|r Вы убили врага, соберите |c00FFFC00",
-                    [2] = "|r убийств для победы"
-                },
-                Death = {
-                    [1] = "|c0000FF40Подсказка:|r Ваш герой будет воскрешен через |c00FFFC00",
-                    [2] = "|r секунд"
-                },
-                Damage = "|c0000FF40Подсказка:|r Наносимый урон будет восполнять ваш запас маны",
-                Parry = "|c0000FF40Подсказка:|r Парирование отражает весь урон, восполняя запас маны, также увеличивает критический фактор на |c00FFFC002|r  секунды",
-                CounterFT = "Контрудар",
-                ParryFT = "Парирование"
-            },
-            Rect = {
-                [1] = "|r создана в ",
-                [2] = " центральной области",
-                TL = "|c0000FF40верхнем левом углу|r",
-                TR= "|c0000FF40верхнем правом углу|r",
-                BL = "|c0000FF40нижнем левом углу|r",
-                BR = "|c0000FF40нижнем правом углу|r"
-            },
-            Force = "Команда",
-            Mode = {
-                DM = "|c00FF0000Death Match|r режим был выбран путем голосования, приготовьтесь к бою, ваши союзники станут врагами через |c00FFFC005|r секунд",
-                TVT = "|c0000FFFFTeam vs Team|r режим был выбран путем голосования, приготовьтесь к бою",
-                DMTimer = "Начало игры",
-                DMVote = "Вы проголосовали за |c00FF0000Death Match|r мод, дождитесь остальных",
-                TVTVote = "Вы проголосовали за |c00FF0000Team vs Team|r мод, дождитесь остальных",
-                Choose = "Выбор мода",
-                VotingEnd = "Конец голосования",
-                DMButton = "Death Match [|Cfffed312D|r]",
-                TVTButton = "Team vs Team [|Cfffed312T|r]",
-                ScoreTable = {
-                    [1] = "Таблица лидеров |c00FFFC00|n",
-                    [2] = "|r убийств для победы"
-                }
-            }
-        },
-        zhCN = {
-            Rune = {
-                [1] = "|r 已在 ",
-                [2] = " 中心区域"
-            },
-            Win = {
-                Player = "|r 玩家赢了，恭喜他，比赛将在 |c00FFFC005|r 第二",
-                Team = "|r 球队赢了，祝贺他们，比赛将以 |c00FFFC005|r 第二"
-            },
-            Loose = {
-                TVT = "您的团队很松散，再次获胜",
-                DM = "你很松，再来赢",
-            },
-            Kill = "|r 杀死了一个 ",
-            Hint = {
-                Slash = "|c0000FF40暗示:|r 猛烈的打击会对前方的敌人造成伤害，但请注意，它也可以招架",
-                Kill = {
-                    [1] = "|c0000FF40暗示:|r 你杀了一个敌人，收集 |c00FFFC00",
-                    [2] = "|r 杀死胜利"
-                },
-                Death = {
-                    [1] = "|c0000FF40暗示:|r 您的英雄将复活 |c00FFFC00",
-                    [2] = "|r 第二"
-                },
-                Damage = "|c0000FF40暗示:|r 造成的伤害将填补你的法力值",
-                Parry = "|c0000FF40暗示:|r 帕里退还所有伤害，填满您的法力，同时也会增加您的伤害系数 |c00FFFC002|r  第二",
-                CounterFT = "计数器",
-                ParryFT = "帕里"
-            },
-            Rect = {
-                [1] = "|r 已在 ",
-                [2] = " 中心区域",
-                TL = "|c0000FF40左上方|r",
-                TR= "|c0000FF40右上|r",
-                BL = "|c0000FF40左下方|r",
-                BR = "|c0000FF40右下|r"
-            },
-            Force = "力",
-            Mode = {
-                DM = "|c00FF0000死亡竞赛|r模式是通过投票准备战斗而选择的，您的盟友将在|c00FFFC005|r秒内成为敌人",
-                TVT = "|c0000FFFF团队vs团队|r模式通过投票准备战斗",
-                DMTimer = "游戏开始",
-                DMVote = "您已投票|c00FF0000死亡竞赛|r模式，等待其他人",
-                TVTVote = "您已投票|c00FF0000团队vs团队|r模式，等待其他人",
-                Choose = "模式选择",
-                VotingEnd = "投票结束",
-                DMButton = "死亡竞赛 [|Cfffed312D|r]",
-                TVTButton = "团队vs团队 [|Cfffed312T|r]",
-                ScoreTable = {
-                    [1] = "得分表 |c00FFFC00|n",
-                    [2] = "|r 杀死胜利"
-                }
-            }
-        },
-        esES = {
-            Rune = {
-                [1] = "|r has created in ",
-                [2] = " of center region"
-            },
-            Win = {
-                Player = "|r player has won, congratulate him, game will be end in |c00FFFC005|r second",
-                Team = "|r team has won, congratulate them, game will be end in |c00FFFC005|r second"
-            },
-            Loose = {
-                TVT = "Your team are loose, come again to win",
-                DM = "You are loose, come again to win",
-            },
-            Kill = "|r has killed a ",
-            Hint = {
-                Slash = "|c0000FF40Hint:|r Slashing strike deals damage to enemies in front of you, but be careful, it can also be parried",
-                Kill = {
-                    [1] = "|c0000FF40Hint:|r You have killed an enemy, collect |c00FFFC00",
-                    [2] = "|r kills to win"
-                },
-                Death = {
-                    [1] = "|c0000FF40Hint:|r Your hero will be Revive in |c00FFFC00",
-                    [2] = "|r second"
-                },
-                Damage = "|c0000FF40Hint:|r Damage dealt will fill your mana",
-                Parry = "|c0000FF40Hint:|r Parry returns all damage filling up your mana, also it increases your damage factor for |c00FFFC002|r  sec",
-                CounterFT = "Counter",
-                ParryFT = "Parry"
-            },
-            Rect = {
-                [1] = "|r has created in ",
-                [2] = " of center region",
-                TL = "|c0000FF40top left|r",
-                TR= "|c0000FF40top right|r",
-                BL = "|c0000FF40bottom left|r",
-                BR = "|c0000FF40bottom right|r"
-            },
-            Force = "Force",
-            Mode = {
-                DM = "|c00FF0000Death Match|r mode was chosen by voting prepare to fight, your allies will become to enemy in |c00FFFC005|r second",
-                TVT = "|c0000FFFFTeam vs Team|r mode was chosen by voting prepare to fight",
-                DMTimer = "Game Start",
-                DMVote = "You have voted |c00FF0000Death Match|r mode, wait for others",
-                TVTVote = "You have voted |c00FF0000Team vs Team|r mode, wait for others",
-                Choose = "Mode choose",
-                VotingEnd = "Voting ends",
-                DMButton = "Death Match [|Cfffed312D|r]",
-                TVTButton = "Team vs Team [|Cfffed312T|r]",
-                ScoreTable = {
-                    [1] = "Score Table |c00FFFC00|n",
-                    [2] = "|r kills to win"
-                },
-            }
-        },
-        deDE = {
-            Rune = {
-                [1] = "|r has created in ",
-                [2] = " of center region"
-            },
-            Win = {
-                Player = "|r player has won, congratulate him, game will be end in |c00FFFC005|r second",
-                Team = "|r team has won, congratulate them, game will be end in |c00FFFC005|r second"
-            },
-            Loose = {
-                TVT = "Your team are loose, come again to win",
-                DM = "You are loose, come again to win",
-            },
-            Kill = "|r has killed a ",
-            Hint = {
-                Slash = "|c0000FF40Hint:|r Slashing strike deals damage to enemies in front of you, but be careful, it can also be parried",
-                Kill = {
-                    [1] = "|c0000FF40Hint:|r You have killed an enemy, collect |c00FFFC00",
-                    [2] = "|r kills to win"
-                },
-                Death = {
-                    [1] = "|c0000FF40Hint:|r Your hero will be Revive in |c00FFFC00",
-                    [2] = "|r second"
-                },
-                Damage = "|c0000FF40Hint:|r Damage dealt will fill your mana",
-                Parry = "|c0000FF40Hint:|r Parry returns all damage filling up your mana, also it increases your damage factor for |c00FFFC002|r  sec",
-                CounterFT = "Counter",
-                ParryFT = "Parry"
-            },
-            Rect = {
-                [1] = "|r has created in ",
-                [2] = " of center region",
-                TL = "|c0000FF40top left|r",
-                TR= "|c0000FF40top right|r",
-                BL = "|c0000FF40bottom left|r",
-                BR = "|c0000FF40bottom right|r"
-            },
-            Force = "Force",
-            Mode = {
-                DM = "|c00FF0000Death Match|r mode was chosen by voting prepare to fight, your allies will become to enemy in |c00FFFC005|r second",
-                TVT = "|c0000FFFFTeam vs Team|r mode was chosen by voting prepare to fight",
-                DMTimer = "Game Start",
-                DMVote = "You have voted |c00FF0000Death Match|r mode, wait for others",
-                TVTVote = "You have voted |c00FF0000Team vs Team|r mode, wait for others",
-                Choose = "Mode choose",
-                VotingEnd = "Voting ends",
-                DMButton = "Death Match [|Cfffed312D|r]",
-                TVTButton = "Team vs Team [|Cfffed312T|r]",
-                ScoreTable = {
-                    [1] = "Score Table |c00FFFC00|n",
-                    [2] = "|r kills to win"
-                },
-            }
-        },
-        esMX = {
-            Rune = {
-                [1] = "|r has created in ",
-                [2] = " of center region"
-            },
-            Win = {
-                Player = "|r player has won, congratulate him, game will be end in |c00FFFC005|r second",
-                Team = "|r team has won, congratulate them, game will be end in |c00FFFC005|r second"
-            },
-            Loose = {
-                TVT = "Your team are loose, come again to win",
-                DM = "You are loose, come again to win",
-            },
-            Kill = "|r has killed a ",
-            Hint = {
-                Slash = "|c0000FF40Hint:|r Slashing strike deals damage to enemies in front of you, but be careful, it can also be parried",
-                Kill = {
-                    [1] = "|c0000FF40Hint:|r You have killed an enemy, collect |c00FFFC00",
-                    [2] = "|r kills to win"
-                },
-                Death = {
-                    [1] = "|c0000FF40Hint:|r Your hero will be Revive in |c00FFFC00",
-                    [2] = "|r second"
-                },
-                Damage = "|c0000FF40Hint:|r Damage dealt will fill your mana",
-                Parry = "|c0000FF40Hint:|r Parry returns all damage filling up your mana, also it increases your damage factor for |c00FFFC002|r  sec",
-                CounterFT = "Counter",
-                ParryFT = "Parry"
-            },
-            Rect = {
-                [1] = "|r has created in ",
-                [2] = " of center region",
-                TL = "|c0000FF40top left|r",
-                TR= "|c0000FF40top right|r",
-                BL = "|c0000FF40bottom left|r",
-                BR = "|c0000FF40bottom right|r"
-            },
-            Force = "Force",
-            Mode = {
-                DM = "|c00FF0000Death Match|r mode was chosen by voting prepare to fight, your allies will become to enemy in |c00FFFC005|r second",
-                TVT = "|c0000FFFFTeam vs Team|r mode was chosen by voting prepare to fight",
-                DMTimer = "Game Start",
-                DMVote = "You have voted |c00FF0000Death Match|r mode, wait for others",
-                TVTVote = "You have voted |c00FF0000Team vs Team|r mode, wait for others",
-                Choose = "Mode choose",
-                VotingEnd = "Voting ends",
-                DMButton = "Death Match [|Cfffed312D|r]",
-                TVTButton = "Team vs Team [|Cfffed312T|r]",
-                ScoreTable = {
-                    [1] = "Score Table |c00FFFC00|n",
-                    [2] = "|r kills to win"
-                },
-            }
-        },
-        frFR = {
-            Rune = {
-                [1] = "|r has created in ",
-                [2] = " of center region"
-            },
-            Win = {
-                Player = "|r player has won, congratulate him, game will be end in |c00FFFC005|r second",
-                Team = "|r team has won, congratulate them, game will be end in |c00FFFC005|r second"
-            },
-            Loose = {
-                TVT = "Your team are loose, come again to win",
-                DM = "You are loose, come again to win",
-            },
-            Kill = "|r has killed a ",
-            Hint = {
-                Slash = "|c0000FF40Hint:|r Slashing strike deals damage to enemies in front of you, but be careful, it can also be parried",
-                Kill = {
-                    [1] = "|c0000FF40Hint:|r You have killed an enemy, collect |c00FFFC00",
-                    [2] = "|r kills to win"
-                },
-                Death = {
-                    [1] = "|c0000FF40Hint:|r Your hero will be Revive in |c00FFFC00",
-                    [2] = "|r second"
-                },
-                Damage = "|c0000FF40Hint:|r Damage dealt will fill your mana",
-                Parry = "|c0000FF40Hint:|r Parry returns all damage filling up your mana, also it increases your damage factor for |c00FFFC002|r  sec",
-                CounterFT = "Counter",
-                ParryFT = "Parry"
-            },
-            Rect = {
-                [1] = "|r has created in ",
-                [2] = " of center region",
-                TL = "|c0000FF40top left|r",
-                TR= "|c0000FF40top right|r",
-                BL = "|c0000FF40bottom left|r",
-                BR = "|c0000FF40bottom right|r"
-            },
-            Force = "Force",
-            Mode = {
-                DM = "|c00FF0000Death Match|r mode was chosen by voting prepare to fight, your allies will become to enemy in |c00FFFC005|r second",
-                TVT = "|c0000FFFFTeam vs Team|r mode was chosen by voting prepare to fight",
-                DMTimer = "Game Start",
-                DMVote = "You have voted |c00FF0000Death Match|r mode, wait for others",
-                TVTVote = "You have voted |c00FF0000Team vs Team|r mode, wait for others",
-                Choose = "Mode choose",
-                VotingEnd = "Voting ends",
-                DMButton = "Death Match [|Cfffed312D|r]",
-                TVTButton = "Team vs Team [|Cfffed312T|r]",
-                ScoreTable = {
-                    [1] = "Score Table |c00FFFC00|n",
-                    [2] = "|r kills to win"
-                },
-            }
-        },
-        itIT = {
-            Rune = {
-                [1] = "|r has created in ",
-                [2] = " of center region"
-            },
-            Win = {
-                Player = "|r player has won, congratulate him, game will be end in |c00FFFC005|r second",
-                Team = "|r team has won, congratulate them, game will be end in |c00FFFC005|r second"
-            },
-            Loose = {
-                TVT = "Your team are loose, come again to win",
-                DM = "You are loose, come again to win",
-            },
-            Kill = "|r has killed a ",
-            Hint = {
-                Slash = "|c0000FF40Hint:|r Slashing strike deals damage to enemies in front of you, but be careful, it can also be parried",
-                Kill = {
-                    [1] = "|c0000FF40Hint:|r You have killed an enemy, collect |c00FFFC00",
-                    [2] = "|r kills to win"
-                },
-                Death = {
-                    [1] = "|c0000FF40Hint:|r Your hero will be Revive in |c00FFFC00",
-                    [2] = "|r second"
-                },
-                Damage = "|c0000FF40Hint:|r Damage dealt will fill your mana",
-                Parry = "|c0000FF40Hint:|r Parry returns all damage filling up your mana, also it increases your damage factor for |c00FFFC002|r  sec",
-                CounterFT = "Counter",
-                ParryFT = "Parry"
-            },
-            Rect = {
-                [1] = "|r has created in ",
-                [2] = " of center region",
-                TL = "|c0000FF40top left|r",
-                TR= "|c0000FF40top right|r",
-                BL = "|c0000FF40bottom left|r",
-                BR = "|c0000FF40bottom right|r"
-            },
-            Force = "Force",
-            Mode = {
-                DM = "|c00FF0000Death Match|r mode was chosen by voting prepare to fight, your allies will become to enemy in |c00FFFC005|r second",
-                TVT = "|c0000FFFFTeam vs Team|r mode was chosen by voting prepare to fight",
-                DMTimer = "Game Start",
-                DMVote = "You have voted |c00FF0000Death Match|r mode, wait for others",
-                TVTVote = "You have voted |c00FF0000Team vs Team|r mode, wait for others",
-                Choose = "Mode choose",
-                VotingEnd = "Voting ends",
-                DMButton = "Death Match [|Cfffed312D|r]",
-                TVTButton = "Team vs Team [|Cfffed312T|r]",
-                ScoreTable = {
-                    [1] = "Score Table |c00FFFC00|n",
-                    [2] = "|r kills to win"
-                },
-            }
-        },
-        koKR = {
-            Rune = {
-                [1] = "|r has created in ",
-                [2] = " of center region"
-            },
-            Win = {
-                Player = "|r player has won, congratulate him, game will be end in |c00FFFC005|r second",
-                Team = "|r team has won, congratulate them, game will be end in |c00FFFC005|r second"
-            },
-            Loose = {
-                TVT = "Your team are loose, come again to win",
-                DM = "You are loose, come again to win",
-            },
-            Kill = "|r has killed a ",
-            Hint = {
-                Slash = "|c0000FF40Hint:|r Slashing strike deals damage to enemies in front of you, but be careful, it can also be parried",
-                Kill = {
-                    [1] = "|c0000FF40Hint:|r You have killed an enemy, collect |c00FFFC00",
-                    [2] = "|r kills to win"
-                },
-                Death = {
-                    [1] = "|c0000FF40Hint:|r Your hero will be Revive in |c00FFFC00",
-                    [2] = "|r second"
-                },
-                Damage = "|c0000FF40Hint:|r Damage dealt will fill your mana",
-                Parry = "|c0000FF40Hint:|r Parry returns all damage filling up your mana, also it increases your damage factor for |c00FFFC002|r  sec",
-                CounterFT = "Counter",
-                ParryFT = "Parry"
-            },
-            Rect = {
-                [1] = "|r has created in ",
-                [2] = " of center region",
-                TL = "|c0000FF40top left|r",
-                TR= "|c0000FF40top right|r",
-                BL = "|c0000FF40bottom left|r",
-                BR = "|c0000FF40bottom right|r"
-            },
-            Force = "Force",
-            Mode = {
-                DM = "|c00FF0000Death Match|r mode was chosen by voting prepare to fight, your allies will become to enemy in |c00FFFC005|r second",
-                TVT = "|c0000FFFFTeam vs Team|r mode was chosen by voting prepare to fight",
-                DMTimer = "Game Start",
-                DMVote = "You have voted |c00FF0000Death Match|r mode, wait for others",
-                TVTVote = "You have voted |c00FF0000Team vs Team|r mode, wait for others",
-                Choose = "Mode choose",
-                VotingEnd = "Voting ends",
-                DMButton = "Death Match [|Cfffed312D|r]",
-                TVTButton = "Team vs Team [|Cfffed312T|r]",
-                ScoreTable = {
-                    [1] = "Score Table |c00FFFC00|n",
-                    [2] = "|r kills to win"
-                },
-            }
-        },
-        plPL = {
-            Rune = {
-                [1] = "|r has created in ",
-                [2] = " of center region"
-            },
-            Win = {
-                Player = "|r player has won, congratulate him, game will be end in |c00FFFC005|r second",
-                Team = "|r team has won, congratulate them, game will be end in |c00FFFC005|r second"
-            },
-            Loose = {
-                TVT = "Your team are loose, come again to win",
-                DM = "You are loose, come again to win",
-            },
-            Kill = "|r has killed a ",
-            Hint = {
-                Slash = "|c0000FF40Hint:|r Slashing strike deals damage to enemies in front of you, but be careful, it can also be parried",
-                Kill = {
-                    [1] = "|c0000FF40Hint:|r You have killed an enemy, collect |c00FFFC00",
-                    [2] = "|r kills to win"
-                },
-                Death = {
-                    [1] = "|c0000FF40Hint:|r Your hero will be Revive in |c00FFFC00",
-                    [2] = "|r second"
-                },
-                Damage = "|c0000FF40Hint:|r Damage dealt will fill your mana",
-                Parry = "|c0000FF40Hint:|r Parry returns all damage filling up your mana, also it increases your damage factor for |c00FFFC002|r  sec",
-                CounterFT = "Counter",
-                ParryFT = "Parry"
-            },
-            Rect = {
-                [1] = "|r has created in ",
-                [2] = " of center region",
-                TL = "|c0000FF40top left|r",
-                TR= "|c0000FF40top right|r",
-                BL = "|c0000FF40bottom left|r",
-                BR = "|c0000FF40bottom right|r"
-            },
-            Force = "Force",
-            Mode = {
-                DM = "|c00FF0000Death Match|r mode was chosen by voting prepare to fight, your allies will become to enemy in |c00FFFC005|r second",
-                TVT = "|c0000FFFFTeam vs Team|r mode was chosen by voting prepare to fight",
-                DMTimer = "Game Start",
-                DMVote = "You have voted |c00FF0000Death Match|r mode, wait for others",
-                TVTVote = "You have voted |c00FF0000Team vs Team|r mode, wait for others",
-                Choose = "Mode choose",
-                VotingEnd = "Voting ends",
-                DMButton = "Death Match [|Cfffed312D|r]",
-                TVTButton = "Team vs Team [|Cfffed312T|r]",
-                ScoreTable = {
-                    [1] = "Score Table |c00FFFC00|n",
-                    [2] = "|r kills to win"
-                },
-            }
-        },
-        ptBR = {
-            Rune = {
-                [1] = "|r has created in ",
-                [2] = " of center region"
-            },
-            Win = {
-                Player = "|r player has won, congratulate him, game will be end in |c00FFFC005|r second",
-                Team = "|r team has won, congratulate them, game will be end in |c00FFFC005|r second"
-            },
-            Loose = {
-                TVT = "Your team are loose, come again to win",
-                DM = "You are loose, come again to win",
-            },
-            Kill = "|r has killed a ",
-            Hint = {
-                Slash = "|c0000FF40Hint:|r Slashing strike deals damage to enemies in front of you, but be careful, it can also be parried",
-                Kill = {
-                    [1] = "|c0000FF40Hint:|r You have killed an enemy, collect |c00FFFC00",
-                    [2] = "|r kills to win"
-                },
-                Death = {
-                    [1] = "|c0000FF40Hint:|r Your hero will be Revive in |c00FFFC00",
-                    [2] = "|r second"
-                },
-                Damage = "|c0000FF40Hint:|r Damage dealt will fill your mana",
-                Parry = "|c0000FF40Hint:|r Parry returns all damage filling up your mana, also it increases your damage factor for |c00FFFC002|r  sec",
-                CounterFT = "Counter",
-                ParryFT = "Parry"
-            },
-            Rect = {
-                [1] = "|r has created in ",
-                [2] = " of center region",
-                TL = "|c0000FF40top left|r",
-                TR= "|c0000FF40top right|r",
-                BL = "|c0000FF40bottom left|r",
-                BR = "|c0000FF40bottom right|r"
-            },
-            Force = "Force",
-            Mode = {
-                DM = "|c00FF0000Death Match|r mode was chosen by voting prepare to fight, your allies will become to enemy in |c00FFFC005|r second",
-                TVT = "|c0000FFFFTeam vs Team|r mode was chosen by voting prepare to fight",
-                DMTimer = "Game Start",
-                DMVote = "You have voted |c00FF0000Death Match|r mode, wait for others",
-                TVTVote = "You have voted |c00FF0000Team vs Team|r mode, wait for others",
-                Choose = "Mode choose",
-                VotingEnd = "Voting ends",
-                DMButton = "Death Match [|Cfffed312D|r]",
-                TVTButton = "Team vs Team [|Cfffed312T|r]",
-                ScoreTable = {
-                    [1] = "Score Table |c00FFFC00|n",
-                    [2] = "|r kills to win"
-                },
-            }
-        },
-        zhTW = {
-            Rune = {
-                [1] = "|r has created in ",
-                [2] = " of center region"
-            },
-            Win = {
-                Player = "|r player has won, congratulate him, game will be end in |c00FFFC005|r second",
-                Team = "|r team has won, congratulate them, game will be end in |c00FFFC005|r second"
-            },
-            Loose = {
-                TVT = "Your team are loose, come again to win",
-                DM = "You are loose, come again to win",
-            },
-            Kill = "|r has killed a ",
-            Hint = {
-                Slash = "|c0000FF40Hint:|r Slashing strike deals damage to enemies in front of you, but be careful, it can also be parried",
-                Kill = {
-                    [1] = "|c0000FF40Hint:|r You have killed an enemy, collect |c00FFFC00",
-                    [2] = "|r kills to win"
-                },
-                Death = {
-                    [1] = "|c0000FF40Hint:|r Your hero will be Revive in |c00FFFC00",
-                    [2] = "|r second"
-                },
-                Damage = "|c0000FF40Hint:|r Damage dealt will fill your mana",
-                Parry = "|c0000FF40Hint:|r Parry returns all damage filling up your mana, also it increases your damage factor for |c00FFFC002|r  sec",
-                CounterFT = "Counter",
-                ParryFT = "Parry"
-            },
-            Rect = {
-                [1] = "|r has created in ",
-                [2] = " of center region",
-                TL = "|c0000FF40top left|r",
-                TR= "|c0000FF40top right|r",
-                BL = "|c0000FF40bottom left|r",
-                BR = "|c0000FF40bottom right|r"
-            },
-            Force = "Force",
-            Mode = {
-                DM = "|c00FF0000Death Match|r mode was chosen by voting prepare to fight, your allies will become to enemy in |c00FFFC005|r second",
-                TVT = "|c0000FFFFTeam vs Team|r mode was chosen by voting prepare to fight",
-                DMTimer = "Game Start",
-                DMVote = "You have voted |c00FF0000Death Match|r mode, wait for others",
-                TVTVote = "You have voted |c00FF0000Team vs Team|r mode, wait for others",
-                Choose = "Mode choose",
-                VotingEnd = "Voting ends",
-                DMButton = "Death Match [|Cfffed312D|r]",
-                TVTButton = "Team vs Team [|Cfffed312T|r]",
-                ScoreTable = {
-                    [1] = "Score Table |c00FFFC00|n",
-                    [2] = "|r kills to win"
-                },
-            }
-        }
-    }
     Team = {
         Name = {
             [0] = String[BlzGetLocale()].Force.."1",
-            [0] = String[BlzGetLocale()].Force.."2",
+            [1] = String[BlzGetLocale()].Force.."2",
         }
     }
     Death()
@@ -1161,6 +1272,7 @@ function Start()
     Slash()
     TimeElapse()
     Parry()
+    SlashAI()
     Stats.Team = {
         [0] = 0,
         [1] = 0
@@ -1179,8 +1291,15 @@ function Start()
     for i = 0, bj_MAX_PLAYERS-1 do
         if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING then
             unit = CreateUnit(Player(i),FourCC("O000"), GetRectCenterX(SpawnRect[i]), GetRectCenterY(SpawnRect[i]),GetPlayerTeam(Player(i))*180)
+            if GetPlayerController(Player(i)) == MAP_CONTROL_COMPUTER then
+                TriggerRegisterUnitInRange(Trigger.SlashAI, unit, 250, nil)
+                TriggerRegisterPlayerUnitEvent(Trigger.AttackAI, Player(i), EVENT_PLAYER_UNIT_ATTACKED, nil)
+                StartMeleeAI(Player(i), "SamuroWars.ai")
+            end
             if GetPlayerController(Player(i)) == MAP_CONTROL_USER then
                 Players = Players + 1
+            else
+                SetUnitAcquireRange(unit, 1000000000)
             end
             ForceAddPlayer(Team[GetPlayerTeam(Player(i))], Player(i))
             AllPlayers = AllPlayers + 1
@@ -1192,9 +1311,10 @@ function Start()
                 Damage = 0
             }
             SelectUnitForPlayerSingle(unit, GetOwningPlayer(unit))
-            PanCameraToForPlayer(Player(i),GetUnitX(unit),GetUnitY(unit))
+            PanCameraToTimedForPlayer(Player(i),GetUnitX(unit),GetUnitY(unit), 0)
         end
     end
+    PauseAllUnitsBJ(true)
     TimerStart(CreateTimer(), 15, true, SpawnBoost)
 end
 function ParryEffect_Actions()
@@ -1434,7 +1554,6 @@ end
 
 function Trig_Counter_Actions()
     ForGroupBJ(GetUnitsInRangeOfLocMatching(250.00, GetUnitLoc(GetTriggerUnit()), Condition(Trig_Counter_Func001001003)), Trig_Counter_Func001002)
-        TimerStart(CreateTimer(), 0.05, false, function() UnitRemoveAbility(GetTriggerUnit(), FourCC('A004')) DestroyTimer(GetExpiredTimer()) end)
 end
 
 function InitTrig_Counter()
@@ -1444,8 +1563,25 @@ function InitTrig_Counter()
     TriggerAddAction(gg_trg_Counter, Trig_Counter_Actions)
 end
 
+function Trig_Leave_Func002001002001()
+    return (GetUnitTypeId(GetFilterUnit()) == FourCC("O000"))
+end
+
+function Trig_Leave_Func002001002002()
+    return (GetOwningPlayer(GetEnumUnit()) == GetTriggerPlayer())
+end
+
+function Trig_Leave_Func002001002()
+    return GetBooleanAnd(Trig_Leave_Func002001002001(), Trig_Leave_Func002001002002())
+end
+
+function Trig_Leave_Func002002()
+    SetUnitAcquireRangeBJ(GetEnumUnit(), 1000000000.00)
+end
+
 function Trig_Leave_Actions()
         print("|c00FFFC00"..GetPlayerName(GetTriggerPlayer()).."|r Has left the game")
+    ForGroupBJ(GetUnitsInRectMatching(GetPlayableMapRect(), Condition(Trig_Leave_Func002001002)), Trig_Leave_Func002002)
 end
 
 function InitTrig_Leave()
@@ -1853,6 +1989,7 @@ function main()
     SetAmbientNightSound("BarrensNight")
     SetMapMusic("Music", true, 0)
     InitSounds()
+    CreateAllItems()
     InitBlizzard()
     InitGlobals()
     InitCustomTriggers()

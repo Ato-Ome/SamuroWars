@@ -1,7 +1,6 @@
 function ChooseTimeElapse_Actions()
     TimerDialogDisplay(dialog, false)
     DestroyTimerDialog(Dialog)
-    PauseAllUnitsBJ(false)
     if Mode.Voices.DM > Mode.Voices.TVT then
         Mode.CurrentDM = true
         KillToWin = math.ceil(KillToWin * AllPlayers / GetPlayers())
@@ -16,6 +15,7 @@ function ChooseTimeElapse_Actions()
             end
             TimerDialogDisplay(dialog, false)
             DestroyTimerDialog(Dialog)
+            PauseAllUnitsBJ(false)
         end)
         dialog = CreateTimerDialog(Timer)
         TimerDialogSetTitle(dialog, String[BlzGetLocale()].Mode.DMTimer)
@@ -24,6 +24,7 @@ function ChooseTimeElapse_Actions()
         print(String[BlzGetLocale()].Mode.TVT)
         Mode.CurrentDM = false
         KillToWin = math.ceil(KillToWin * 2 * AllPlayers / GetPlayers())
+        PauseAllUnitsBJ(false)
     end
     ScoreTable = CreateLeaderboardBJ(GetPlayersAll(), String[BlzGetLocale()].Mode.ScoreTable[1]..KillToWin..String[BlzGetLocale()].Mode.ScoreTable[2])
     for i = 0,bj_MAX_PLAYERS-1 do

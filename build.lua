@@ -11,6 +11,6 @@ require 'build' {
         'src\\Start.lua',
         'src\\Parry.lua',
         'src\\PrintDamageType.lua',
-        'src\\Boosters.lua'
+        'src\\Boosters.lua',
     }
 }

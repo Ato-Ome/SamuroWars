@@ -1,0 +1,149 @@
+
+    function RandomizePoints takes nothing returns nothing
+        local integer i = 0
+        local integer j = 0
+        loop
+        exitwhen i == bj_MAX_PLAYERS
+            if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING then
+                set String[j] = GetPlayerName(Player(i))
+                set PlayerId[j] = GetPlayerId(Player(i))
+                set PlayerPlace[j] = j
+                set PlayerPoints[j] = GetRandomInt(10, 10000)
+                call ForceAddPlayer(PlayerForce, Player(i))
+                call FogModifierStart(CreateFogModifierRect(Player(i), FOG_OF_WAR_VISIBLE, gg_rct_Arena, true, false))
+                set j = j + 1
+            endif
+        set i = i + 1
+        endloop
+        set PlayersCount = CountPlayersInForceBJ(PlayerForce)
+        set i = 0
+	    set MultiBoard = CreateMultiboard()
+	    call MultiboardSetRowCount(MultiBoard, PlayersCount + 1)
+        call MultiboardSetColumnCount(MultiBoard, 2)
+        call MultiboardSetItemsWidth(MultiBoard, 0.1)
+        call MultiboardSetTitleText(MultiBoard, "Рейтинг игроков")
+        call MultiboardSetItemsStyle(MultiBoard, true, false)
+        call MultiboardSetItemValue(MultiboardGetItem(MultiBoard, 0, 0), "Игрок")
+        call MultiboardSetItemIcon(MultiboardGetItem(MultiBoard, 0, 0), "UI\\Widgets\\Console\\Human\\infocard-armor-hero.blp")
+        call MultiboardSetItemStyle(MultiboardGetItem(MultiBoard, 0, 0), true, true)
+	call MultiboardSetItemValue(MultiboardGetItem(MultiBoard, 0, 1), "Очков")
+	call MultiboardSetItemIcon(MultiboardGetItem(MultiBoard, 0, 1), "UI\\Minimap\\minimap-gold-haunted.blp")
+	call MultiboardSetItemStyle(MultiboardGetItem(MultiBoard, 0, 1), true, true)
+        call MultiboardDisplay(MultiBoard, true)
+    endfunction
+
+    function SortPlayers takes nothing returns nothing
+        local integer i = 0
+        local integer j = 0
+        local integer temp
+        loop
+        exitwhen i == PlayersCount
+            set j = 0
+            loop
+            exitwhen j == PlayersCount - 1
+                if(PlayerPoints[PlayerPlace[j]] < PlayerPoints[PlayerPlace[j + 1]])then
+                    set temp = PlayerPlace[j]
+                    set PlayerPlace[j] = PlayerPlace[j + 1]
+                    set PlayerPlace[j + 1] = temp
+                endif
+                set j = j + 1
+            endloop
+            set i = i + 1
+        endloop
+    endfunction
+
+    function UpdateMultiboard takes nothing returns nothing
+        local integer i = 0
+        loop
+        exitwhen i == PlayersCount
+            call MultiboardSetItemValueColor(MultiboardGetItem(MultiBoard, i+1, 0), red[PlayerId[PlayerPlace[i]]], green[PlayerId[PlayerPlace[i]]], blue[PlayerId[PlayerPlace[i]]], 25)
+            call MultiboardSetItemValue(MultiboardGetItem(MultiBoard, i+1, 0), String[PlayerPlace[i]])
+            call MultiboardSetItemValue(MultiboardGetItem(MultiBoard, i+1, 1), I2S(PlayerPoints[PlayerPlace[i]]))
+            set i = i + 1
+        endloop
+    endfunction
+
+    function Colors takes nothing returns nothing
+		set red[0] = 255 // 1 Red
+		set green[0] = 3
+		set blue[0] = 3
+		set red[1] = 0 // 2 Blue
+		set green[1] = 66
+		set blue[1] = 255
+		set red[2] = 28 // 3 Teal
+		set green[2] = 230
+		set blue[2] = 185
+		set red[3] = 84 // 4 Purple
+		set green[3] = 0
+		set blue[3] = 129
+		set red[4] = 255 // 5 Yellow
+		set green[4] = 252
+		set blue[4] = 0
+		set red[5] = 254 // 6 Orange
+		set green[5] = 138
+		set blue[5] = 14
+		set red[6] = 32 // 7 Green
+		set green[6] = 192
+		set blue[6] = 0
+		set red[7] = 229 // 8 Pink
+		set green[7] = 91
+		set blue[7] = 176
+		set red[8] = 149 // 9 Gray
+		set green[8] = 150
+		set blue[8] = 151
+		set red[9] = 126 // 10 Light blue
+		set green[9] = 191
+		set blue[9] = 241
+		set red[10] = 16 // 11 Dark Green
+		set green[10] = 98
+		set blue[10] = 70
+		set red[11] = 78 // 12 Brown
+		set green[11] = 42
+		set blue[11] = 4
+		set red[12] = 155 // 13 Maroon
+		set green[12] = 0
+		set blue[12] = 0
+		set red[13] = 0 // 13 Navy
+		set green[13] = 0
+		set blue[13] = 195
+		set red[14] = 0 // 14 Turquoise
+		set green[14] = 234
+		set blue[14] = 255
+		set red[15] = 190 // 15 Violet
+		set green[15] = 0
+		set blue[15] = 254
+		set red[16] = 235 // 16 Wheat
+		set green[16] = 205
+		set blue[16] = 135
+		set red[17] = 248 // 17 Peach
+		set green[17] = 164
+		set blue[17] = 139
+		set red[18] = 191 // 18 Mint
+		set green[18] = 255
+		set blue[18] = 128
+		set red[19] = 220 // 19 Lavender
+		set green[19] = 185
+		set blue[19] = 235
+		set red[20] = 40 // 20 Coal
+		set green[20] = 40
+		set blue[20] = 40
+		set red[21] = 235 // 21 Snow
+		set green[21] = 240
+		set blue[21] = 255
+		set red[22] = 0 // 22 Emerald
+		set green[22] = 120
+		set blue[22] = 30
+		set red[23] = 164 // 23 Peanut
+		set green[23] = 111
+		set blue[23] = 51
+    endfunction
+
+    function Init takes nothing returns nothing
+	set udg_Hash = InitHashtable()
+        call TriggerSleepAction(0)
+        call Colors()
+        call RandomizePoints()
+        call SortPlayers()
+        call UpdateMultiboard()
+    endfunction
+endlibrary
