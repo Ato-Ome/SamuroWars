@@ -11,12 +11,9 @@ function Death_Actions()
     local random = GetRandomInt(1,20)
     local x = GetRandomReal(GetRectMinX(SpawnRect.Revive[random]),GetRectMaxX(SpawnRect.Revive[random]))
     local y = GetRandomReal(GetRectMinY(SpawnRect.Revive[random]),GetRectMaxY(SpawnRect.Revive[random]))
-    if Hint[GetPlayerId(killerplayer)].Kill then
-        Hint[GetPlayerId(killerplayer)].Kill = false
-        DisplayTimedTextToPlayer(killerplayer, 0, 0, bj_TEXT_DELAY_ALWAYSHINT, String[BlzGetLocale()].Hint.Kill[1]..KillToWin..String[BlzGetLocale()].Hint.Kill[2])
-    end
     Stats[GetPlayerId(killerplayer)].Kill = Stats[GetPlayerId(killerplayer)].Kill + 1
-    print(Color[GetPlayerId(killerplayer)+ 1]..GetPlayerName(killerplayer)..String[BlzGetLocale()].Kill..Color[GetPlayerId(player)+ 1]..GetPlayerName(player).."|r")
+    BlzDisplayChatMessage(Player(24), 0, Color[GetPlayerId(killerplayer)+ 1]..GetPlayerName(killerplayer)..String[BlzGetLocale()].Kill..Color[GetPlayerId(player)+ 1]..GetPlayerName(player).."|r")
+    --print(Color[GetPlayerId(killerplayer)+ 1]..GetPlayerName(killerplayer)..String[BlzGetLocale()].Kill..Color[GetPlayerId(player)+ 1]..GetPlayerName(player).."|r")
     if Mode.CurrentDM == false then
         Stats.Team[GetPlayerTeam(killerplayer)] = Stats.Team[GetPlayerTeam(killerplayer)] + 1
     end
@@ -60,10 +57,6 @@ function Death_Actions()
     end
     Stats[GetPlayerId(player)].Death = Stats[GetPlayerId(player)].Death + 1
     random =  GetRandomInt(3,5)
-    if Hint[GetPlayerId(player)].Death then
-        Hint[GetPlayerId(player)].Death = false
-        DisplayTimedTextToPlayer(player, 0, 0, bj_TEXT_DELAY_ALWAYSHINT, String[BlzGetLocale()].Hint.Death[1]..random..String[BlzGetLocale()].Hint.Death[2])
-    end
     TimerStart(t, random,false, function()
         ReviveHero(unit, x, y, true)
         SetUnitState(unit, UNIT_STATE_MANA, Mana[GetPlayerId(player)])

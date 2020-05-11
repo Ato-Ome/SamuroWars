@@ -25,6 +25,20 @@ function ChooseTimeElapse_Actions()
         Mode.CurrentDM = false
         KillToWin = math.ceil(KillToWin * 2 * AllPlayers / GetPlayers())
         PauseAllUnitsBJ(false)
+        local group = CreateGroup()
+        local first
+        GroupEnumUnitsInRect(group, bj_mapInitialPlayableArea, nil)
+        for i = 0, CountUnitsInGroup(group) do
+            first = FirstOfGroup(group)
+            if first ~= nil then
+                SetUnitColor(first, ConvertPlayerColor(GetPlayerTeam(GetOwningPlayer(first))))
+                GroupRemoveUnit(group, first)
+            end
+        end
+        DestroyGroup(group)
+        for i = 0, bj_MAX_PLAYERS do
+            SetPlayerColor(Player(i), ConvertPlayerColor(GetPlayerTeam(Player(i))))
+        end
     end
     ScoreTable = CreateLeaderboardBJ(GetPlayersAll(), String[BlzGetLocale()].Mode.ScoreTable[1]..KillToWin..String[BlzGetLocale()].Mode.ScoreTable[2])
     for i = 0,bj_MAX_PLAYERS-1 do

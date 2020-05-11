@@ -1,6 +1,6 @@
 ﻿STRING 1
 {
-|c00FF0080Samuro Wars|r 1.0
+|c00FF0080Samuro Wars|r 1.1
 }
 
 STRING 3
@@ -14,330 +14,318 @@ xgm.guru/p/samurowars - подробная информация
 
 STRING 4
 {
-Phoenix  (AtoOme)
+Phoenix | AtoOme
 }
 
-STRING 5
-{
-Игрок 1
-}
-
-STRING 6
-{
-Игрок 2
-}
-
-STRING 7
-{
-Игрок 3
-}
-
-STRING 8
-{
-Игрок 4
-}
-
-STRING 29
-{
-Команда 1
-}
-
-STRING 35
-// Abilities: A001 (Jump), Researchubertip (Tooltip - Learn - Extended)
-{
-Переносит самурая  на короткое расстояние, позволяя быстро вступить в бой и выйти из него.
-}
-
-STRING 36
-// Abilities: A001 (Jump), Researchtip (Tooltip - Learn)
-{
-Изучить «Скачок»
-}
-
-STRING 38
-// Abilities: A002 (Bladestorm), Researchhotkey (Hotkey - Learn)
-{
-R
-}
-
-STRING 39
-// Abilities: A002 (Bladestorm), Hotkey (Hotkey - Normal)
-{
-R
-}
-
-STRING 44
-// Abilities: A002 (Bladestorm), Researchubertip (Tooltip - Learn - Extended)
-{
-Окружает мастера клинка вихрем разрушительной силы, который наносит 350 урона/сек. находящимся рядом врагам.|n|Cffffcc00Не может навредить врагам в состоянии вихря.|r
-}
-
-STRING 46
-// Abilities: A000 (Parry), Hotkey (Hotkey - Normal)
-{
-W
-}
-
-STRING 47
-// Abilities: A001 (Jump), Researchhotkey (Hotkey - Learn)
-{
-W
-}
-
-STRING 48
-// Abilities: A004 (Counter Attack), Hotkey (Hotkey - Normal)
-{
-E
-}
-
-STRING 52
-// Abilities: A003 (Slash Attack), Hotkey (Hotkey - Normal)
-{
-Q
-}
-
-STRING 56
-{
-Force 2
-}
-
-STRING 64
-// Abilities: A000 (Parry), Name (Name)
-{
-Parry
-}
-
-STRING 65
-// Abilities: A000 (Parry), Tip (Tooltip - Normal)
-{
-Parry
-}
-
-STRING 67
-// Abilities: A001 (Jump), Tip (Tooltip - Normal)
-{
-Скачок
-}
-
-STRING 68
-// Abilities: A001 (Jump), Name (Name)
-{
-Скачок
-}
-
-STRING 69
-// Abilities: A001 (Jump), Ubertip (Tooltip - Normal - Extended)
-{
-Прыгает на короткую дистанцию, оставляя за собой облако дыма
-}
-
-STRING 71
-// Abilities: A002 (Bladestorm), Tip (Tooltip - Normal)
-{
-Вихрь клинков
-}
-
-STRING 72
-// Abilities: A002 (Bladestorm), Name (Name)
-{
-Вихрь клинков
-}
-
-STRING 73
-// Abilities: A003 (Slash Attack), Name (Name)
-{
-Режущий удар
-}
-
-STRING 74
-// Abilities: A003 (Slash Attack), Tip (Tooltip - Normal)
-{
-Режущий удар
-}
-
-STRING 76
-{
-Игрок 13
-}
-
-STRING 77
-{
-Игрок 14
-}
-
-STRING 78
-{
-Игрок 15
-}
-
-STRING 79
-{
-Игрок 16
-}
-
-STRING 80
-// Abilities: A002 (Bladestorm), Ubertip (Tooltip - Normal - Extended)
-{
-Окружает мастера клинка вихрем разрушительной силы, который наносит 350 урона/сек. находящимся рядом врагам.|n|Cffffcc00Не может навредить врагам в состоянии вихря.|r
-}
-
-STRING 81
+STRING 112
 {
 2-12
 }
 
-STRING 82
+STRING 113
+{
+ |n
+}
+
+STRING 114
+{
+ |n
+}
+
+STRING 115
+{
+ |n
+}
+
+STRING 116
+{
+Игрок 1
+}
+
+STRING 117
+{
+Игрок 2
+}
+
+STRING 118
+{
+Игрок 3
+}
+
+STRING 119
+{
+Игрок 4
+}
+
+STRING 120
+{
+Игрок 5
+}
+
+STRING 121
+{
+Игрок 6
+}
+
+STRING 122
+{
+Игрок 12
+}
+
+STRING 123
+{
+Игрок 13
+}
+
+STRING 124
+{
+Игрок 14
+}
+
+STRING 125
+{
+Игрок 15
+}
+
+STRING 126
+{
+Игрок 16
+}
+
+STRING 127
+{
+Игрок 17
+}
+
+STRING 128
+{
+Клан Северного Волка
+}
+
+STRING 129
+{
+Клан Песни Войны
+}
+
+STRING 130
 // Units: O000 (Samurai), Name (Name)
 {
 Самурай
 }
 
-STRING 83
+STRING 131
 // Units: O000 (Samurai), Propernames (Proper Names)
 {
 Уэсуги Кэнсин,Ода Нобунага,Укита Хидэиэ,Мори Мотонари,Санада Юкимура,Исида Мицунари,Мори Нагаёси,Такэда Нобусигэ,Сакаи Тадацугу,Катакура Кагэцуна,Тоётоми Хидэёси,Хидзиката Тосидзо,Гинтоки Саката,Химура Кэнсин
 }
 
-STRING 84
-// Abilities: A000 (Parry), Ubertip (Tooltip - Normal - Extended)
-{
-Возвращает весь входящий урон и увеличивает фактор критического удара за каждую успешную заблокированную атаку.
-}
-
-STRING 85
-// Abilities: A003 (Slash Attack), Ubertip (Tooltip - Normal - Extended)
-{
-Разрезающий взмах мечом наносит урон врагам спереди
-}
-
-STRING 89
-{
- 
-}
-
-STRING 90
-{
- 
-}
-
-STRING 91
-{
- 
-}
-
-STRING 92
-// Abilities: A001 (Jump), Hotkey (Hotkey - Normal)
-{
-D
-}
-
-STRING 93
-// Abilities: A004 (Counter Attack), Name (Name)
-{
-Контрудар
-}
-
-STRING 94
-// Abilities: A004 (Counter Attack), Tip (Tooltip - Normal)
-{
-Контрудар
-}
-
-STRING 95
-// Abilities: A004 (Counter Attack), Ubertip (Tooltip - Normal - Extended)
-{
-Контрудар наносит 150 ед. урона врагам вокруг.
-}
-
-STRING 96
+STRING 132
 // Items: I000 (Healing Rune), Name (Name)
 {
-Руна лечения
+Восстанавливающая руна
 }
 
-STRING 97
+STRING 133
 // Items: I000 (Healing Rune), Description (Description)
 {
-Восстанавливает 250 единиц здоровья
+Восстанавливает |cff00ff00250|r единиц здоровья
 }
 
-STRING 98
+STRING 134
 // Items: I001 (Mana Rune), Name (Name)
 {
 Руна маны
 }
 
-STRING 99
+STRING 135
 // Items: I001 (Mana Rune), Description (Description)
 {
-Восстанавливает 150 единиц маны
+Восполняет |cff00ffff150|r единиц маны
 }
 
-STRING 100
+STRING 136
 // Items: I002 (Illusion Rune), Name (Name)
 {
 Руна иллюзии
 }
 
-STRING 101
+STRING 137
 // Items: I002 (Illusion Rune), Description (Description)
 {
-Создаёт 2 зеркальные копии
+Создаёт |cffffff002|r зеркальные копии
 }
 
-STRING 102
-// Items: I003 (Windwalk Rune), Name (Name)
+STRING 138
+// Items: I003 (Wind Walk Rune), Name (Name)
 {
-Руна танца ветра
+Руна ветра
 }
 
-STRING 103
-// Items: I003 (Windwalk Rune), Description (Description)
+STRING 139
+// Items: I003 (Wind Walk Rune), Description (Description)
 {
-Руна невидимости
+Становится невидимым и дает дополнительную скорость бега
 }
 
-STRING 104
+STRING 140
 // Items: I004 (Lightning Rune), Name (Name)
 {
 Руна молнии
 }
 
-STRING 105
+STRING 141
 // Items: I004 (Lightning Rune), Description (Description)
 {
-Добавляет щит молнии
+Дает электрический щит, который ежесекундно наносит урон юнитам вокруг
 }
 
-STRING 106
+STRING 142
 // Items: I005 (Combat Rune), Name (Name)
 {
 Руна битвы
 }
 
-STRING 107
+STRING 143
 // Items: I005 (Combat Rune), Description (Description)
 {
-Увеличивает боевые навыки
+Увеличивает атаку на |cff00ff00+150%|r, скорость боя и бега |cff00ff00+100%|r
 }
 
-STRING 108
+STRING 144
+// Items: I006 (Horde Flag), Name (Name)
 {
-Игрок 5
+Знамя Орды
 }
 
-STRING 109
+STRING 145
+// Items: I006 (Horde Flag), Description (Description)
 {
-Игрок 6
+Знамя армии Тралла. Носи его с гордостью!
 }
 
-STRING 110
+STRING 146
+// Items: I006 (Horde Flag), Ubertip (Tooltip - Extended)
 {
-Игрок 17
+Боевое знамя Орды, которое даёт |cff00ff00+5|r ко всем атрибутам, |cff00ff00+20|r к атаке и +|cff00ff0010|r защиты.|n|cffff0000Падает при смерти|r
 }
 
-STRING 111
+STRING 147
+// Abilities: A000 (Parry), Name (Name)
 {
-Игрок 18
+Парирование
+}
+
+STRING 148
+// Abilities: A000 (Parry), Hotkey (Hotkey - Normal)
+{
+W
+}
+
+STRING 149
+// Abilities: A000 (Parry), Ubertip (Tooltip - Normal - Extended)
+{
+Отражает весь урон в течении |cff00ffff0.5|r сек.|n|Cffffcc00Не действует на вихрь клинков.|r
+}
+
+STRING 150
+// Abilities: A001 (Jump), Hotkey (Hotkey - Normal)
+{
+E
+}
+
+STRING 151
+// Abilities: A001 (Jump), Name (Name)
+{
+Скачок
+}
+
+STRING 152
+// Abilities: A001 (Jump), Ubertip (Tooltip - Normal - Extended)
+{
+Делает скачок на короткую дистанцию, оставляя за собой облако пыли
+}
+
+STRING 153
+// Abilities: A002 (Bladestorm), Hotkey (Hotkey - Normal)
+{
+R
+}
+
+STRING 154
+// Abilities: A002 (Bladestorm), Ubertip (Tooltip - Normal - Extended)
+{
+Разрушительная техника Вихря клинков наносит |cffff0000350|r урна / сек. врагам поблизости. |n|cff8080ffДлительность:|r 3 секунды |n|Cffffcc00Не наносит урона врагам в состоянии вихря клинков.|r
+}
+
+STRING 155
+// Abilities: A002 (Bladestorm), Name (Name)
+{
+Вихрь клинков
+}
+
+STRING 156
+// Abilities: A003 (Slashing strike), Name (Name)
+{
+Режущий удар
+}
+
+STRING 157
+// Abilities: A003 (Slashing strike), Hotkey (Hotkey - Normal)
+{
+Q
+}
+
+STRING 158
+// Abilities: A003 (Slashing strike), Ubertip (Tooltip - Normal - Extended)
+{
+Режущий удар наносит |cffff0000250|r |cff00ffffмагического|r урона врагам спереди.|n|Cffffcc00Не наносит урона врагам в состоянии вихря клинков.|r
+}
+
+STRING 159
+// Abilities: A004 (Counter attack), Name (Name)
+{
+Контратака
+}
+
+STRING 160
+// Abilities: A004 (Counter attack), Hotkey (Hotkey - Normal)
+{
+D
+}
+
+STRING 161
+// Items: I000 (Healing Rune), Description (Description)
+{
+Восстанавливает |cff00ff00250|r единиц здоровья
+}
+
+STRING 162
+// Abilities: A000 (Parry), Tip (Tooltip - Normal)
+{
+Парирование
+}
+
+STRING 163
+// Abilities: A001 (Jump), Name (Name)
+{
+Скачок
+}
+
+STRING 164
+// Abilities: A002 (Bladestorm), Name (Name)
+{
+Вихрь клинков
+}
+
+STRING 165
+// Abilities: A003 (Slashing strike), Tip (Tooltip - Normal)
+{
+Режущий удар
+}
+
+STRING 166
+// Abilities: A004 (Counter attack), Tip (Tooltip - Normal)
+{
+Контратака
 }
 

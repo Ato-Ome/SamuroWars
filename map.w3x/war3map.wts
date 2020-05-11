@@ -1,6 +1,6 @@
 ﻿STRING 1
 {
-|c00FF0080Samuro Wars|r 1.0
+|c00FF0080Samuro Wars|r 1.1
 }
 
 STRING 3
@@ -14,330 +14,312 @@ xgm.guru/p/samurowars - to information
 
 STRING 4
 {
-Phoenix  (AtoOme)
+Phoenix | AtoOme
 }
 
-STRING 5
-{
-Player 1
-}
-
-STRING 6
-{
-Player 2
-}
-
-STRING 7
-{
-Player 3
-}
-
-STRING 8
-{
-Player 4
-}
-
-STRING 29
-{
-Force 1
-}
-
-STRING 35
-// Abilities: A001 (Jump), Researchubertip (Tooltip - Learn - Extended)
-{
-Переносит самурая  на короткое расстояние, позволяя быстро вступить в бой и выйти из него.
-}
-
-STRING 36
-// Abilities: A001 (Jump), Researchtip (Tooltip - Learn)
-{
-Изучить «Скачок»
-}
-
-STRING 38
-// Abilities: A002 (Bladestorm), Researchhotkey (Hotkey - Learn)
-{
-R
-}
-
-STRING 39
-// Abilities: A002 (Bladestorm), Hotkey (Hotkey - Normal)
-{
-R
-}
-
-STRING 44
-// Abilities: A002 (Bladestorm), Researchubertip (Tooltip - Learn - Extended)
-{
-Окружает мастера клинка вихрем разрушительной силы, который наносит 250 урона/сек. находящимся рядом врагам.|n|Cffffcc00Не может навредить врагам в состоянии вихря.|r
-}
-
-STRING 46
-// Abilities: A000 (Parry), Hotkey (Hotkey - Normal)
-{
-W
-}
-
-STRING 47
-// Abilities: A001 (Jump), Researchhotkey (Hotkey - Learn)
-{
-W
-}
-
-STRING 48
-// Abilities: A004 (Counter Attack), Hotkey (Hotkey - Normal)
-{
-E
-}
-
-STRING 52
-// Abilities: A003 (Slash Attack), Hotkey (Hotkey - Normal)
-{
-Q
-}
-
-STRING 56
-{
-Force 2
-}
-
-STRING 64
-// Abilities: A000 (Parry), Name (Name)
-{
-Parry
-}
-
-STRING 65
-// Abilities: A000 (Parry), Tip (Tooltip - Normal)
-{
-Parry
-}
-
-STRING 67
-// Abilities: A001 (Jump), Tip (Tooltip - Normal)
-{
-Jump
-}
-
-STRING 68
-// Abilities: A001 (Jump), Name (Name)
-{
-Jump
-}
-
-STRING 69
-// Abilities: A001 (Jump), Ubertip (Tooltip - Normal - Extended)
-{
-Jumps a short distance leaving a cloud of dust
-}
-
-STRING 71
-// Abilities: A002 (Bladestorm), Tip (Tooltip - Normal)
-{
-Bladestorm
-}
-
-STRING 72
-// Abilities: A002 (Bladestorm), Name (Name)
-{
-Bladestorm
-}
-
-STRING 73
-// Abilities: A003 (Slash Attack), Name (Name)
-{
-Slash Attack
-}
-
-STRING 74
-// Abilities: A003 (Slash Attack), Tip (Tooltip - Normal)
-{
-Slash Atttack
-}
-
-STRING 76
-{
-Player 13
-}
-
-STRING 77
-{
-Player 14
-}
-
-STRING 78
-{
-Player 15
-}
-
-STRING 79
-{
-Player 16
-}
-
-STRING 80
-// Abilities: A002 (Bladestorm), Ubertip (Tooltip - Normal - Extended)
-{
-Surrounds the master of the blade with a whirlwind of destructive force, which deals 350 damage / sec. nearby ground enemies. |nDuration: 3 seconds |n|Cffffcc00Cannot harm enemies in a whirlwind state.|r
-}
-
-STRING 81
+STRING 112
 {
 2-12
 }
 
-STRING 82
+STRING 113
+{
+ |n
+}
+
+STRING 114
+{
+ |n
+}
+
+STRING 115
+{
+ |n
+}
+
+STRING 116
+{
+Player 1
+}
+
+STRING 117
+{
+Player 2
+}
+
+STRING 118
+{
+Player 3
+}
+
+STRING 119
+{
+Player 4
+}
+
+STRING 120
+{
+Player 5
+}
+
+STRING 121
+{
+Player 6
+}
+
+STRING 122
+{
+Player 12
+}
+
+STRING 123
+{
+Player 13
+}
+
+STRING 124
+{
+Player 14
+}
+
+STRING 125
+{
+Player 15
+}
+
+STRING 126
+{
+Player 16
+}
+
+STRING 127
+{
+Player 17
+}
+
+STRING 128
+{
+Frostwolf Clan
+}
+
+STRING 129
+{
+War Song Clan
+}
+
+STRING 130
 // Units: O000 (Samurai), Name (Name)
 {
 Samurai
 }
 
-STRING 83
+STRING 131
 // Units: O000 (Samurai), Propernames (Proper Names)
 {
 Uesugi Kenshin,Oda Nobunaga,Ukita Hideie,Mori Motonari,Yukimura Sanada,Ishida Mitsunari,Mori Nagayoshi,Takeda Nobushige,Tadatsugu Sakai,Katakura Kagetsuna,Toyotomi Hideyoshi,Toshizou Hijikata,Sakata Gintoki,Himura Kenshin
 }
 
-STRING 84
-// Abilities: A000 (Parry), Ubertip (Tooltip - Normal - Extended)
-{
-Blocks and returns all incoming damage, also when succes increases cricital factor
-}
-
-STRING 85
-// Abilities: A003 (Slash Attack), Ubertip (Tooltip - Normal - Extended)
-{
-Slash attack deals damage to enemies in front
-}
-
-STRING 89
-{
- 
-}
-
-STRING 90
-{
- 
-}
-
-STRING 91
-{
- 
-}
-
-STRING 92
-// Abilities: A001 (Jump), Hotkey (Hotkey - Normal)
-{
-D
-}
-
-STRING 93
-// Abilities: A004 (Counter Attack), Name (Name)
-{
-Counter Attack
-}
-
-STRING 94
-// Abilities: A004 (Counter Attack), Tip (Tooltip - Normal)
-{
-Counter Attack
-}
-
-STRING 96
+STRING 132
 // Items: I000 (Healing Rune), Name (Name)
 {
 Healing Rune
 }
 
-STRING 97
-// Items: I000 (Healing Rune), Description (Description)
-{
-Heals 250 hit points
-}
-
-STRING 98
+STRING 134
 // Items: I001 (Mana Rune), Name (Name)
 {
 Mana Rune
 }
 
-STRING 99
+STRING 135
 // Items: I001 (Mana Rune), Description (Description)
 {
-Heals 150 mana points
+Heals |cff00ffff150|r mana points
 }
 
-STRING 100
+STRING 136
 // Items: I002 (Illusion Rune), Name (Name)
 {
 Illusion Rune
 }
 
-STRING 101
+STRING 137
 // Items: I002 (Illusion Rune), Description (Description)
 {
-Creates 2 illusion coppies
+Creates |cffffff002|r mirror illusions
 }
 
-STRING 102
-// Items: I003 (Windwalk Rune), Name (Name)
+STRING 138
+// Items: I003 (Wind Walk Rune), Name (Name)
 {
-Windwalk Rune
+Wind Walk Rune
 }
 
-STRING 103
-// Items: I003 (Windwalk Rune), Description (Description)
+STRING 139
+// Items: I003 (Wind Walk Rune), Description (Description)
 {
-Gives invisible
+Becomes invisible and gives addition move speed
 }
 
-STRING 104
+STRING 140
 // Items: I004 (Lightning Rune), Name (Name)
 {
 Lightning Rune
 }
 
-STRING 105
+STRING 141
 // Items: I004 (Lightning Rune), Description (Description)
 {
-Gives lightning shield
+Gives lightning shield damaging near units
 }
 
-STRING 106
+STRING 142
 // Items: I005 (Combat Rune), Name (Name)
 {
 Combat Rune
 }
 
-STRING 107
+STRING 143
 // Items: I005 (Combat Rune), Description (Description)
 {
-Increases combat attributes
+Increases attack |cff00ff00+150%|r, rate and move speed |cff00ff00+100%|r
 }
 
-STRING 108
+STRING 144
+// Items: I006 (Horde Flag), Name (Name)
 {
-Player 5
+Horde Flag
 }
 
-STRING 109
+STRING 145
+// Items: I006 (Horde Flag), Description (Description)
 {
-Player 6
+Thrall army banner. Carry it with pride!
 }
 
-STRING 110
+STRING 146
+// Items: I006 (Horde Flag), Ubertip (Tooltip - Extended)
 {
-Player 17
+Combat Horde flag increases all attributes |cff00ff00+5|r and gives addition |cff00ff00+20|r attack and +|cff00ff0010|r defence|n|cffff0000Drop on death|r
 }
 
-STRING 111
+STRING 147
+// Abilities: A000 (Parry), Name (Name)
 {
-Player 18
+Parry
 }
 
-STRING 112
-// Abilities: A004 (Counter Attack), Ubertip (Tooltip - Normal - Extended)
+STRING 148
+// Abilities: A000 (Parry), Hotkey (Hotkey - Normal)
 {
-Counter attack deals 150 damage to enemies around
+W
+}
+
+STRING 149
+// Abilities: A000 (Parry), Ubertip (Tooltip - Normal - Extended)
+{
+Reflect all incoming damage in |cff00ffff0.5|r sec.|n|Cffffcc00Can not reflect whirlwind damage.|r
+}
+
+STRING 150
+// Abilities: A001 (Jump), Hotkey (Hotkey - Normal)
+{
+E
+}
+
+STRING 151
+// Abilities: A001 (Jump), Tip (Tooltip - Normal)
+{
+Jump
+}
+
+STRING 152
+// Abilities: A001 (Jump), Ubertip (Tooltip - Normal - Extended)
+{
+Jumps a short distance leaving a cloud of dust
+}
+
+STRING 153
+// Abilities: A002 (Bladestorm), Hotkey (Hotkey - Normal)
+{
+R
+}
+
+STRING 154
+// Abilities: A002 (Bladestorm), Ubertip (Tooltip - Normal - Extended)
+{
+Surrounds the master of the blade with a whirlwind of destructive force, which deals |cffff0000350|r damage / sec. nearby ground enemies. |n|cff8080ffDuration:|r 3 seconds |n|Cffffcc00Can not damage enemies in a whirlwind state.|r
+}
+
+STRING 155
+// Abilities: A002 (Bladestorm), Tip (Tooltip - Normal)
+{
+Bladestorm
+}
+
+STRING 156
+// Abilities: A003 (Slashing strike), Name (Name)
+{
+Slashing strike
+}
+
+STRING 157
+// Abilities: A003 (Slashing strike), Hotkey (Hotkey - Normal)
+{
+Q
+}
+
+STRING 158
+// Abilities: A003 (Slashing strike), Ubertip (Tooltip - Normal - Extended)
+{
+Slashing strike deals |cffff0000250|r |cff00ffffmagic|r damage to enemies in front.|n|Cffffcc00Can not damage enemies in a whirlwind state.|r
+}
+
+STRING 159
+// Abilities: A004 (Counter attack), Name (Name)
+{
+Counter attack
+}
+
+STRING 160
+// Abilities: A004 (Counter attack), Hotkey (Hotkey - Normal)
+{
+D
+}
+
+STRING 161
+// Items: I000 (Healing Rune), Description (Description)
+{
+Heals |cff00ff00250|r hit points
+}
+
+STRING 162
+// Abilities: A000 (Parry), Tip (Tooltip - Normal)
+{
+Parry
+}
+
+STRING 163
+// Abilities: A001 (Jump), Name (Name)
+{
+Jump
+}
+
+STRING 164
+// Abilities: A002 (Bladestorm), Name (Name)
+{
+Bladestorm
+}
+
+STRING 165
+// Abilities: A003 (Slashing strike), Tip (Tooltip - Normal)
+{
+Slashing strike
+}
+
+STRING 166
+// Abilities: A004 (Counter attack), Tip (Tooltip - Normal)
+{
+Counter attack
 }
 

@@ -1,6 +1,35 @@
+gg_rct_Region_001 = nil
+gg_rct_Region_002 = nil
+gg_rct_Region_003 = nil
+gg_rct_Region_004 = nil
+gg_rct_Region_005 = nil
+gg_rct_Region_007 = nil
+gg_rct_Region_008 = nil
+gg_rct_Region_009 = nil
+gg_rct_Region_010 = nil
+gg_rct_Region_011 = nil
+gg_rct_Region_012 = nil
+gg_rct_Region_013 = nil
+gg_rct_Region_014 = nil
+gg_rct_Region_015 = nil
+gg_rct_Region_006 = nil
+gg_rct_Region_017 = nil
+gg_rct_Region_018 = nil
+gg_rct_Region_019 = nil
+gg_rct_Region_020 = nil
+gg_rct_Region_021 = nil
+gg_rct_Region_022 = nil
+gg_rct_Region_023 = nil
+gg_rct_Region_024 = nil
+gg_rct_Region_025 = nil
+gg_rct_Region_026 = nil
+gg_rct_Region_016 = nil
+gg_rct_Region_028 = nil
+gg_rct_Region_029 = nil
+gg_rct_Region_030 = nil
+gg_rct_Region_027 = nil
 gg_snd_great_player01 = ""
 gg_snd_AchievementEarned = nil
-gg_snd_RyuKanSenTsumui = nil
 gg_trg_Initialization = nil
 gg_trg_AttackAllied = nil
 gg_trg_Counter = nil
@@ -12,18 +41,47 @@ function InitSounds()
     gg_snd_great_player01 = "war3mapImported/great_player.mp3"
     gg_snd_AchievementEarned = CreateSound("Sound/Interface/AchievementEarned.flac", false, false, false, 0, 0, "DefaultEAXON")
     SetSoundParamsFromLabel(gg_snd_AchievementEarned, "AchievementEarned")
-    SetSoundDuration(gg_snd_AchievementEarned, 171)
+    SetSoundDuration(gg_snd_AchievementEarned, 4173)
     SetSoundVolume(gg_snd_AchievementEarned, 127)
-    gg_snd_RyuKanSenTsumui = CreateSound("war3mapImported/RyuKanSenTsumui.wav", false, false, false, 1, 1, "SpellsEAX")
-    SetSoundDuration(gg_snd_RyuKanSenTsumui, 1171)
-    SetSoundChannel(gg_snd_RyuKanSenTsumui, 0)
-    SetSoundVolume(gg_snd_RyuKanSenTsumui, 127)
-    SetSoundPitch(gg_snd_RyuKanSenTsumui, 1.0)
 end
 
 function CreateAllItems()
     local itemID
-    BlzCreateItemWithSkin(FourCC("I006"), -5.9, -256.6, FourCC("I006"))
+    BlzCreateItemWithSkin(FourCC("I006"), 9041.4, -12627.8, FourCC("I006"))
+end
+
+function CreateRegions()
+    local we
+    gg_rct_Region_001 = Rect(10336.0, -15136.0, 10464.0, -15008.0)
+    gg_rct_Region_002 = Rect(10464.0, -15072.0, 10592.0, -14944.0)
+    gg_rct_Region_003 = Rect(10592.0, -15008.0, 10720.0, -14880.0)
+    gg_rct_Region_004 = Rect(10336.0, -15008.0, 10464.0, -14880.0)
+    gg_rct_Region_005 = Rect(10464.0, -14944.0, 10592.0, -14816.0)
+    gg_rct_Region_007 = Rect(9376.0, -10624.0, 9504.0, -10496.0)
+    gg_rct_Region_008 = Rect(9440.0, -10496.0, 9568.0, -10368.0)
+    gg_rct_Region_009 = Rect(9312.0, -10496.0, 9440.0, -10368.0)
+    gg_rct_Region_010 = Rect(9248.0, -10368.0, 9376.0, -10240.0)
+    gg_rct_Region_011 = Rect(9376.0, -10368.0, 9504.0, -10240.0)
+    gg_rct_Region_012 = Rect(9504.0, -10368.0, 9632.0, -10240.0)
+    gg_rct_Region_013 = Rect(8928.0, -13568.0, 9024.0, -13472.0)
+    gg_rct_Region_014 = Rect(9536.0, -13376.0, 9632.0, -13280.0)
+    gg_rct_Region_015 = Rect(8640.0, -11616.0, 8736.0, -11520.0)
+    gg_rct_Region_006 = Rect(10336.0, -14880.0, 10464.0, -14752.0)
+    gg_rct_Region_017 = Rect(7904.0, -11968.0, 8128.0, -11744.0)
+    gg_rct_Region_018 = Rect(8096.0, -10368.0, 8352.0, -10144.0)
+    gg_rct_Region_019 = Rect(9696.0, -14464.0, 9888.0, -14240.0)
+    gg_rct_Region_020 = Rect(10624.0, -10496.0, 10848.0, -10272.0)
+    gg_rct_Region_021 = Rect(7840.0, -14976.0, 8032.0, -14752.0)
+    gg_rct_Region_022 = Rect(10176.0, -12960.0, 10400.0, -12704.0)
+    gg_rct_Region_023 = Rect(10432.0, -11648.0, 10688.0, -11360.0)
+    gg_rct_Region_024 = Rect(6656.0, -13088.0, 6912.0, -12832.0)
+    gg_rct_Region_025 = Rect(8672.0, -14240.0, 8896.0, -13984.0)
+    gg_rct_Region_026 = Rect(11744.0, -12320.0, 12032.0, -12096.0)
+    gg_rct_Region_016 = Rect(9216.0, -11584.0, 9312.0, -11488.0)
+    gg_rct_Region_028 = Rect(8384.0, -13408.0, 8576.0, -13120.0)
+    gg_rct_Region_029 = Rect(9088.0, -16160.0, 9312.0, -15904.0)
+    gg_rct_Region_030 = Rect(6912.0, -11552.0, 7168.0, -11296.0)
+    gg_rct_Region_027 = Rect(8960.0, -12576.0, 9056.0, -12480.0)
 end
 
 --CUSTOM_CODE
@@ -161,7 +219,7 @@ String = {
             BL = "|c0000FF40bottom left|r",
             BR = "|c0000FF40bottom right|r"
         },
-        Force = "Force",
+        Force = "Force ",
         Mode = {
             DM = "|c00FF0000Death Match|r mode was chosen by voting prepare to fight, your allies will become to enemy in |c00FFFC005|r second",
             TVT = "|c0000FFFFTeam vs Team|r mode was chosen by voting prepare to fight",
@@ -184,8 +242,8 @@ String = {
             [2] = " центральной области"
         },
         Win = {
-            Player = "|r победил, поздравьте его, игра закончится через |c00FFFC005|r second",
-            Team = "|r победила, поздравьте их, игра закончится через |c00FFFC005|r second"
+            Player = "|r победил, поздравьте его, игра закончится через |c00FFFC005|r секунд",
+            Team = "|r победила, поздравьте их, игра закончится через |c00FFFC005|r секунд"
         },
         Loose = {
             TVT = "Ваша команда проиграла, возвращайся снова, чтобы победить",
@@ -215,7 +273,7 @@ String = {
             BL = "|c0000FF40нижнем левом углу|r",
             BR = "|c0000FF40нижнем правом углу|r"
         },
-        Force = "Команда",
+        Force = "Команда ",
         Mode = {
             DM = "|c00FF0000Death Match|r режим был выбран путем голосования, приготовьтесь к бою, ваши союзники станут врагами через |c00FFFC005|r секунд",
             TVT = "|c0000FFFFTeam vs Team|r режим был выбран путем голосования, приготовьтесь к бою",
@@ -269,7 +327,7 @@ String = {
             BL = "|c0000FF40左下方|r",
             BR = "|c0000FF40右下|r"
         },
-        Force = "力",
+        Force = "力 ",
         Mode = {
             DM = "|c00FF0000死亡竞赛|r模式是通过投票准备战斗而选择的，您的盟友将在|c00FFFC005|r秒内成为敌人",
             TVT = "|c0000FFFF团队vs团队|r模式通过投票准备战斗",
@@ -877,6 +935,20 @@ function ChooseTimeElapse_Actions()
         Mode.CurrentDM = false
         KillToWin = math.ceil(KillToWin * 2 * AllPlayers / GetPlayers())
         PauseAllUnitsBJ(false)
+        local group = CreateGroup()
+        local first
+        GroupEnumUnitsInRect(group, bj_mapInitialPlayableArea, nil)
+        for i = 0, CountUnitsInGroup(group) do
+            first = FirstOfGroup(group)
+            if first ~= nil then
+                SetUnitColor(first, ConvertPlayerColor(GetPlayerTeam(GetOwningPlayer(first))))
+                GroupRemoveUnit(group, first)
+            end
+        end
+        DestroyGroup(group)
+        for i = 0, bj_MAX_PLAYERS do
+            SetPlayerColor(Player(i), ConvertPlayerColor(GetPlayerTeam(Player(i))))
+        end
     end
     ScoreTable = CreateLeaderboardBJ(GetPlayersAll(), String[BlzGetLocale()].Mode.ScoreTable[1]..KillToWin..String[BlzGetLocale()].Mode.ScoreTable[2])
     for i = 0,bj_MAX_PLAYERS-1 do
@@ -955,12 +1027,9 @@ function Death_Actions()
     local random = GetRandomInt(1,20)
     local x = GetRandomReal(GetRectMinX(SpawnRect.Revive[random]),GetRectMaxX(SpawnRect.Revive[random]))
     local y = GetRandomReal(GetRectMinY(SpawnRect.Revive[random]),GetRectMaxY(SpawnRect.Revive[random]))
-    if Hint[GetPlayerId(killerplayer)].Kill then
-        Hint[GetPlayerId(killerplayer)].Kill = false
-        DisplayTimedTextToPlayer(killerplayer, 0, 0, bj_TEXT_DELAY_ALWAYSHINT, String[BlzGetLocale()].Hint.Kill[1]..KillToWin..String[BlzGetLocale()].Hint.Kill[2])
-    end
     Stats[GetPlayerId(killerplayer)].Kill = Stats[GetPlayerId(killerplayer)].Kill + 1
-    print(Color[GetPlayerId(killerplayer)+ 1]..GetPlayerName(killerplayer)..String[BlzGetLocale()].Kill..Color[GetPlayerId(player)+ 1]..GetPlayerName(player).."|r")
+    BlzDisplayChatMessage(Player(24), 0, Color[GetPlayerId(killerplayer)+ 1]..GetPlayerName(killerplayer)..String[BlzGetLocale()].Kill..Color[GetPlayerId(player)+ 1]..GetPlayerName(player).."|r")
+    --print(Color[GetPlayerId(killerplayer)+ 1]..GetPlayerName(killerplayer)..String[BlzGetLocale()].Kill..Color[GetPlayerId(player)+ 1]..GetPlayerName(player).."|r")
     if Mode.CurrentDM == false then
         Stats.Team[GetPlayerTeam(killerplayer)] = Stats.Team[GetPlayerTeam(killerplayer)] + 1
     end
@@ -1004,10 +1073,6 @@ function Death_Actions()
     end
     Stats[GetPlayerId(player)].Death = Stats[GetPlayerId(player)].Death + 1
     random =  GetRandomInt(3,5)
-    if Hint[GetPlayerId(player)].Death then
-        Hint[GetPlayerId(player)].Death = false
-        DisplayTimedTextToPlayer(player, 0, 0, bj_TEXT_DELAY_ALWAYSHINT, String[BlzGetLocale()].Hint.Death[1]..random..String[BlzGetLocale()].Hint.Death[2])
-    end
     TimerStart(t, random,false, function()
         ReviveHero(unit, x, y, true)
         SetUnitState(unit, UNIT_STATE_MANA, Mana[GetPlayerId(player)])
@@ -1033,16 +1098,8 @@ function Damage_Actions()
     end
     BlzSetEventDamage(damage)
     local effect
-    if Hint[GetPlayerId(sourceplayer)].Mana then
-        Hint[GetPlayerId(sourceplayer)].Mana = false
-        DisplayTimedTextToPlayer(sourceplayer, 0, 0, bj_TEXT_DELAY_ALWAYSHINT, String[BlzGetLocale()].Hint.Damage)
-    end
     if GetUnitCurrentOrder(unit) == String2OrderIdBJ("defend") then
-        if Hint[GetPlayerId(player)].Parry then
-            Hint[GetPlayerId(player)].Parry = false
-            DisplayTimedTextToPlayer(player, 0, 0, bj_TEXT_DELAY_ALWAYSHINT, String[BlzGetLocale()].Hint.Parry)
-        end
-        if Counter[GetPlayerId(player)] then
+        if Counter[GetPlayerId(player)] and BlzGetEventDamageType() ~= DAMAGE_TYPE_ENHANCED then
             Counter[GetPlayerId(player)] = false
             UnitAddAbility(unit, FourCC('A004'))
             if GetPlayerController(player) == MAP_CONTROL_USER then
@@ -1051,6 +1108,7 @@ function Damage_Actions()
             IssueImmediateOrder(unit, "thunderclap")
             --PlaySoundOnUnitBJ(gg_snd_RyuKanSenTsumui, 100, GetTriggerUnit())
             TimerStart(CreateTimer(), 0.05, false, function() UnitRemoveAbility(unit, FourCC('A004')) DestroyTimer(GetExpiredTimer()) end)
+            BlzStartUnitAbilityCooldown(unit, FourCC('A000'), 3)
         end
         UnitDamageTargetBJ(unit, source, damage, BlzGetEventAttackType(), DAMAGE_TYPE_DEFENSIVE)
         SetUnitState(unit, UNIT_STATE_MANA, GetUnitState(unit, UNIT_STATE_MANA) + damage / 5)
@@ -1074,9 +1132,11 @@ function Damage_Actions()
             local textsize = 0.018 + damage / 30000
             FlyTextTag("-" .. math.ceil(damage), textsize, GetUnitX(unit) - 32, GetUnitY(unit), 32, 255, 0, 0, 255, 0, 0.03, 1.5, 2, sourceplayer)
         end
-        SetUnitState(source, UNIT_STATE_MANA, GetUnitState(source, UNIT_STATE_MANA) + damage / 5)
-        if GetPlayerController(sourceplayer) == MAP_CONTROL_USER then
-            FlyTextTagManaBurn(source, "+" .. math.ceil(damage/5), sourceplayer)
+        if IsUnitIllusion(unit) == false then
+            SetUnitState(source, UNIT_STATE_MANA, GetUnitState(source, UNIT_STATE_MANA) + damage / 5)
+            if GetPlayerController(sourceplayer) == MAP_CONTROL_USER then
+                FlyTextTagManaBurn(source, "+" .. math.ceil(damage/5), sourceplayer)
+            end
         end
         if GetUnitTypeId(source) ~= UNIT_TYPE_SUMMONED and BlzGetEventDamageType() ~= DAMAGE_TYPE_DEFENSIVE then
             TimerStart(CreateTimer(), 0.03, false, function() DestroyEffect(Effect[GetPlayerId(sourceplayer)].Crit) CritFactor[GetPlayerId(sourceplayer)] = CritDefault[GetPlayerId(sourceplayer)] DestroyTimer(GetExpiredTimer()) end)
@@ -1105,13 +1165,15 @@ function ParryAI_Actions()
     local group = CreateGroup()
     local first
     local point
+    local random
     GroupEnumUnitsInRange(group, GetUnitX(unit), GetUnitY(unit), 250, nil)
     for i = 1, CountUnitsInGroup(group) do
         first = FirstOfGroup(group)
-        if first ~= unit and IsUnitEnemy(first, player) and IsUnitVisible(first, player) and GetPlayerController(GetOwningPlayer(first)) == MAP_CONTROL_COMPUTER then
+        random = GetRandomReal(0, 100)
+        if first ~= unit and IsUnitEnemy(first, player) and IsUnitVisible(first, player) and GetPlayerController(GetOwningPlayer(first)) == MAP_CONTROL_COMPUTER and random >= 25 then
             if BlzGetUnitAbilityCooldownRemaining(first, FourCC('A000')) == 0 then
                 IssueImmediateOrder(first, "defend")
-            elseif BlzGetUnitAbilityCooldownRemaining(first, FourCC('A001')) == 0 and GetUnitState(first, UNIT_STATE_MANA) > 25 then
+            elseif BlzGetUnitAbilityCooldownRemaining(first, FourCC('A001')) == 0 and GetUnitState(first, UNIT_STATE_MANA) > 30 then
                 point = GetRandomLocInRect(bj_mapInitialPlayableArea)
                 IssuePointOrderLoc(first, "blink", point)
                 RemoveLocation(point)
@@ -1126,7 +1188,10 @@ function AttackAI_Actions()
     local unit = GetTriggerUnit()
     local attacker = GetAttacker()
     SetUnitFacingToFaceUnitTimed(unit, attacker, 0)
-    IssueImmediateOrder(unit, "shockwave")
+    local random = GetRandomReal(0, 100)
+    if random >= 25 then
+        IssueImmediateOrder(unit, "shockwave")
+    end
 end
 
 function AttackAI_Conditions()
@@ -1142,7 +1207,7 @@ function SlashAI_Actions()
     GroupEnumUnitsInRange(group, GetUnitX(unit), GetUnitY(unit), 250, nil)
     for i = 1, CountUnitsInGroup(group) do
         first = FirstOfGroup(group)
-        if first ~= unit and IsUnitEnemy(first, player) and IsUnitVisible(first, player) and GetPlayerController(GetOwningPlayer(first)) == MAP_CONTROL_COMPUTER and BlzGetUnitAbilityCooldownRemaining(first, FourCC('A003')) == 0 then
+        if first ~= unit and IsUnitEnemy(first, player) and IsUnitVisible(first, player) and GetPlayerController(GetOwningPlayer(first)) == MAP_CONTROL_COMPUTER and BlzGetUnitAbilityCooldownRemaining(first, FourCC('A003')) == 0 and IsUnitEnemy(first, unit) then
             SetUnitFacingToFaceUnitTimed(first, unit, 0)
             IssueImmediateOrder(first, "shockwave")
         end
@@ -1187,16 +1252,12 @@ function Slash_Actions()
     local group = CreateGroup()
     local unit = GetTriggerUnit()
     local player = GetOwningPlayer(unit)
-    if Hint[GetPlayerId(player)].Slash then
-        Hint[GetPlayerId(player)].Slash = false
-        DisplayTimedTextToPlayer(player, 0, 0, bj_TEXT_DELAY_ALWAYSHINT, String[BlzGetLocale()].Hint.Slash)
-    end
     local first
     local effect
     GroupEnumUnitsInRange(group,GetUnitX(unit), GetUnitY(unit),250, Filter(Slash_Filter))
     for i = 1, CountUnitsInGroup(group) do
         first = FirstOfGroup(group)
-        UnitDamageTarget(unit,first,250,true,false, ATTACK_TYPE_HERO,DAMAGE_TYPE_NORMAL, WEAPON_TYPE_WHOKNOWS)
+        UnitDamageTarget(unit,first,250,true,false, ATTACK_TYPE_HERO,DAMAGE_TYPE_MAGIC, WEAPON_TYPE_WHOKNOWS)
         effect = AddSpecialEffect("Objects\\Spawnmodels\\Human\\HumanBlood\\HumanBloodKnight.mdl", GetUnitX(first),GetUnitY(first))
         DestroyEffect(effect)
         GroupRemoveUnit(group,first)
@@ -1213,51 +1274,40 @@ end
 function Start()
     local unit
     SpawnRect = {
-        [0] = Rect(-1408.0, -128.0, -1280.0, 0.0),
-        [1] = Rect(-1408.0, -256.0, -1280.0, -128.0),
-        [2] = Rect(-1408.0, -384.0, -1280.0, -256.0),
-        [3] = Rect(-1408.0, -512.0, -1280.0, -384.0),
-        [4] = Rect(-1280.0, -128.0, -1152.0, 0.0),
-        [5] = Rect(-1280.0, -256.0, -1152.0, -128.0),
-        [6] = Rect(-1280.0, -384.0, -1152.0, -256.0),
-        [7] = Rect(-1280.0, -512.0, -1152.0, -384.0),
-        [8] = Rect(-1152.0, -128.0, -1024.0, 0.0),
-        [9] = Rect(-1152.0, -256.0, -1024.0, -128.0),
-        [10] = Rect(-1152.0, -384.0, -1024.0, -256.0),
-        [11] = Rect(-1152.0, -512.0, -1024.0, -384.0),
-        [12] = Rect(1280.0, -128.0, 1408.0, 0.0),
-        [13] = Rect(1280.0, -256.0, 1408.0, -128.0),
-        [14] = Rect(1280.0, -384.0, 1408.0, -256.0),
-        [15] = Rect(1280.0, -512.0, 1408.0, -384.0),
-        [16] = Rect(1152.0, -128.0, 1280.0, 0.0),
-        [17] = Rect(1152.0, -256.0, 1280.0, -128.0),
-        [18] = Rect(1152.0, -384.0, 1280.0, -256.0),
-        [19] = Rect(1152.0, -512.0, 1280.0, -384.0),
-        [20] = Rect(1024.0, -128.0, 1152.0, 0.0),
-        [21] = Rect(1024.0, -256.0, 1152.0, -128.0),
-        [22] = Rect(1024.0, -384.0, 1152.0, -256.0),
-        [23] = Rect(1024.0, -512.0, 1152.0, -384.0),
+        [0] = gg_rct_Region_001, --Rect(-1408.0, -128.0, -1280.0, 0.0),
+        [1] = gg_rct_Region_002, --Rect(-1408.0, -256.0, -1280.0, -128.0),
+        [2] = gg_rct_Region_003, --Rect(-1408.0, -384.0, -1280.0, -256.0),
+        [3] = gg_rct_Region_004, --Rect(-1408.0, -512.0, -1280.0, -384.0),
+        [4] = gg_rct_Region_005, --Rect(-1280.0, -128.0, -1152.0, 0.0),
+        [5] = gg_rct_Region_006, --Rect(-1280.0, -256.0, -1152.0, -128.0),
+
+        [11] = gg_rct_Region_007, --Rect(-1152.0, -512.0, -1024.0, -384.0),
+        [12] = gg_rct_Region_008, --Rect(1280.0, -128.0, 1408.0, 0.0),
+        [13] = gg_rct_Region_009, --Rect(1280.0, -256.0, 1408.0, -128.0),
+        [14] = gg_rct_Region_010, --Rect(1280.0, -384.0, 1408.0, -256.0),
+        [15] = gg_rct_Region_011, --Rect(1280.0, -512.0, 1408.0, -384.0),
+        [16] = gg_rct_Region_012, --Rect(1152.0, -128.0, 1280.0, 0.0),
         Revive = {
-            [1] = Rect(-1536.0, -1408.0, -1152.0, -896.0),
-            [2] = Rect(1152.0, -1408.0, 1536.0, -896.0),
-            [3] = Rect(-512.0, -3200.0, 512.0, -2816.0),
-            [4] = Rect(-512.0, 2304.0, 512.0, 2688.0),
-            [5] = Rect(-1536.0, 384.0, -1152.0, 896.0),
-            [6] = Rect(1152.0, 384.0, 1536.0, 896.0),
-            [7] = Rect(-1024.0, -1792.0, -384.0, -1536.0),
-            [8] = Rect(384.0, -1792.0, 1024.0, -1536.0),
-            [9] = Rect(-1024.0, 1024.0, -384.0, 1280.0),
-            [10] = Rect(384.0, 1024.0, 1024.0, 1280.0),
-            [11] = Rect(-1536.0, -640.0, -768.0, 128.0),
-            [12] = Rect(768.0, -640.0, 1536.0, 128.0),
-            [13] = Rect(-1152.0, -2560.0, -640.0, -2048.0),
-            [14] = Rect(640.0, -2560.0, 1152.0, -2048.0),
-            [15] = Rect(-1152.0, 1536.0, -640.0, 2048.0),
-            [16] = Rect(640.0, 1536.0, 1152.0, 2048.0),
-            [17] = Rect(-1024.0, 384.0, -384.0, 768.0), --center top left
-            [18] = Rect(384.0, 384.0, 1024.0, 768.0), --center top right
-            [19] = Rect(-1024.0, -1280.0, -384.0, -896.0), --center bottom left
-            [20] = Rect(384.0, -1280.0, 1024.0, -896.0)  --center bottom right
+            [1] = gg_rct_Region_015, --Rect(-1536.0, -1408.0, -1152.0, -896.0), --center top left
+            [2] = gg_rct_Region_016, --Rect(1152.0, -1408.0, 1536.0, -896.0), --center top right
+            [3] = gg_rct_Region_013, --Rect(-512.0, -3200.0, 512.0, -2816.0), --center bottom left
+            [4] = gg_rct_Region_014, --Rect(-512.0, 2304.0, 512.0, 2688.0),  --center bottom right
+            [5] = gg_rct_Region_029, --Rect(-1536.0, 384.0, -1152.0, 896.0),
+            [6] = gg_rct_Region_030, --Rect(1152.0, 384.0, 1536.0, 896.0),
+            [7] = gg_rct_Region_017, --Rect(-1024.0, -1792.0, -384.0, -1536.0),
+            [8] = gg_rct_Region_018, --Rect(384.0, -1792.0, 1024.0, -1536.0),
+            [9] = gg_rct_Region_019, --Rect(-1024.0, 1024.0, -384.0, 1280.0),
+            [10] = gg_rct_Region_020, --Rect(384.0, 1024.0, 1024.0, 1280.0),
+            [11] = gg_rct_Region_021, --Rect(-1536.0, -640.0, -768.0, 128.0),
+            [12] = gg_rct_Region_022, --Rect(768.0, -640.0, 1536.0, 128.0),
+            [13] = gg_rct_Region_023, --Rect(-1152.0, -2560.0, -640.0, -2048.0),
+            [14] = gg_rct_Region_024, --Rect(640.0, -2560.0, 1152.0, -2048.0),
+            [15] = gg_rct_Region_025, --Rect(-1152.0, 1536.0, -640.0, 2048.0),
+            [16] = gg_rct_Region_026, --Rect(640.0, 1536.0, 1152.0, 2048.0),
+            [17] = gg_rct_Region_027, --Rect(-1024.0, 384.0, -384.0, 768.0),
+            [18] = gg_rct_Region_028, --Rect(384.0, 384.0, 1024.0, 768.0),
+            [19] = gg_rct_Region_002, --Rect(-1024.0, -1280.0, -384.0, -896.0),
+            [20] = gg_rct_Region_011, --Rect(384.0, -1280.0, 1024.0, -896.0)
         }
     }
     Team = {
@@ -1278,19 +1328,12 @@ function Start()
         [1] = 0
     }
     for i = 0, bj_MAX_PLAYERS-1 do
-        Hint[i] = {
-            Death = true,
-            Mana = true,
-            Parry = true,
-            Slash = true,
-            Kill = true
-        }
         FogModifierStart(CreateFogModifierRect(Player(i), FOG_OF_WAR_VISIBLE, GetPlayableMapRect(), true, false))
     end
 
     for i = 0, bj_MAX_PLAYERS-1 do
         if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING then
-            unit = CreateUnit(Player(i),FourCC("O000"), GetRectCenterX(SpawnRect[i]), GetRectCenterY(SpawnRect[i]),GetPlayerTeam(Player(i))*180)
+            unit = CreateUnit(Player(i),FourCC("O000"), GetRectCenterX(SpawnRect[i]), GetRectCenterY(SpawnRect[i]),90+GetPlayerTeam(Player(i))*180)
             if GetPlayerController(Player(i)) == MAP_CONTROL_COMPUTER then
                 TriggerRegisterUnitInRange(Trigger.SlashAI, unit, 250, nil)
                 TriggerRegisterPlayerUnitEvent(Trigger.AttackAI, Player(i), EVENT_PLAYER_UNIT_ATTACKED, nil)
@@ -1316,6 +1359,7 @@ function Start()
     end
     PauseAllUnitsBJ(true)
     TimerStart(CreateTimer(), 15, true, SpawnBoost)
+    SetPlayerName(Player(24), " ")
 end
 function ParryEffect_Actions()
     local player = GetOwningPlayer(GetTriggerUnit())
@@ -1486,17 +1530,24 @@ function PrintDamage(showdamage, damage, damagetype, attacktype, weapontype, sho
     end
 end
 function SpawnBoost()
-    local random = GetRandomInt(17, 20)
+    local random = GetRandomInt(1, 4)
     local rectname = {
-        [17] = String[BlzGetLocale()].Rect.TL,
-        [18]  = String[BlzGetLocale()].Rect.TR,
-        [19] = String[BlzGetLocale()].Rect.BL,
-        [20] = String[BlzGetLocale()].Rect.BR
+        [1] = String[BlzGetLocale()].Rect.TL,
+        [2]  = String[BlzGetLocale()].Rect.TR,
+        [3] = String[BlzGetLocale()].Rect.BL,
+        [4] = String[BlzGetLocale()].Rect.BR
     }
     local x = GetRectCenterX(SpawnRect.Revive[random])
     local y = GetRectCenterY(SpawnRect.Revive[random])
     local item = CreateItem(Boost[GetRandomInt(1, Boost.Count)], x, y)
-    print("|c00FFFC00"..GetItemName(item)..String[BlzGetLocale()].Rune[1]..rectname[random]..String[BlzGetLocale()].Rune[2])
+    local red = BlzGetItemIntegerField(item, ITEM_IF_TINTING_COLOR_RED)
+    local green = BlzGetItemIntegerField(item, ITEM_IF_TINTING_COLOR_GREEN)
+    local blue = BlzGetItemIntegerField(item, ITEM_IF_TINTING_COLOR_BLUE)
+    --print("|c00FFFC00"..GetItemName(item)..String[BlzGetLocale()].Rune[1]..rectname[random]..String[BlzGetLocale()].Rune[2])
+    --BlzDisplayChatMessage(Player(24), 0, "|c00FFFC00"..GetItemName(item)..String[BlzGetLocale()].Rune[1]..rectname[random]..String[BlzGetLocale()].Rune[2])
+    local minimapicon = CreateMinimapIcon(x, y, red, green, blue, "UI\\Minimap\\Minimap-QuestObjectivePrimary.mdl", FOG_OF_WAR_VISIBLE)
+    PingMinimap(x, y, 3)
+    TimerStart(CreateTimer(), 3, false, function() DestroyMinimapIcon(minimapicon) DestroyTimer(GetExpiredTimer()) end)
 end
 --CUSTOM_CODE
 function Trig_Initialization_Actions()
@@ -1661,42 +1712,42 @@ function InitCustomPlayerSlots()
     SetPlayerRacePreference(Player(5), RACE_PREF_ORC)
     SetPlayerRaceSelectable(Player(5), false)
     SetPlayerController(Player(5), MAP_CONTROL_USER)
-    SetPlayerStartLocation(Player(12), 6)
-    ForcePlayerStartLocation(Player(12), 6)
+    SetPlayerStartLocation(Player(11), 6)
+    ForcePlayerStartLocation(Player(11), 6)
+    SetPlayerColor(Player(11), ConvertPlayerColor(11))
+    SetPlayerRacePreference(Player(11), RACE_PREF_ORC)
+    SetPlayerRaceSelectable(Player(11), false)
+    SetPlayerController(Player(11), MAP_CONTROL_USER)
+    SetPlayerStartLocation(Player(12), 7)
+    ForcePlayerStartLocation(Player(12), 7)
     SetPlayerColor(Player(12), ConvertPlayerColor(12))
     SetPlayerRacePreference(Player(12), RACE_PREF_ORC)
     SetPlayerRaceSelectable(Player(12), false)
     SetPlayerController(Player(12), MAP_CONTROL_USER)
-    SetPlayerStartLocation(Player(13), 7)
-    ForcePlayerStartLocation(Player(13), 7)
+    SetPlayerStartLocation(Player(13), 8)
+    ForcePlayerStartLocation(Player(13), 8)
     SetPlayerColor(Player(13), ConvertPlayerColor(13))
     SetPlayerRacePreference(Player(13), RACE_PREF_ORC)
     SetPlayerRaceSelectable(Player(13), false)
     SetPlayerController(Player(13), MAP_CONTROL_USER)
-    SetPlayerStartLocation(Player(14), 8)
-    ForcePlayerStartLocation(Player(14), 8)
+    SetPlayerStartLocation(Player(14), 9)
+    ForcePlayerStartLocation(Player(14), 9)
     SetPlayerColor(Player(14), ConvertPlayerColor(14))
     SetPlayerRacePreference(Player(14), RACE_PREF_ORC)
     SetPlayerRaceSelectable(Player(14), false)
     SetPlayerController(Player(14), MAP_CONTROL_USER)
-    SetPlayerStartLocation(Player(15), 9)
-    ForcePlayerStartLocation(Player(15), 9)
+    SetPlayerStartLocation(Player(15), 10)
+    ForcePlayerStartLocation(Player(15), 10)
     SetPlayerColor(Player(15), ConvertPlayerColor(15))
     SetPlayerRacePreference(Player(15), RACE_PREF_ORC)
     SetPlayerRaceSelectable(Player(15), false)
     SetPlayerController(Player(15), MAP_CONTROL_USER)
-    SetPlayerStartLocation(Player(16), 10)
-    ForcePlayerStartLocation(Player(16), 10)
+    SetPlayerStartLocation(Player(16), 11)
+    ForcePlayerStartLocation(Player(16), 11)
     SetPlayerColor(Player(16), ConvertPlayerColor(16))
     SetPlayerRacePreference(Player(16), RACE_PREF_ORC)
     SetPlayerRaceSelectable(Player(16), false)
     SetPlayerController(Player(16), MAP_CONTROL_USER)
-    SetPlayerStartLocation(Player(17), 11)
-    ForcePlayerStartLocation(Player(17), 11)
-    SetPlayerColor(Player(17), ConvertPlayerColor(17))
-    SetPlayerRacePreference(Player(17), RACE_PREF_ORC)
-    SetPlayerRaceSelectable(Player(17), false)
-    SetPlayerController(Player(17), MAP_CONTROL_USER)
 end
 
 function InitCustomTeams()
@@ -1766,72 +1817,72 @@ function InitCustomTeams()
     SetPlayerAllianceStateVisionBJ(Player(5), Player(2), true)
     SetPlayerAllianceStateVisionBJ(Player(5), Player(3), true)
     SetPlayerAllianceStateVisionBJ(Player(5), Player(4), true)
+    SetPlayerTeam(Player(11), 1)
     SetPlayerTeam(Player(12), 1)
     SetPlayerTeam(Player(13), 1)
     SetPlayerTeam(Player(14), 1)
     SetPlayerTeam(Player(15), 1)
     SetPlayerTeam(Player(16), 1)
-    SetPlayerTeam(Player(17), 1)
+    SetPlayerAllianceStateAllyBJ(Player(11), Player(12), true)
+    SetPlayerAllianceStateAllyBJ(Player(11), Player(13), true)
+    SetPlayerAllianceStateAllyBJ(Player(11), Player(14), true)
+    SetPlayerAllianceStateAllyBJ(Player(11), Player(15), true)
+    SetPlayerAllianceStateAllyBJ(Player(11), Player(16), true)
+    SetPlayerAllianceStateAllyBJ(Player(12), Player(11), true)
     SetPlayerAllianceStateAllyBJ(Player(12), Player(13), true)
     SetPlayerAllianceStateAllyBJ(Player(12), Player(14), true)
     SetPlayerAllianceStateAllyBJ(Player(12), Player(15), true)
     SetPlayerAllianceStateAllyBJ(Player(12), Player(16), true)
-    SetPlayerAllianceStateAllyBJ(Player(12), Player(17), true)
+    SetPlayerAllianceStateAllyBJ(Player(13), Player(11), true)
     SetPlayerAllianceStateAllyBJ(Player(13), Player(12), true)
     SetPlayerAllianceStateAllyBJ(Player(13), Player(14), true)
     SetPlayerAllianceStateAllyBJ(Player(13), Player(15), true)
     SetPlayerAllianceStateAllyBJ(Player(13), Player(16), true)
-    SetPlayerAllianceStateAllyBJ(Player(13), Player(17), true)
+    SetPlayerAllianceStateAllyBJ(Player(14), Player(11), true)
     SetPlayerAllianceStateAllyBJ(Player(14), Player(12), true)
     SetPlayerAllianceStateAllyBJ(Player(14), Player(13), true)
     SetPlayerAllianceStateAllyBJ(Player(14), Player(15), true)
     SetPlayerAllianceStateAllyBJ(Player(14), Player(16), true)
-    SetPlayerAllianceStateAllyBJ(Player(14), Player(17), true)
+    SetPlayerAllianceStateAllyBJ(Player(15), Player(11), true)
     SetPlayerAllianceStateAllyBJ(Player(15), Player(12), true)
     SetPlayerAllianceStateAllyBJ(Player(15), Player(13), true)
     SetPlayerAllianceStateAllyBJ(Player(15), Player(14), true)
     SetPlayerAllianceStateAllyBJ(Player(15), Player(16), true)
-    SetPlayerAllianceStateAllyBJ(Player(15), Player(17), true)
+    SetPlayerAllianceStateAllyBJ(Player(16), Player(11), true)
     SetPlayerAllianceStateAllyBJ(Player(16), Player(12), true)
     SetPlayerAllianceStateAllyBJ(Player(16), Player(13), true)
     SetPlayerAllianceStateAllyBJ(Player(16), Player(14), true)
     SetPlayerAllianceStateAllyBJ(Player(16), Player(15), true)
-    SetPlayerAllianceStateAllyBJ(Player(16), Player(17), true)
-    SetPlayerAllianceStateAllyBJ(Player(17), Player(12), true)
-    SetPlayerAllianceStateAllyBJ(Player(17), Player(13), true)
-    SetPlayerAllianceStateAllyBJ(Player(17), Player(14), true)
-    SetPlayerAllianceStateAllyBJ(Player(17), Player(15), true)
-    SetPlayerAllianceStateAllyBJ(Player(17), Player(16), true)
+    SetPlayerAllianceStateVisionBJ(Player(11), Player(12), true)
+    SetPlayerAllianceStateVisionBJ(Player(11), Player(13), true)
+    SetPlayerAllianceStateVisionBJ(Player(11), Player(14), true)
+    SetPlayerAllianceStateVisionBJ(Player(11), Player(15), true)
+    SetPlayerAllianceStateVisionBJ(Player(11), Player(16), true)
+    SetPlayerAllianceStateVisionBJ(Player(12), Player(11), true)
     SetPlayerAllianceStateVisionBJ(Player(12), Player(13), true)
     SetPlayerAllianceStateVisionBJ(Player(12), Player(14), true)
     SetPlayerAllianceStateVisionBJ(Player(12), Player(15), true)
     SetPlayerAllianceStateVisionBJ(Player(12), Player(16), true)
-    SetPlayerAllianceStateVisionBJ(Player(12), Player(17), true)
+    SetPlayerAllianceStateVisionBJ(Player(13), Player(11), true)
     SetPlayerAllianceStateVisionBJ(Player(13), Player(12), true)
     SetPlayerAllianceStateVisionBJ(Player(13), Player(14), true)
     SetPlayerAllianceStateVisionBJ(Player(13), Player(15), true)
     SetPlayerAllianceStateVisionBJ(Player(13), Player(16), true)
-    SetPlayerAllianceStateVisionBJ(Player(13), Player(17), true)
+    SetPlayerAllianceStateVisionBJ(Player(14), Player(11), true)
     SetPlayerAllianceStateVisionBJ(Player(14), Player(12), true)
     SetPlayerAllianceStateVisionBJ(Player(14), Player(13), true)
     SetPlayerAllianceStateVisionBJ(Player(14), Player(15), true)
     SetPlayerAllianceStateVisionBJ(Player(14), Player(16), true)
-    SetPlayerAllianceStateVisionBJ(Player(14), Player(17), true)
+    SetPlayerAllianceStateVisionBJ(Player(15), Player(11), true)
     SetPlayerAllianceStateVisionBJ(Player(15), Player(12), true)
     SetPlayerAllianceStateVisionBJ(Player(15), Player(13), true)
     SetPlayerAllianceStateVisionBJ(Player(15), Player(14), true)
     SetPlayerAllianceStateVisionBJ(Player(15), Player(16), true)
-    SetPlayerAllianceStateVisionBJ(Player(15), Player(17), true)
+    SetPlayerAllianceStateVisionBJ(Player(16), Player(11), true)
     SetPlayerAllianceStateVisionBJ(Player(16), Player(12), true)
     SetPlayerAllianceStateVisionBJ(Player(16), Player(13), true)
     SetPlayerAllianceStateVisionBJ(Player(16), Player(14), true)
     SetPlayerAllianceStateVisionBJ(Player(16), Player(15), true)
-    SetPlayerAllianceStateVisionBJ(Player(16), Player(17), true)
-    SetPlayerAllianceStateVisionBJ(Player(17), Player(12), true)
-    SetPlayerAllianceStateVisionBJ(Player(17), Player(13), true)
-    SetPlayerAllianceStateVisionBJ(Player(17), Player(14), true)
-    SetPlayerAllianceStateVisionBJ(Player(17), Player(15), true)
-    SetPlayerAllianceStateVisionBJ(Player(17), Player(16), true)
 end
 
 function InitAllyPriorities()
@@ -1982,13 +2033,15 @@ function InitAllyPriorities()
 end
 
 function main()
-    SetCameraBounds(-3328.0 + GetCameraMargin(CAMERA_MARGIN_LEFT), -3584.0 + GetCameraMargin(CAMERA_MARGIN_BOTTOM), 3328.0 - GetCameraMargin(CAMERA_MARGIN_RIGHT), 3072.0 - GetCameraMargin(CAMERA_MARGIN_TOP), -3328.0 + GetCameraMargin(CAMERA_MARGIN_LEFT), 3072.0 - GetCameraMargin(CAMERA_MARGIN_TOP), 3328.0 - GetCameraMargin(CAMERA_MARGIN_RIGHT), -3584.0 + GetCameraMargin(CAMERA_MARGIN_BOTTOM))
+    SetCameraBounds(5888.0 + GetCameraMargin(CAMERA_MARGIN_LEFT), -16384.0 + GetCameraMargin(CAMERA_MARGIN_BOTTOM), 12544.0 - GetCameraMargin(CAMERA_MARGIN_RIGHT), -9088.0 - GetCameraMargin(CAMERA_MARGIN_TOP), 5888.0 + GetCameraMargin(CAMERA_MARGIN_LEFT), -9088.0 - GetCameraMargin(CAMERA_MARGIN_TOP), 12544.0 - GetCameraMargin(CAMERA_MARGIN_RIGHT), -16384.0 + GetCameraMargin(CAMERA_MARGIN_BOTTOM))
     SetDayNightModels("Environment\\DNC\\DNCLordaeron\\DNCLordaeronTerrain\\DNCLordaeronTerrain.mdl", "Environment\\DNC\\DNCLordaeron\\DNCLordaeronUnit\\DNCLordaeronUnit.mdl")
+    SetTerrainFogEx(0, 3000.0, 5000.0, 8.500, 0.502, 0.502, 0.502)
     NewSoundEnvironment("Default")
-    SetAmbientDaySound("BarrensDay")
-    SetAmbientNightSound("BarrensNight")
+    SetAmbientDaySound("LordaeronWinterDay")
+    SetAmbientNightSound("LordaeronWinterNight")
     SetMapMusic("Music", true, 0)
     InitSounds()
+    CreateRegions()
     CreateAllItems()
     InitBlizzard()
     InitGlobals()
@@ -2002,18 +2055,18 @@ function config()
     SetPlayers(12)
     SetTeams(12)
     SetGamePlacement(MAP_PLACEMENT_TEAMS_TOGETHER)
-    DefineStartLocation(0, 3008.0, 3968.0)
-    DefineStartLocation(1, 3008.0, 3968.0)
-    DefineStartLocation(2, 3008.0, 3968.0)
-    DefineStartLocation(3, 3008.0, 3968.0)
-    DefineStartLocation(4, 3008.0, 3968.0)
-    DefineStartLocation(5, 3008.0, 3968.0)
-    DefineStartLocation(6, 3008.0, 3968.0)
-    DefineStartLocation(7, 3008.0, 3968.0)
-    DefineStartLocation(8, 3008.0, 3968.0)
-    DefineStartLocation(9, 3008.0, 3968.0)
-    DefineStartLocation(10, 3008.0, 3968.0)
-    DefineStartLocation(11, 3008.0, 3968.0)
+    DefineStartLocation(0, 11456.0, -9728.0)
+    DefineStartLocation(1, 11456.0, -9728.0)
+    DefineStartLocation(2, 11456.0, -9728.0)
+    DefineStartLocation(3, 11456.0, -9728.0)
+    DefineStartLocation(4, 11456.0, -9728.0)
+    DefineStartLocation(5, 11456.0, -9728.0)
+    DefineStartLocation(6, 11456.0, -9728.0)
+    DefineStartLocation(7, 11456.0, -9728.0)
+    DefineStartLocation(8, 11456.0, -9728.0)
+    DefineStartLocation(9, 11456.0, -9728.0)
+    DefineStartLocation(10, 11456.0, -9728.0)
+    DefineStartLocation(11, 11456.0, -9728.0)
     InitCustomPlayerSlots()
     InitCustomTeams()
     InitAllyPriorities()

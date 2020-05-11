@@ -132,7 +132,7 @@ String = {
             BL = "|c0000FF40bottom left|r",
             BR = "|c0000FF40bottom right|r"
         },
-        Force = "Force",
+        Force = "Force ",
         Mode = {
             DM = "|c00FF0000Death Match|r mode was chosen by voting prepare to fight, your allies will become to enemy in |c00FFFC005|r second",
             TVT = "|c0000FFFFTeam vs Team|r mode was chosen by voting prepare to fight",
@@ -155,8 +155,8 @@ String = {
             [2] = " центральной области"
         },
         Win = {
-            Player = "|r победил, поздравьте его, игра закончится через |c00FFFC005|r second",
-            Team = "|r победила, поздравьте их, игра закончится через |c00FFFC005|r second"
+            Player = "|r победил, поздравьте его, игра закончится через |c00FFFC005|r секунд",
+            Team = "|r победила, поздравьте их, игра закончится через |c00FFFC005|r секунд"
         },
         Loose = {
             TVT = "Ваша команда проиграла, возвращайся снова, чтобы победить",
@@ -186,7 +186,7 @@ String = {
             BL = "|c0000FF40нижнем левом углу|r",
             BR = "|c0000FF40нижнем правом углу|r"
         },
-        Force = "Команда",
+        Force = "Команда ",
         Mode = {
             DM = "|c00FF0000Death Match|r режим был выбран путем голосования, приготовьтесь к бою, ваши союзники станут врагами через |c00FFFC005|r секунд",
             TVT = "|c0000FFFFTeam vs Team|r режим был выбран путем голосования, приготовьтесь к бою",
@@ -240,7 +240,7 @@ String = {
             BL = "|c0000FF40左下方|r",
             BR = "|c0000FF40右下|r"
         },
-        Force = "力",
+        Force = "力 ",
         Mode = {
             DM = "|c00FF0000死亡竞赛|r模式是通过投票准备战斗而选择的，您的盟友将在|c00FFFC005|r秒内成为敌人",
             TVT = "|c0000FFFF团队vs团队|r模式通过投票准备战斗",

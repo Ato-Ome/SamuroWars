@@ -4,13 +4,15 @@ function ParryAI_Actions()
     local group = CreateGroup()
     local first
     local point
+    local random
     GroupEnumUnitsInRange(group, GetUnitX(unit), GetUnitY(unit), 250, nil)
     for i = 1, CountUnitsInGroup(group) do
         first = FirstOfGroup(group)
-        if first ~= unit and IsUnitEnemy(first, player) and IsUnitVisible(first, player) and GetPlayerController(GetOwningPlayer(first)) == MAP_CONTROL_COMPUTER then
+        random = GetRandomReal(0, 100)
+        if first ~= unit and IsUnitEnemy(first, player) and IsUnitVisible(first, player) and GetPlayerController(GetOwningPlayer(first)) == MAP_CONTROL_COMPUTER and random >= 25 then
             if BlzGetUnitAbilityCooldownRemaining(first, FourCC('A000')) == 0 then
                 IssueImmediateOrder(first, "defend")
-            elseif BlzGetUnitAbilityCooldownRemaining(first, FourCC('A001')) == 0 and GetUnitState(first, UNIT_STATE_MANA) > 25 then
+            elseif BlzGetUnitAbilityCooldownRemaining(first, FourCC('A001')) == 0 and GetUnitState(first, UNIT_STATE_MANA) > 30 then
                 point = GetRandomLocInRect(bj_mapInitialPlayableArea)
                 IssuePointOrderLoc(first, "blink", point)
                 RemoveLocation(point)
@@ -25,7 +27,10 @@ function AttackAI_Actions()
     local unit = GetTriggerUnit()
     local attacker = GetAttacker()
     SetUnitFacingToFaceUnitTimed(unit, attacker, 0)
-    IssueImmediateOrder(unit, "shockwave")
+    local random = GetRandomReal(0, 100)
+    if random >= 25 then
+        IssueImmediateOrder(unit, "shockwave")
+    end
 end
 
 function AttackAI_Conditions()
@@ -41,7 +46,7 @@ function SlashAI_Actions()
     GroupEnumUnitsInRange(group, GetUnitX(unit), GetUnitY(unit), 250, nil)
     for i = 1, CountUnitsInGroup(group) do
         first = FirstOfGroup(group)
-        if first ~= unit and IsUnitEnemy(first, player) and IsUnitVisible(first, player) and GetPlayerController(GetOwningPlayer(first)) == MAP_CONTROL_COMPUTER and BlzGetUnitAbilityCooldownRemaining(first, FourCC('A003')) == 0 then
+        if first ~= unit and IsUnitEnemy(first, player) and IsUnitVisible(first, player) and GetPlayerController(GetOwningPlayer(first)) == MAP_CONTROL_COMPUTER and BlzGetUnitAbilityCooldownRemaining(first, FourCC('A003')) == 0 and IsUnitEnemy(first, unit) then
             SetUnitFacingToFaceUnitTimed(first, unit, 0)
             IssueImmediateOrder(first, "shockwave")
         end
@@ -86,16 +91,12 @@ function Slash_Actions()
     local group = CreateGroup()
     local unit = GetTriggerUnit()
     local player = GetOwningPlayer(unit)
-    if Hint[GetPlayerId(player)].Slash then
-        Hint[GetPlayerId(player)].Slash = false
-        DisplayTimedTextToPlayer(player, 0, 0, bj_TEXT_DELAY_ALWAYSHINT, String[BlzGetLocale()].Hint.Slash)
-    end
     local first
     local effect
     GroupEnumUnitsInRange(group,GetUnitX(unit), GetUnitY(unit),250, Filter(Slash_Filter))
     for i = 1, CountUnitsInGroup(group) do
         first = FirstOfGroup(group)
-        UnitDamageTarget(unit,first,250,true,false, ATTACK_TYPE_HERO,DAMAGE_TYPE_NORMAL, WEAPON_TYPE_WHOKNOWS)
+        UnitDamageTarget(unit,first,250,true,false, ATTACK_TYPE_HERO,DAMAGE_TYPE_MAGIC, WEAPON_TYPE_WHOKNOWS)
         effect = AddSpecialEffect("Objects\\Spawnmodels\\Human\\HumanBlood\\HumanBloodKnight.mdl", GetUnitX(first),GetUnitY(first))
         DestroyEffect(effect)
         GroupRemoveUnit(group,first)

@@ -9,16 +9,8 @@ function Damage_Actions()
     end
     BlzSetEventDamage(damage)
     local effect
-    if Hint[GetPlayerId(sourceplayer)].Mana then
-        Hint[GetPlayerId(sourceplayer)].Mana = false
-        DisplayTimedTextToPlayer(sourceplayer, 0, 0, bj_TEXT_DELAY_ALWAYSHINT, String[BlzGetLocale()].Hint.Damage)
-    end
     if GetUnitCurrentOrder(unit) == String2OrderIdBJ("defend") then
-        if Hint[GetPlayerId(player)].Parry then
-            Hint[GetPlayerId(player)].Parry = false
-            DisplayTimedTextToPlayer(player, 0, 0, bj_TEXT_DELAY_ALWAYSHINT, String[BlzGetLocale()].Hint.Parry)
-        end
-        if Counter[GetPlayerId(player)] then
+        if Counter[GetPlayerId(player)] and BlzGetEventDamageType() ~= DAMAGE_TYPE_ENHANCED then
             Counter[GetPlayerId(player)] = false
             UnitAddAbility(unit, FourCC('A004'))
             if GetPlayerController(player) == MAP_CONTROL_USER then
@@ -27,6 +19,7 @@ function Damage_Actions()
             IssueImmediateOrder(unit, "thunderclap")
             --PlaySoundOnUnitBJ(gg_snd_RyuKanSenTsumui, 100, GetTriggerUnit())
             TimerStart(CreateTimer(), 0.05, false, function() UnitRemoveAbility(unit, FourCC('A004')) DestroyTimer(GetExpiredTimer()) end)
+            BlzStartUnitAbilityCooldown(unit, FourCC('A000'), 3)
         end
         UnitDamageTargetBJ(unit, source, damage, BlzGetEventAttackType(), DAMAGE_TYPE_DEFENSIVE)
         SetUnitState(unit, UNIT_STATE_MANA, GetUnitState(unit, UNIT_STATE_MANA) + damage / 5)
@@ -50,9 +43,11 @@ function Damage_Actions()
             local textsize = 0.018 + damage / 30000
             FlyTextTag("-" .. math.ceil(damage), textsize, GetUnitX(unit) - 32, GetUnitY(unit), 32, 255, 0, 0, 255, 0, 0.03, 1.5, 2, sourceplayer)
         end
-        SetUnitState(source, UNIT_STATE_MANA, GetUnitState(source, UNIT_STATE_MANA) + damage / 5)
-        if GetPlayerController(sourceplayer) == MAP_CONTROL_USER then
-            FlyTextTagManaBurn(source, "+" .. math.ceil(damage/5), sourceplayer)
+        if IsUnitIllusion(unit) == false then
+            SetUnitState(source, UNIT_STATE_MANA, GetUnitState(source, UNIT_STATE_MANA) + damage / 5)
+            if GetPlayerController(sourceplayer) == MAP_CONTROL_USER then
+                FlyTextTagManaBurn(source, "+" .. math.ceil(damage/5), sourceplayer)
+            end
         end
         if GetUnitTypeId(source) ~= UNIT_TYPE_SUMMONED and BlzGetEventDamageType() ~= DAMAGE_TYPE_DEFENSIVE then
             TimerStart(CreateTimer(), 0.03, false, function() DestroyEffect(Effect[GetPlayerId(sourceplayer)].Crit) CritFactor[GetPlayerId(sourceplayer)] = CritDefault[GetPlayerId(sourceplayer)] DestroyTimer(GetExpiredTimer()) end)

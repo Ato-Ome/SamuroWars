@@ -1,325 +1,325 @@
 ﻿STRING 1
 {
-|c00FF0080萨穆罗战争|r 1.0
+|c00FF0080Samuro Wars|r 1.1
 }
 
 STRING 3
 {
 |c00FFFC01WarCraft III: Reforged|r
-两种模式的动态砍刀: |c0000FFFF团队vs团队|r 和 |c00FF0000死亡比赛|r
-证明你是最好的武士
+动态剪切器有两种模式： |c0000FFFFTeam vs Team|r 和 |c00FF0000Death Match|r
+证明你是最好的武士!
 
 xgm.guru/p/samurowars - 信息
 }
 
 STRING 4
 {
-Phoenix  (AtoOme)
+Phoenix | AtoOme
 }
 
-STRING 5
-{
-播放器 1
-}
-
-STRING 6
-{
-播放器 2
-}
-
-STRING 7
-{
-播放器 3
-}
-
-STRING 8
-{
-播放器 4
-}
-
-STRING 29
-{
-力 1
-}
-
-STRING 38
-// Abilities: A002 (Bladestorm), Researchhotkey (Hotkey - Learn)
-{
-R
-}
-
-STRING 39
-// Abilities: A002 (Bladestorm), Hotkey (Hotkey - Normal)
-{
-R
-}
-
-STRING 46
-// Abilities: A000 (Parry), Hotkey (Hotkey - Normal)
-{
-W
-}
-
-STRING 47
-// Abilities: A001 (Jump), Researchhotkey (Hotkey - Learn)
-{
-W
-}
-
-STRING 48
-// Abilities: A004 (Counter Attack), Hotkey (Hotkey - Normal)
-{
-E
-}
-
-STRING 52
-// Abilities: A003 (Slash Attack), Hotkey (Hotkey - Normal)
-{
-Q
-}
-
-STRING 56
-{
-力 2
-}
-
-STRING 64
-// Abilities: A000 (Parry), Name (Name)
-{
-帕里
-}
-
-STRING 65
-// Abilities: A000 (Parry), Tip (Tooltip - Normal)
-{
-帕里
-}
-
-STRING 67
-// Abilities: A001 (Jump), Tip (Tooltip - Normal)
-{
-跳
-}
-
-STRING 68
-// Abilities: A001 (Jump), Name (Name)
-{
-跳
-}
-
-STRING 69
-// Abilities: A001 (Jump), Ubertip (Tooltip - Normal - Extended)
-{
-跳跃一小段距离，留下一团灰尘
-}
-
-STRING 71
-// Abilities: A002 (Bladestorm), Tip (Tooltip - Normal)
-{
-剑刃风暴
-}
-
-STRING 72
-// Abilities: A002 (Bladestorm), Name (Name)
-{
-剑刃风暴
-}
-
-STRING 73
-// Abilities: A003 (Slash Attack), Name (Name)
-{
-斩击
-}
-
-STRING 74
-// Abilities: A003 (Slash Attack), Tip (Tooltip - Normal)
-{
-斩击
-}
-
-STRING 76
-{
-播放器 13
-}
-
-STRING 77
-{
-播放器 14
-}
-
-STRING 78
-{
-播放器 15
-}
-
-STRING 79
-{
-播放器 16
-}
-
-STRING 80
-// Abilities: A002 (Bladestorm), Ubertip (Tooltip - Normal - Extended)
-{
-旋转的破坏力环绕着叶片的主人 350 损伤 / 第二 附近的地面敌人. |n持续时间：3秒 |n|Cffffcc00在旋风状态下无法伤害敌人|r
-}
-
-STRING 81
+STRING 112
 {
 2-12
 }
 
-STRING 82
+STRING 113
+{
+ |n
+}
+
+STRING 114
+{
+ |n
+}
+
+STRING 115
+{
+ |n
+}
+
+STRING 116
+{
+播放器 1
+}
+
+STRING 117
+{
+播放器 2
+}
+
+STRING 118
+{
+播放器 3
+}
+
+STRING 119
+{
+播放器 4
+}
+
+STRING 120
+{
+播放器 5
+}
+
+STRING 121
+{
+播放器 6
+}
+
+STRING 122
+{
+播放器 12
+}
+
+STRING 123
+{
+播放器 13
+}
+
+STRING 124
+{
+播放器 14
+}
+
+STRING 125
+{
+播放器 15
+}
+
+STRING 126
+{
+播放器 16
+}
+
+STRING 127
+{
+播放器 17
+}
+
+STRING 128
+{
+霜狼氏族
+}
+
+STRING 129
+{
+战歌氏族
+}
+
+STRING 130
 // Units: O000 (Samurai), Name (Name)
 {
 武士
 }
 
-STRING 83
+STRING 131
 // Units: O000 (Samurai), Propernames (Proper Names)
 {
-上杉谦信，小田信长，宇田田秀英，森元成，幸村真田，石田三成，森长永佳，武田信重，忠达忠孝，片仓佳淳，丰臣秀吉，土方俊二，坂田银时，久村贤新
+上杉谦信,织田信长,宇多田秀荣,森元,真田幸村,石田光成,森长吉,竹笋,Just Tsugisakai,机灵,丰臣秀吉,土方俊三,酒田银时,姬村谦信
 }
 
-STRING 84
-// Abilities: A000 (Parry), Ubertip (Tooltip - Normal - Extended)
-{
-阻止并返回所有传入的损坏，以及在成功增加临界因子时
-}
-
-STRING 85
-// Abilities: A003 (Slash Attack), Ubertip (Tooltip - Normal - Extended)
-{
-斩击攻击对前方敌人造成伤害
-}
-
-STRING 89
-{
- 
-}
-
-STRING 90
-{
- 
-}
-
-STRING 91
-{
- 
-}
-
-STRING 92
-// Abilities: A001 (Jump), Hotkey (Hotkey - Normal)
-{
-D
-}
-
-STRING 93
-// Abilities: A004 (Counter Attack), Name (Name)
-{
-反击
-}
-
-STRING 94
-// Abilities: A004 (Counter Attack), Tip (Tooltip - Normal)
-{
-反击
-}
-
-STRING 95
-// Abilities: A004 (Counter Attack), Ubertip (Tooltip - Normal - Extended)
-{
-反击对周围的敌人造成150点伤害
-}
-
-STRING 96
+STRING 132
 // Items: I000 (Healing Rune), Name (Name)
 {
 治疗符文
 }
 
-STRING 97
-// Items: I000 (Healing Rune), Description (Description)
-{
-可以恢复250点生命值
-}
-
-STRING 98
+STRING 134
 // Items: I001 (Mana Rune), Name (Name)
 {
 法力符文
 }
 
-STRING 99
+STRING 135
 // Items: I001 (Mana Rune), Description (Description)
 {
-治愈150点法力值
+治愈|cff00ffff150|r魔力点
 }
 
-STRING 100
+STRING 136
 // Items: I002 (Illusion Rune), Name (Name)
 {
 幻象符文
 }
 
-STRING 101
+STRING 137
 // Items: I002 (Illusion Rune), Description (Description)
 {
-创建2个幻觉副本
+创建|cffffff002|r镜像错觉
 }
 
-STRING 102
-// Items: I003 (Windwalk Rune), Name (Name)
+STRING 138
+// Items: I003 (Wind Walk Rune), Name (Name)
 {
 风行符文
 }
 
-STRING 103
-// Items: I003 (Windwalk Rune), Description (Description)
+STRING 139
+// Items: I003 (Wind Walk Rune), Description (Description)
 {
-带来隐形
+变得不可见并增加移动速度
 }
 
-STRING 104
+STRING 140
 // Items: I004 (Lightning Rune), Name (Name)
 {
 闪电符文
 }
 
-STRING 105
+STRING 141
 // Items: I004 (Lightning Rune), Description (Description)
 {
-给闪电屏蔽
+使雷电盾牌在装置附近受损
 }
 
-STRING 106
+STRING 142
 // Items: I005 (Combat Rune), Name (Name)
 {
 战斗符文
 }
 
-STRING 107
+STRING 143
 // Items: I005 (Combat Rune), Description (Description)
 {
-增加战斗属性
+增加攻击|cff00ff00 +150％|r，速率和移动速度|cff00ff00+100％|r
 }
 
-STRING 108
+STRING 144
+// Items: I006 (Horde Flag), Name (Name)
 {
-播放器 5
+部落旗帜
 }
 
-STRING 109
+STRING 145
+// Items: I006 (Horde Flag), Description (Description)
 {
-播放器 6
+萨尔军队的旗帜。自豪地进行！
 }
 
-STRING 110
+STRING 146
+// Items: I006 (Horde Flag), Ubertip (Tooltip - Extended)
 {
-播放器 17
+战斗部落标志增加所有属性|cff00ff00 +5|r并给予加法|cff00ff00+20|r攻击和+ |cff00ff0010|r防御|n|cffff0000死亡掉落|r
 }
 
-STRING 111
+STRING 147
+// Abilities: A000 (Parry), Name (Name)
 {
-播放器 18
+帕里
+}
+
+STRING 148
+// Abilities: A000 (Parry), Hotkey (Hotkey - Normal)
+{
+W
+}
+
+STRING 149
+// Abilities: A000 (Parry), Ubertip (Tooltip - Normal - Extended)
+{
+|sff00ffff0.5|r秒内反映所有传入的损坏。|n|Cffffcc00无法反映旋风伤害。|r
+}
+
+STRING 150
+// Abilities: A001 (Jump), Hotkey (Hotkey - Normal)
+{
+E
+}
+
+STRING 151
+// Abilities: A001 (Jump), Tip (Tooltip - Normal)
+{
+跳
+}
+
+STRING 152
+// Abilities: A001 (Jump), Ubertip (Tooltip - Normal - Extended)
+{
+跳跃一小段距离，留下一团灰尘
+}
+
+STRING 153
+// Abilities: A002 (Bladestorm), Hotkey (Hotkey - Normal)
+{
+R
+}
+
+STRING 154
+// Abilities: A002 (Bladestorm), Ubertip (Tooltip - Normal - Extended)
+{
+用破坏力的旋风包围刀片的母带，每秒造成|cffff0000350|r伤害。附近的地面敌人。 |n|cff8080ff持续时间：|r 3秒|n|Cffffcc00无法在旋风状态下伤害敌人。|r
+}
+
+STRING 155
+// Abilities: A002 (Bladestorm), Tip (Tooltip - Normal)
+{
+剑刃风暴
+}
+
+STRING 156
+// Abilities: A003 (Slashing strike), Name (Name)
+{
+大刀阔斧
+}
+
+STRING 157
+// Abilities: A003 (Slashing strike), Hotkey (Hotkey - Normal)
+{
+Q
+}
+
+STRING 158
+// Abilities: A003 (Slashing strike), Ubertip (Tooltip - Normal - Extended)
+{
+猛烈打击|cffff0000250|r|cff00ffff魔法|r对前方敌人造成伤害。|n|Cffffcc00无法在旋风状态下伤害敌人。|r
+}
+
+STRING 159
+// Abilities: A004 (Counter attack), Name (Name)
+{
+反击
+}
+
+STRING 160
+// Abilities: A004 (Counter attack), Hotkey (Hotkey - Normal)
+{
+D
+}
+
+STRING 161
+// Items: I000 (Healing Rune), Description (Description)
+{
+治愈|cff00ff00250|r生命值
+}
+
+STRING 162
+// Abilities: A000 (Parry), Tip (Tooltip - Normal)
+{
+帕里
+}
+
+STRING 163
+// Abilities: A001 (Jump), Name (Name)
+{
+跳
+}
+
+STRING 164
+// Abilities: A002 (Bladestorm), Name (Name)
+{
+剑刃风暴
+}
+
+STRING 165
+// Abilities: A003 (Slashing strike), Tip (Tooltip - Normal)
+{
+大刀阔斧
+}
+
+STRING 166
+// Abilities: A004 (Counter attack), Tip (Tooltip - Normal)
+{
+反击
 }
 
